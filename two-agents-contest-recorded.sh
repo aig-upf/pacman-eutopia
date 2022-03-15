@@ -10,6 +10,6 @@
 
 source ../venv/bin/activate
 ml Tkinter
-python3 capture.py -b agents/team_name_1/myTeam.py -r agents/team_name_2/myTeam.py  --record --game_id 1234
+python3 capture.py -b agents/team_name_1/myTeam.py -r agents/team_name_2/myTeam.py  --record --game-id 1234
 deactivate
 
