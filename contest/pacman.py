@@ -91,7 +91,7 @@ class GameState:
         else:
             return GhostRules.getLegalActions( self, agentIndex )
 
-    def generateSuccessor( self, agentIndex, action):
+    def generate_successor(self, agentIndex, action):
         """
         Returns the successor state after the specified agent takes the action.
         """
@@ -112,7 +112,7 @@ class GameState:
         if agentIndex == 0:
             state.data.scoreChange += -TIME_PENALTY # Penalty for waiting around
         else:
-            GhostRules.decrementTimer( state.data.agentStates[agentIndex] )
+            GhostRules.decrementTimer(state.data.agent_states[agentIndex])
 
         # Resolve multi-agent effects
         GhostRules.checkDeath( state, agentIndex )
@@ -131,7 +131,7 @@ class GameState:
         """
         Generates the successor state after the specified pacman move
         """
-        return self.generateSuccessor( 0, action )
+        return self.generate_successor(0, action)
 
     def getPacmanState( self ):
         """
@@ -140,29 +140,29 @@ class GameState:
         state.pos gives the current position
         state.direction gives the travel vector
         """
-        return self.data.agentStates[0].copy()
+        return self.data.agent_states[0].copy()
 
     def getPacmanPosition( self ):
-        return self.data.agentStates[0].getPosition()
+        return self.data.agent_states[0].getPosition()
 
     def getGhostStates( self ):
-        return self.data.agentStates[1:]
+        return self.data.agent_states[1:]
 
     def getGhostState( self, agentIndex ):
         if agentIndex == 0 or agentIndex >= self.getNumAgents():
             raise Exception("Invalid index passed to getGhostState")
-        return self.data.agentStates[agentIndex]
+        return self.data.agent_states[agentIndex]
 
     def getGhostPosition( self, agentIndex ):
         if agentIndex == 0:
             raise Exception("Pacman's index passed to getGhostPosition")
-        return self.data.agentStates[agentIndex].getPosition()
+        return self.data.agent_states[agentIndex].getPosition()
 
     def getGhostPositions(self):
         return [s.getPosition() for s in self.getGhostStates()]
 
     def getNumAgents( self ):
-        return len( self.data.agentStates )
+        return len(self.data.agent_states)
 
     def getScore( self ):
         return float(self.data.score)
@@ -228,7 +228,7 @@ class GameState:
 
     def deepCopy( self ):
         state = GameState( self )
-        state.data = self.data.deepCopy()
+        state.data = self.data.deep_copy()
         return state
 
     def __eq__( self, other ):
@@ -272,7 +272,7 @@ class ClassicGameRules:
         self.timeout = timeout
 
     def newGame( self, layout, pacmanAgent, ghostAgents, display, quiet = False, catchExceptions=False):
-        agents = [pacmanAgent] + ghostAgents[:layout.getNumGhosts()]
+        agents = [pacmanAgent] + ghostAgents[:layout.get_num_ghosts()]
         initState = GameState()
         initState.initialize( layout, len(ghostAgents) )
         game = Game(agents, display, self, catchExceptions=catchExceptions)
@@ -331,7 +331,7 @@ class PacmanRules:
         """
         Returns a list of possible actions.
         """
-        return Actions.getPossibleActions( state.getPacmanState().configuration, state.data.layout.walls )
+        return Actions.get_possible_actions(state.getPacmanState().configuration, state.data.layout.walls)
     getLegalActions = staticmethod( getLegalActions )
 
     def applyAction( state, action ):
@@ -342,11 +342,11 @@ class PacmanRules:
         if action not in legal:
             raise Exception("Illegal action " + str(action))
 
-        pacmanState = state.data.agentStates[0]
+        pacmanState = state.data.agent_states[0]
 
         # Update Configuration
-        vector = Actions.directionToVector( action, PacmanRules.PACMAN_SPEED )
-        pacmanState.configuration = pacmanState.configuration.generateSuccessor( vector )
+        vector = Actions.direction_to_vector(action, PacmanRules.PACMAN_SPEED)
+        pacmanState.configuration = pacmanState.configuration.generate_successor(vector)
 
         # Eat
         next = pacmanState.configuration.getPosition()
@@ -370,12 +370,12 @@ class PacmanRules:
                 state.data.scoreChange += 500
                 state.data._win = True
         # Eat capsule
-        if( position in state.getCapsules() ):
+        if( position in state.get_capsules()):
             state.data.capsules.remove( position )
             state.data._capsuleEaten = position
             # Reset all ghosts' scared timers
-            for index in range( 1, len( state.data.agentStates ) ):
-                state.data.agentStates[index].scaredTimer = SCARED_TIME
+            for index in range(1, len(state.data.agent_states)):
+                state.data.agent_states[index].scaredTimer = SCARED_TIME
     consume = staticmethod( consume )
 
 class GhostRules:
@@ -389,8 +389,8 @@ class GhostRules:
         reach a dead end, but can turn 90 degrees at intersections.
         """
         conf = state.getGhostState( ghostIndex ).configuration
-        possibleActions = Actions.getPossibleActions( conf, state.data.layout.walls )
-        reverse = Actions.reverseDirection( conf.direction )
+        possibleActions = Actions.get_possible_actions(conf, state.data.layout.walls)
+        reverse = Actions.reverse_direction(conf.direction)
         if Directions.STOP in possibleActions:
             possibleActions.remove( Directions.STOP )
         if reverse in possibleActions and len( possibleActions ) > 1:
@@ -404,11 +404,11 @@ class GhostRules:
         if action not in legal:
             raise Exception("Illegal ghost action " + str(action))
 
-        ghostState = state.data.agentStates[ghostIndex]
+        ghostState = state.data.agent_states[ghostIndex]
         speed = GhostRules.GHOST_SPEED
         if ghostState.scaredTimer > 0: speed /= 2.0
-        vector = Actions.directionToVector( action, speed )
-        ghostState.configuration = ghostState.configuration.generateSuccessor( vector )
+        vector = Actions.direction_to_vector(action, speed)
+        ghostState.configuration = ghostState.configuration.generate_successor(vector)
     applyAction = staticmethod( applyAction )
 
     def decrementTimer( ghostState):
@@ -421,13 +421,13 @@ class GhostRules:
     def checkDeath( state, agentIndex):
         pacmanPosition = state.getPacmanPosition()
         if agentIndex == 0: # Pacman just moved; Anyone can kill him
-            for index in range( 1, len( state.data.agentStates ) ):
-                ghostState = state.data.agentStates[index]
+            for index in range(1, len(state.data.agent_states)):
+                ghostState = state.data.agent_states[index]
                 ghostPosition = ghostState.configuration.getPosition()
                 if GhostRules.canKill( pacmanPosition, ghostPosition ):
                     GhostRules.collide( state, ghostState, index )
         else:
-            ghostState = state.data.agentStates[agentIndex]
+            ghostState = state.data.agent_states[agentIndex]
             ghostPosition = ghostState.configuration.getPosition()
             if GhostRules.canKill( pacmanPosition, ghostPosition ):
                 GhostRules.collide( state, ghostState, agentIndex )
@@ -610,14 +610,14 @@ def loadAgent(pacman, nographics):
 def replayGame( layout, actions, display ):
     import pacmanAgents, ghostAgents
     rules = ClassicGameRules()
-    agents = [pacmanAgents.GreedyAgent()] + [ghostAgents.RandomGhost(i+1) for i in range(layout.getNumGhosts())]
+    agents = [pacmanAgents.GreedyAgent()] + [ghostAgents.RandomGhost(i+1) for i in range(layout.get_num_ghosts())]
     game = rules.newGame( layout, agents[0], agents[1:], display )
     state = game.state
     display.initialize(state.data)
 
     for action in actions:
             # Execute the action
-        state = state.generateSuccessor( *action )
+        state = state.generate_successor(*action)
         # Change the display
         display.update( state.data )
         # Allow for game specific conditions (winning, losing, etc.)
@@ -655,7 +655,7 @@ def runGames( layout, pacman, ghosts, display, numGames, record, numTraining = 0
             f.close()
 
     if (numGames-numTraining) > 0:
-        scores = [game.state.getScore() for game in games]
+        scores = [game.state.get_score() for game in games]
         wins = [game.state.isWin() for game in games]
         winRate = wins.count(True)/ float(len(wins))
         print('Average Score:', sum(scores) / float(len(scores)))

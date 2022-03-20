@@ -41,7 +41,7 @@ class RandomAgent( Agent ):
     self.index = index
 
   def getAction( self, state ):
-    return random.choice( state.getLegalActions( self.index ) )
+    return random.choice(state.get_legal_actions(self.index))
 
 class CaptureAgent(Agent):
   """
@@ -98,7 +98,7 @@ class CaptureAgent(Agent):
     between each pair of positions, so your agents can use:
     self.distancer.getDistance(p1, p2)
     """
-    self.red = gameState.isOnRedTeam(self.index)
+    self.red = gameState.is_on_red_team(self.index)
     self.registerTeam(self.getTeam(gameState))
     self.distancer = distanceCalculator.Distancer(gameState.data.layout)
 
@@ -121,7 +121,7 @@ class CaptureAgent(Agent):
 
   def observationFunction(self, gameState):
     " Changing this won't affect pacclient.py, but will affect capture.py "
-    return gameState.makeObservation(self.index)
+    return gameState.make_observation(self.index)
 
   def debugDraw(self, cells, color, clear=False):
 
@@ -153,11 +153,11 @@ class CaptureAgent(Agent):
     """
     self.observationHistory.append(gameState)
 
-    myState = gameState.getAgentState(self.index)
+    myState = gameState.get_agent_state(self.index)
     myPos = myState.getPosition()
     if myPos != nearestPoint(myPos):
       # We're halfway from one position to the next
-      return gameState.getLegalActions(self.index)[0]
+      return gameState.get_legal_actions(self.index)[0]
     else:
       return self.chooseAction(gameState)
 
@@ -178,9 +178,9 @@ class CaptureAgent(Agent):
     where m[x][y]=true if there is food you can eat (based on your team) in that square.
     """
     if self.red:
-      return gameState.getBlueFood()
+      return gameState.get_blue_food()
     else:
-      return gameState.getRedFood()
+      return gameState.get_red_food()
 
   def getFoodYouAreDefending(self, gameState):
     """
@@ -189,21 +189,21 @@ class CaptureAgent(Agent):
     there is food at (x,y) that your opponent can eat.
     """
     if self.red:
-      return gameState.getRedFood()
+      return gameState.get_red_food()
     else:
-      return gameState.getBlueFood()
+      return gameState.get_blue_food()
 
   def getCapsules(self, gameState):
     if self.red:
-      return gameState.getBlueCapsules()
+      return gameState.get_blue_capsules()
     else:
-      return gameState.getRedCapsules()
+      return gameState.get_red_capsules()
 
   def getCapsulesYouAreDefending(self, gameState):
     if self.red:
-      return gameState.getRedCapsules()
+      return gameState.get_red_capsules()
     else:
-      return gameState.getBlueCapsules()
+      return gameState.get_blue_capsules()
 
   def getOpponents(self, gameState):
     """
@@ -211,9 +211,9 @@ class CaptureAgent(Agent):
     of the agents (e.g., red might be "1,3,5")
     """
     if self.red:
-      return gameState.getBlueTeamIndices()
+      return gameState.get_blue_team_indices()
     else:
-      return gameState.getRedTeamIndices()
+      return gameState.get_red_team_indices()
 
   def getTeam(self, gameState):
     """
@@ -221,9 +221,9 @@ class CaptureAgent(Agent):
     of the agents (e.g., red might be the list of 1,3,5)
     """
     if self.red:
-      return gameState.getRedTeamIndices()
+      return gameState.get_red_team_indices()
     else:
-      return gameState.getBlueTeamIndices()
+      return gameState.get_blue_team_indices()
 
   def getScore(self, gameState):
     """
@@ -232,9 +232,9 @@ class CaptureAgent(Agent):
     is negative if you're losing.
     """
     if self.red:
-      return gameState.getScore()
+      return gameState.get_score()
     else:
-      return gameState.getScore() * -1
+      return gameState.get_score() * -1
 
   def getMazeDistance(self, pos1, pos2):
     """
@@ -301,4 +301,4 @@ class TimeoutAgent( Agent ):
   def getAction( self, state ):
     import random, time
     time.sleep(2.0)
-    return random.choice( state.getLegalActions( self.index ) )
+    return random.choice(state.get_legal_actions(self.index))

@@ -59,14 +59,14 @@ class ReflexCaptureAgent(CaptureAgent):
   """
  
   def registerInitialState(self, gameState):
-    self.start = gameState.getAgentPosition(self.index)
+    self.start = gameState.get_agent_position(self.index)
     CaptureAgent.registerInitialState(self, gameState)
 
   def chooseAction(self, gameState):
     """
     Picks among the actions with the highest Q(s,a).
     """
-    actions = gameState.getLegalActions(self.index)
+    actions = gameState.get_legal_actions(self.index)
 
     # You can profile your evaluation time by uncommenting these lines
     # start = time.time()
@@ -76,13 +76,13 @@ class ReflexCaptureAgent(CaptureAgent):
     maxValue = max(values)
     bestActions = [a for a, v in zip(actions, values) if v == maxValue]
 
-    foodLeft = len(self.getFood(gameState).asList())
+    foodLeft = len(self.getFood(gameState).as_list())
 
     if foodLeft <= 2:
       bestDist = 9999
       for action in actions:
         successor = self.getSuccessor(gameState, action)
-        pos2 = successor.getAgentPosition(self.index)
+        pos2 = successor.get_agent_position(self.index)
         dist = self.getMazeDistance(self.start,pos2)
         if dist < bestDist:
           bestAction = action
@@ -95,11 +95,11 @@ class ReflexCaptureAgent(CaptureAgent):
     """
     Finds the next successor which is a grid position (location tuple).
     """
-    successor = gameState.generateSuccessor(self.index, action)
-    pos = successor.getAgentState(self.index).getPosition()
+    successor = gameState.generate_successor(self.index, action)
+    pos = successor.get_agent_state(self.index).getPosition()
     if pos != nearestPoint(pos):
       # Only half a grid position was covered
-      return successor.generateSuccessor(self.index, action)
+      return successor.generate_successor(self.index, action)
     else:
       return successor
 
@@ -136,13 +136,13 @@ class OffensiveReflexAgent(ReflexCaptureAgent):
   def getFeatures(self, gameState, action):
     features = util.Counter()
     successor = self.getSuccessor(gameState, action)
-    foodList = self.getFood(successor).asList()    
+    foodList = self.getFood(successor).as_list()
     features['successorScore'] = -len(foodList)#self.getScore(successor)
 
     # Compute distance to the nearest food
 
     if len(foodList) > 0: # This should always be True,  but better safe than sorry
-      myPos = successor.getAgentState(self.index).getPosition()
+      myPos = successor.get_agent_state(self.index).getPosition()
       minDistance = min([self.getMazeDistance(myPos, food) for food in foodList])
       features['distanceToFood'] = minDistance
     return features
@@ -162,7 +162,7 @@ class DefensiveReflexAgent(ReflexCaptureAgent):
     features = util.Counter()
     successor = self.getSuccessor(gameState, action)
 
-    myState = successor.getAgentState(self.index)
+    myState = successor.get_agent_state(self.index)
     myPos = myState.getPosition()
 
     # Computes whether we're on defense (1) or offense (0)
@@ -170,7 +170,7 @@ class DefensiveReflexAgent(ReflexCaptureAgent):
     if myState.isPacman: features['onDefense'] = 0
 
     # Computes distance to invaders we can see
-    enemies = [successor.getAgentState(i) for i in self.getOpponents(successor)]
+    enemies = [successor.get_agent_state(i) for i in self.getOpponents(successor)]
     invaders = [a for a in enemies if a.isPacman and a.getPosition() != None]
     features['numInvaders'] = len(invaders)
     if len(invaders) > 0:
@@ -178,7 +178,7 @@ class DefensiveReflexAgent(ReflexCaptureAgent):
       features['invaderDistance'] = min(dists)
 
     if action == Directions.STOP: features['stop'] = 1
-    rev = Directions.REVERSE[gameState.getAgentState(self.index).configuration.direction]
+    rev = Directions.REVERSE[gameState.get_agent_state(self.index).configuration.direction]
     if action == rev: features['reverse'] = 1
 
     return features

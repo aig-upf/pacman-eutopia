@@ -26,7 +26,7 @@ class Layout:
 
     def __init__(self, layoutText):
         self.width = len(layoutText[0])
-        self.height= len(layoutText)
+        self.height = len(layoutText)
         self.walls = Grid(self.width, self.height, False)
         self.food = Grid(self.width, self.height, False)
         self.capsules = []
@@ -34,10 +34,10 @@ class Layout:
         self.numGhosts = 0
         self.processLayoutText(layoutText)
         self.layoutText = layoutText
-        self.totalFood = len(self.food.asList())
+        self.totalFood = len(self.food.as_list())
         # self.initializeVisibilityMatrix()
 
-    def getNumGhosts(self):
+    def get_num_ghosts(self):
         return self.numGhosts
 
     def initializeVisibilityMatrix(self):
@@ -89,7 +89,7 @@ class Layout:
     def __str__(self):
         return "\n".join(self.layoutText)
 
-    def deepCopy(self):
+    def deep_copy(self):
         return Layout(self.layoutText[:])
 
     def processLayoutText(self, layoutText):

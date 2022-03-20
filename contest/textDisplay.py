@@ -58,7 +58,7 @@ class PacmanGraphics:
         self.agentCounter = 0
 
     def update(self, state):
-        numAgents = len(state.agentStates)
+        numAgents = len(state.agent_states)
         self.agentCounter = (self.agentCounter + 1) % numAgents
         if self.agentCounter == 0:
             self.turn += 1

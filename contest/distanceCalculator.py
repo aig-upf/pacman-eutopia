@@ -110,7 +110,7 @@ class DistanceCalculator:
 def computeDistances(layout):
     "Runs UCS to all other positions from each position"
     distances = {}
-    allNodes = layout.walls.asList(False)
+    allNodes = layout.walls.as_list(False)
     for source in allNodes:
         dist = {}
         closed = {}
