@@ -62,7 +62,7 @@ import sys, util, types, time, random
 import keyboardAgents
 import os
 
-import importlib
+import importlib.util
 import pathlib
 
 DIR_SCRIPT = sys.path[0]
