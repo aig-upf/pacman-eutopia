@@ -128,13 +128,13 @@ def computeDistances(layout):
             nodeDist = dist[node]
             adjacent = []
             x, y = node
-            if not layout.isWall((x,y+1)):
+            if not layout.is_wall((x, y + 1)):
                 adjacent.append((x,y+1))
-            if not layout.isWall((x,y-1)):
+            if not layout.is_wall((x, y - 1)):
                 adjacent.append((x,y-1) )
-            if not layout.isWall((x+1,y)):
+            if not layout.is_wall((x + 1, y)):
                 adjacent.append((x+1,y) )
-            if not layout.isWall((x-1,y)):
+            if not layout.is_wall((x - 1, y)):
                 adjacent.append((x-1,y))
             for other in adjacent:
                 if not other in dist:

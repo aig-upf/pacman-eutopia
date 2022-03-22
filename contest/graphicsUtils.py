@@ -141,12 +141,13 @@ def _destroy_window(event=None):
 #    _root_window = None
     #print("DESTROY")
 
+
 def end_graphics():
     global _root_window, _canvas, _mouse_enabled
     try:
         try:
             sleep(1)
-            if _root_window != None:
+            if _root_window is not None:
                 _root_window.destroy()
         except SystemExit as e:
             print('Ending graphics raised an exception:', e)
@@ -221,16 +222,18 @@ def moveCircle(id, pos, r, endpoints=None):
         edit(id, ('start', e[0]), ('extent', e[1] - e[0]))
     move_to(id, x0, y0)
 
+
 def edit(id, *args):
     _canvas.itemconfigure(id, **dict(args))
 
-def text(pos, color, contents, font='Helvetica', size=12, style='normal', anchor="nw"):
+
+def create_text(pos, color, contents, font='Helvetica', size=12, style='normal', anchor="nw"):
     global _canvas_x, _canvas_y
     x, y = pos
     font = (font, str(size), style)
     return _canvas.create_text(x, y, fill=color, text=contents, font=font, anchor=anchor)
 
-def changeText(id, newText, font=None, size=12, style='normal'):
+def change_text(id, newText, font=None, size=12, style='normal'):
     _canvas.itemconfigure(id, text=newText)
     if font != None:
         _canvas.itemconfigure(id, font=(font, '-%d' % size, style))

@@ -95,7 +95,7 @@ We will run your submissions on an Amazon EC2 like instance supported by the Aus
 
 Each agent has 1 second to return each action. Each move which does not return within one second will incur a warning. After three warnings, or any single move taking more than 3 seconds, the game is forfeit. 
 
-There will be an initial start-up allowance of 15 seconds (use the `registerInitialState` function). 
+There will be an initial start-up allowance of 15 seconds (use the `register_initial_state` function). 
 
 If you agent times out or otherwise throws an exception, an error message will be present in the log files, which you can download from the results page (see below).
 

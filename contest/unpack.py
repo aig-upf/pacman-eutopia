@@ -28,7 +28,7 @@ k = 0
 print('Unpacking games for', user)
 for g, w in d[user]['gameHistory']:
     k += 1
-    t = {'layout': g.state.data.layout, 'agents': g.agents, 'actions': g.moveHistory, 'length': g.length}
+    t = {'layout': g.state.data.layout, 'agents': g.agents, 'actions': g.move_history, 'length': g.length}
     fname = 'replay_' + user + '_' + str(k)
     print('Game:', fname)
     pickle.dump(t,open(fname, 'w'))

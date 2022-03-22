@@ -48,16 +48,19 @@ Capture.py holds the logic for Pacman capture the flag.
     P1: 'a', 's', 'd', and 'w' to move
     P2: 'l', ';', ',' and 'p' to move
 """
-from game import GameStateData, Game, Grid, Configuration
-from game import Actions
-from util import nearestPoint, manhattanDistance
-import sys, time, random
-import keyboardAgents
+import importlib.util
+import importlib.machinery
 import os
+import pathlib
+import random
+import sys
+import time
 import traceback
 
-import importlib.util
-import pathlib
+import keyboardAgents
+from game import Actions
+from game import GameStateData, Game, Grid, Configuration
+from util import nearestPoint, manhattanDistance
 
 DIR_SCRIPT = sys.path[0]
 
@@ -114,8 +117,8 @@ class GameState:
         AgentRules.decrement_timer(state.data.agent_states[agent_index])
 
         # Bookkeeping
-        state.data._agentMoved = agent_index
-        state.data.score += state.data.scoreChange
+        state.data._agent_moved = agent_index
+        state.data.score += state.data.score_change
         state.data.timeleft = self.data.timeleft - 1
         return state
 
@@ -128,7 +131,7 @@ class GameState:
         if the agent is unobservable, returns None.
         """
         agent_state = self.data.agent_states[index]
-        ret = agent_state.getPosition()
+        ret = agent_state.get_position()
         if ret:
             return tuple(int(x) for x in ret)
         return ret
@@ -354,8 +357,8 @@ class CaptureRules:
         init_state.initialize(layout, len(agents))
         starter = random.randint(0, 1)
         print('%s team starts' % ['Red', 'Blue'][starter])
-        game = Game(agents, display, self, startingIndex=starter, muteAgents=mute_agents,
-                    catchExceptions=catch_exceptions)
+        game = Game(agents, display, self, starting_index=starter, mute_agents=mute_agents,
+                    catch_exceptions=catch_exceptions)
         game.state = init_state
         game.length = length
         game.state.data.timeleft = length
@@ -368,12 +371,12 @@ class CaptureRules:
     @staticmethod
     def process(state, game):
         """Checks to see whether it is time to end the game."""
-        if 'moveHistory' in dir(game):
-            if len(game.moveHistory) == game.length:
+        if 'move_history' in dir(game):
+            if len(game.move_history) == game.length:
                 state.data._win = True
 
         if state.is_over():
-            game.gameOver = True
+            game.game_over = True
             if not game.rules.quiet:
                 red_count = 0
                 blue_count = 0
@@ -381,9 +384,9 @@ class CaptureRules:
                 for index in range(state.get_num_agents()):
                     agent_state = state.data.agent_states[index]
                     if index in state.get_red_team_indices():
-                        red_count += agent_state.numReturned
+                        red_count += agent_state.num_returned
                     else:
-                        blue_count += agent_state.numReturned
+                        blue_count += agent_state.num_returned
 
                 if blue_count >= food_to_win:  # state.getRedFood().count() == MIN_FOOD:
                     print(f'The Blue team has returned at least {food_to_win} of the opponents\' dots.')
@@ -401,7 +404,7 @@ class CaptureRules:
     def get_progress(self, game):
         blue = 1.0 - (game.state.get_blue_food().count() / float(self._init_blue_food))
         red = 1.0 - (game.state.get_red_food().count() / float(self._init_red_food))
-        moves = len(self.moveHistory) / float(game.length)
+        moves = len(self.move_history) / float(game.length)
 
         # return the most likely progress indicator, clamped to [0, 1]
         return min(max(0.75 * max(red, blue) + 0.25 * moves, 0.0), 1.0)
@@ -421,7 +424,7 @@ class CaptureRules:
 
     @staticmethod
     def get_max_startup_time():
-        return 15  # 15 seconds for registerInitialState
+        return 15  # 15 seconds for register_initial_state
 
     @staticmethod
     def get_move_warning_time():
@@ -465,40 +468,40 @@ class AgentRules:
         # Update Configuration
         agent_state = state.data.agent_states[agent_index]
         speed = 1.0
-        # if agent_state.isPacman: speed = 0.5
+        # if agent_state.is_pacman: speed = 0.5
         vector = Actions.direction_to_vector(action, speed)
         old_config = agent_state.configuration
         agent_state.configuration = old_config.generate_successor(vector)
 
         # Eat
-        current_position = agent_state.configuration.getPosition()
+        current_position = agent_state.configuration.get_position()
         nearest = nearestPoint(current_position)
 
         if current_position == nearest:
             is_red = state.is_on_red_team(agent_index)
             # Change agent type
-            agent_state.isPacman = [is_red, state.is_red(agent_state.configuration)].count(True) == 1
+            agent_state.is_pacman = [is_red, state.is_red(agent_state.configuration)].count(True) == 1
             # if he's no longer pacman, he's on his own side, so reset the num carrying timer
-            # agent_state.numCarrying *= int(agent_state.isPacman)
-            if agent_state.numCarrying > 0 and not agent_state.isPacman:
-                score = agent_state.numCarrying if is_red else -1 * agent_state.numCarrying
-                state.data.scoreChange += score
+            # agent_state.numCarrying *= int(agent_state.is_pacman)
+            if agent_state.num_carrying > 0 and not agent_state.is_pacman:
+                score = agent_state.num_carrying if is_red else -1 * agent_state.num_carrying
+                state.data.score_change += score
 
-                agent_state.numReturned += agent_state.numCarrying
-                agent_state.numCarrying = 0
+                agent_state.num_returned += agent_state.num_carrying
+                agent_state.num_carrying = 0
 
                 red_count = 0
                 blue_count = 0
                 for index in range(state.get_num_agents()):
                     agent = state.data.agent_states[index]
                     if index in state.get_red_team_indices():
-                        red_count += agent.numReturned
+                        red_count += agent.num_returned
                     else:
-                        blue_count += agent.numReturned
+                        blue_count += agent.num_returned
                 if red_count >= (TOTAL_FOOD / 2) - MIN_FOOD or blue_count >= (TOTAL_FOOD / 2) - MIN_FOOD:
                     state.data._win = True
 
-        if agent_state.isPacman and manhattanDistance(nearest, current_position) <= 0.9:
+        if agent_state.is_pacman and manhattanDistance(nearest, current_position) <= 0.9:
             AgentRules.consume(nearest, state, state.is_on_red_team(agent_index))
 
     @staticmethod
@@ -509,25 +512,26 @@ class AgentRules:
 
             # blue case is the default
             team_indices_func = state.get_blue_team_indices
-            score = -1
+            # score = -1
             if is_red:
                 # switch if its red
-                score = 1
+                # score = 1
                 team_indices_func = state.get_red_team_indices
 
             # go increase the variable for the pacman who ate this
             agents = [state.data.agent_states[agentIndex] for agentIndex in team_indices_func()]
             for agent in agents:
-                if agent.getPosition() == position:
-                    agent.numCarrying += 1
+                if agent.get_position() == position:
+                    agent.num_carrying += 1
                     break  # the above should only be true for one agent...
 
-            # do all the score and food grid maintainenace
+            # do all the score and food grid maintenance
             # state.data.scoreChange += score
             state.data.food = state.data.food.copy()
             state.data.food[x][y] = False
-            state.data._foodEaten = position
-            # if (isRed and state.getBlueFood().count() == MIN_FOOD) or (not isRed and state.getRedFood().count() == MIN_FOOD):
+            state.data._food_eaten = position
+            # if (isRed and state.get_blue_food().count() == MIN_FOOD) or
+            # (not isRed and state.get_red_food().count() == MIN_FOOD):
             #  state.data._win = True
 
         # Eat capsule
@@ -537,7 +541,7 @@ class AgentRules:
             my_capsules = state.get_red_capsules()
         if position in my_capsules:
             state.data.capsules.remove(position)
-            state.data._capsuleEaten = position
+            state.data._capsule_eaten = position
 
             # Reset all ghosts' scared timers
             if is_red:
@@ -545,14 +549,14 @@ class AgentRules:
             else:
                 other_team = state.get_red_team_indices()
             for index in other_team:
-                state.data.agent_states[index].scaredTimer = SCARED_TIME
+                state.data.agent_states[index].scared_timer = SCARED_TIME
 
     @staticmethod
     def decrement_timer(state):
-        timer = state.scaredTimer
+        timer = state.scared_timer
         if timer == 1:
             state.configuration.pos = nearestPoint(state.configuration.pos)
-        state.scaredTimer = max(0, timer - 1)
+        state.scared_timer = max(0, timer - 1)
 
     @staticmethod
     def dump_food_from_death(state, agent_state):
@@ -560,29 +564,29 @@ class AgentRules:
             # this feature is not turned on
             return
 
-        if not agent_state.isPacman:
-            raise Exception('something is seriously wrong, this agent isnt a pacman!')
+        if not agent_state.is_pacman:
+            raise Exception('something is seriously wrong, this agent isn\'t a pacman!')
 
         # ok so agentState is this:
-        if agent_state.numCarrying == 0:
+        if agent_state.num_carrying == 0:
             return
 
         # first, score changes!
         # we HACK pack that ugly bug by just determining if its red based on the first position
         # to die...
-        dummy_config = Configuration(agent_state.getPosition(), 'North')
+        dummy_config = Configuration(agent_state.get_position(), 'North')
         is_red = state.is_red(dummy_config)
 
         # the score increases if red eats dots, so if we are refunding points,
         # the direction should be -1 if the red agent died, which means he dies
         # on the blue side
-        score_direction = (-1) ** (int(is_red) + 1)
+        # score_direction = (-1) ** (int(is_red) + 1)
 
         # state.data.scoreChange += scoreDirection * agentState.numCarrying
 
-        def on_right_side(state, x, y):
-            dummy_config = Configuration((x, y), 'North')
-            return state.is_red(dummy_config) == is_red
+        def on_right_side(from_state, from_x, from_y):
+            new_dummy_config = Configuration((from_x, from_y), 'North')
+            return from_state.is_red(new_dummy_config) == is_red
 
         # we have food to dump
         # -- expand out in BFS. Check:
@@ -591,44 +595,44 @@ class AgentRules:
         #   - that no other agents are there
         #   - that no power pellets are there
         #   - that it's on the right side of the grid
-        def all_good(state, x, y):
-            width, height = state.data.layout.width, state.data.layout.height
-            food, walls = state.data.food, state.data.layout.walls
+        def all_good(from_state, from_x, from_y):
+            width, height = from_state.data.layout.width, from_state.data.layout.height
+            food, walls = from_state.data.food, from_state.data.layout.walls
 
             # bounds check
-            if x >= width or y >= height or x <= 0 or y <= 0:
+            if from_x >= width or from_y >= height or from_x <= 0 or from_y <= 0:
                 return False
 
-            if walls[x][y]:
+            if walls[from_x][from_y]:
                 return False
-            if food[x][y]:
+            if food[from_x][from_y]:
                 return False
 
             # dots need to be on the side where this agent will be a pacman :P
-            if not on_right_side(state, x, y):
+            if not on_right_side(from_state, from_x, from_y):
                 return False
 
-            if (x, y) in state.data.capsules:
+            if (from_x, from_y) in from_state.data.capsules:
                 return False
 
             # loop through agents
-            agent_poses = [state.get_agent_position(i) for i in range(state.get_num_agents())]
-            if (x, y) in agent_poses:
+            agent_poses = [from_state.get_agent_position(i) for i in range(from_state.get_num_agents())]
+            if (from_x, from_y) in agent_poses:
                 return False
 
             return True
 
-        num_to_dump = agent_state.numCarrying
+        num_to_dump = agent_state.num_carrying
         state.data.food = state.data.food.copy()
         food_added = []
 
-        def gen_successors(x, y):
+        def gen_successors(from_x, from_y):
             dirs_x = [-1, 0, 1]
             dirs_y = [-1, 0, 1]
-            return [(x + dx, y + dy) for dx in dirs_x for dy in dirs_y]
+            return [(from_x + dx, from_y + dy) for dx in dirs_x for dy in dirs_y]
 
         # BFS graph search
-        position_queue = [agent_state.getPosition()]
+        position_queue = [agent_state.get_position()]
         seen = set()
         while num_to_dump > 0:
             if not len(position_queue):
@@ -650,12 +654,12 @@ class AgentRules:
             # generate successors
             position_queue = position_queue + gen_successors(x, y)
 
-        if state.data._foodAdded is None:
-            state.data._foodAdded = food_added
+        if state.data._food_added is None:
+            state.data._food_added = food_added
         else:
-            state.data._foodAdded.extend(food_added)
+            state.data._food_added.extend(food_added)
         # now our agentState is no longer carrying food
-        agent_state.numCarrying = 0
+        agent_state.num_carrying = 0
         pass
 
     @staticmethod
@@ -665,62 +669,62 @@ class AgentRules:
             other_team = state.get_blue_team_indices()
         else:
             other_team = state.get_red_team_indices()
-        if agent_state.isPacman:
+        if agent_state.is_pacman:
             for index in other_team:
                 other_agent_state = state.data.agent_states[index]
-                if other_agent_state.isPacman: continue
-                ghost_position = other_agent_state.getPosition()
+                if other_agent_state.is_pacman: continue
+                ghost_position = other_agent_state.get_position()
                 if ghost_position is None: continue
-                if manhattanDistance(ghost_position, agent_state.getPosition()) <= COLLISION_TOLERANCE:
+                if manhattanDistance(ghost_position, agent_state.get_position()) <= COLLISION_TOLERANCE:
                     # award points to the other team for killing Pacmen
-                    if other_agent_state.scaredTimer <= 0:
+                    if other_agent_state.scared_timer <= 0:
                         AgentRules.dump_food_from_death(state, agent_state)
 
                         score = KILL_POINTS
                         if state.is_on_red_team(agent_index):
                             score = -score
-                        state.data.scoreChange += score
-                        agent_state.isPacman = False
+                        state.data.score_change += score
+                        agent_state.is_pacman = False
                         agent_state.configuration = agent_state.start
-                        agent_state.scaredTimer = 0
+                        agent_state.scared_timer = 0
                     else:
                         score = KILL_POINTS
                         if state.is_on_red_team(agent_index):
                             score = -score
-                        state.data.scoreChange += score
-                        other_agent_state.isPacman = False
+                        state.data.score_change += score
+                        other_agent_state.is_pacman = False
                         other_agent_state.configuration = other_agent_state.start
-                        other_agent_state.scaredTimer = 0
+                        other_agent_state.scared_timer = 0
         else:  # Agent is a ghost
             for index in other_team:
                 other_agent_state = state.data.agent_states[index]
-                if not other_agent_state.isPacman: continue
-                pac_pos = other_agent_state.getPosition()
+                if not other_agent_state.is_pacman: continue
+                pac_pos = other_agent_state.get_position()
                 if pac_pos is None: continue
-                if manhattanDistance(pac_pos, agent_state.getPosition()) <= COLLISION_TOLERANCE:
+                if manhattanDistance(pac_pos, agent_state.get_position()) <= COLLISION_TOLERANCE:
                     # award points to the other team for killing Pacmen
-                    if agent_state.scaredTimer <= 0:
+                    if agent_state.scared_timer <= 0:
                         AgentRules.dump_food_from_death(state, other_agent_state)
 
                         score = KILL_POINTS
                         if not state.is_on_red_team(agent_index):
                             score = -score
-                        state.data.scoreChange += score
-                        other_agent_state.isPacman = False
+                        state.data.score_change += score
+                        other_agent_state.is_pacman = False
                         other_agent_state.configuration = other_agent_state.start
-                        other_agent_state.scaredTimer = 0
+                        other_agent_state.scared_timer = 0
                     else:
                         score = KILL_POINTS
                         if state.is_on_red_team(agent_index):
                             score = -score
-                        state.data.scoreChange += score
-                        agent_state.isPacman = False
+                        state.data.score_change += score
+                        agent_state.is_pacman = False
                         agent_state.configuration = agent_state.start
-                        agent_state.scaredTimer = 0
+                        agent_state.scared_timer = 0
 
     @staticmethod
-    def place_ghost(ghostState):
-        ghostState.configuration = ghostState.start
+    def place_ghost(ghost_state):
+        ghost_state.configuration = ghost_state.start
 
 
 #############################
@@ -760,17 +764,12 @@ def read_command(argv):
     """
     parser = OptionParser(usage_str)
 
-    parser.add_option('-r', '--red', help=default('Red team'),
-                      default=os.path.join(DIR_SCRIPT, 'baselineTeam')),
-    parser.add_option('-b', '--blue', help=default('Blue team'),
-                      default=os.path.join(DIR_SCRIPT, 'baselineTeam')),
-    parser.add_option('--red-name', help=default('Red team name'),
-                      default='Red')
-    parser.add_option('--blue-name', help=default('Blue team name'),
-                      default='Blue')
-    parser.add_option('--redOpts', help=default('Options for red team (e.g. first=keys)'),
-                      default='')
-    parser.add_option('--blueOpts', help=default('Options for blue team (e.g. first=keys)'),
+    parser.add_option('-r', '--red', help=default('Red team'), default=os.path.join(DIR_SCRIPT, 'baselineTeam')),
+    parser.add_option('-b', '--blue', help=default('Blue team'), default=os.path.join(DIR_SCRIPT, 'baselineTeam')),
+    parser.add_option('--red-name', dest="red_name", help=default('Red team name'), default='Red')
+    parser.add_option('--blue-name', dest="blue_name", help=default('Blue team name'), default='Blue')
+    parser.add_option('--redOpts', dest="red_opts", help=default('Options for red team (e.g. first=keys)'), default='')
+    parser.add_option('--blueOpts', dest="blue_opts", help=default('Options for blue team (e.g. first=keys)'),
                       default='')
     parser.add_option('--keys0', help='Make agent 0 (first red player) a keyboard agent', action='store_true',
                       default=False)
@@ -797,16 +796,16 @@ def read_command(argv):
                       help=default('Zoom in the graphics'), default=1)
     parser.add_option('-i', '--time', type='int', dest='time',
                       help=default('TIME limit of a game in moves'), default=1200, metavar='TIME')
-    parser.add_option('-n', '--numGames', type='int',
-                      help=default('Number of games to play'), default=1)
-    parser.add_option('-f', '--fixRandomSeed', action='store_true',
+    parser.add_option('-n', '--numGames', type='int', dest="num_games", help=default('Number of games to play'),
+                      default=1)
+    parser.add_option('-f', '--fixRandomSeed', dest="fix_random_seed", action='store_true',
                       help='Fixes the random seed to always play the same game', default=False)
-    parser.add_option('--setRandomSeed', type='str',
+    parser.add_option('--setRandomSeed', dest="set_random_seed", type='str',
                       help='Sets the random seed to a the given string')
     parser.add_option('--record', action='store_true',
                       help='Writes game histories to a file (named by the time they were played)', default=False)
 
-    parser.add_option('--recordLog', action='store_true',
+    parser.add_option('--record-log', dest="record_log", action='store_true',
                       help='Writes game log  to a file (named by the time they were played)', default=False)
     parser.add_option('--replay', default=None,
                       help='Replays a recorded game file.')
@@ -814,17 +813,17 @@ def read_command(argv):
                       help='Replays a recorded game file without display to generate result log.')
     parser.add_option('--delay-step', type='float', dest='delay_step',
                       help=default('Delay step in a play or replay.'), default=0.03)
-    parser.add_option('-x', '--numTraining', dest='numTraining', type='int',
+    parser.add_option('-x', '--numTraining', dest='num_training', type='int',
                       help=default('How many episodes are training (suppresses output)'), default=0)
-    parser.add_option('-c', '--catchExceptions', action='store_true', default=False,
+    parser.add_option('-c', '--catch-exceptions', dest='catch_exceptions', action='store_true', default=False,
                       help='Catch exceptions and enforce time limits')
     parser.add_option('-g', '--game-id', dest='game_id', type='int', default=0,
                       help='Set the gameplay identifier')
     parser.add_option('-u', '--contest-name', dest='contest_name', type=str, default="default",
                       help="Set the contest name")
 
-    parsed_options, otherjunk = parser.parse_args(argv)
-    assert len(otherjunk) == 0, "Unrecognized options: " + str(otherjunk)
+    parsed_options, other_junk = parser.parse_args(argv)
+    assert len(other_junk) == 0, "Unrecognized options: " + str(other_junk)
     args = dict()
 
     # Choose a display format
@@ -855,16 +854,6 @@ def read_command(argv):
     args['red_team_name'] = parsed_options.red_name
     args['blue_team_name'] = parsed_options.blue_name
 
-    if parsed_options.fixRandomSeed:
-        random.seed('cs188')
-
-    if parsed_options.setRandomSeed:
-        random.seed(parsed_options.setRandomSeed)
-
-    if parsed_options.recordLog:
-        sys.stdout = open('log-0', 'w')
-        sys.stderr = sys.stdout
-
     # Special case: recorded games don't use the runGames method or args structure
     if parsed_options.replay is not None:
         print(f'Replaying recorded game {parsed_options.replay}.')
@@ -892,15 +881,27 @@ def read_command(argv):
         replay_game(**recorded)
         sys.exit(0)
 
+    if parsed_options.fix_random_seed:
+        random.seed('cs188')
+
+    if parsed_options.set_random_seed:
+        random.seed(parsed_options.set_random_seed)
+
+    if parsed_options.record_log:
+        sub_folder = f'logs/contest_{parsed_options.contest_name}'
+        os.makedirs(name=sub_folder, exist_ok=True)
+        sys.stdout = open(f'{sub_folder}/game_{parsed_options.game_id}.log', 'w')
+        sys.stderr = sys.stdout
+
     # Choose a pacman agent
-    red_args, blue_args = parse_agent_args(parsed_options.redOpts), parse_agent_args(parsed_options.blueOpts)
-    if parsed_options.numTraining > 0:
-        red_args['num_training'] = parsed_options.numTraining
-        blue_args['num_training'] = parsed_options.numTraining
-    no_keyboard = parsed_options.textgraphics or parsed_options.quiet or parsed_options.numTraining > 0
-    print('\nRed team %s with %s:' % (parsed_options.red, red_args))
+    red_args, blue_args = parse_agent_args(parsed_options.red_opts), parse_agent_args(parsed_options.blue_opts)
+    if parsed_options.num_training > 0:
+        red_args['num_training'] = parsed_options.num_training
+        blue_args['num_training'] = parsed_options.num_training
+    # no_keyboard = parsed_options.textgraphics or parsed_options.quiet or parsed_options.num_training > 0
+    print(f'\nRed team {parsed_options.red} with {red_args}:')
     red_agents = load_agents(True, parsed_options.red, red_args)
-    print('\nBlue team %s with %s:' % (parsed_options.blue, blue_args))
+    print(f'\nBlue team {parsed_options.blue} with {blue_args}:')
     blue_agents = load_agents(False, parsed_options.blue, blue_args)
     args['agents'] = sum([list(el) for el in zip(red_agents, blue_agents)], [])  # list of agents
 
@@ -927,7 +928,7 @@ def read_command(argv):
     # Choose a layout
     import layout
     layouts = []
-    for i in range(parsed_options.numGames):
+    for i in range(parsed_options.num_games):
         if parsed_options.layout == 'RANDOM':
             layout_generated = layout.Layout(random_layout().split('\n'))
         elif parsed_options.layout.startswith('RANDOM'):
@@ -942,10 +943,10 @@ def read_command(argv):
 
     args['layouts'] = layouts
     args['length'] = parsed_options.time
-    args['num_games'] = parsed_options.numGames
-    args['num_training'] = parsed_options.numTraining
+    args['num_games'] = parsed_options.num_games
+    args['num_training'] = parsed_options.num_training
     args['record'] = parsed_options.record
-    args['catch_exceptions'] = parsed_options.catchExceptions
+    args['catch_exceptions'] = parsed_options.catch_exceptions
     args['delay_step'] = parsed_options.delay_step
     args['game_id'] = parsed_options.game_id
     args['contest_name'] = parsed_options.contest_name
@@ -984,11 +985,11 @@ def load_agents(is_red, agent_file, cmd_line_args):
     except (NameError, ImportError):
         print('Error: The team "' + agent_file + '" could not be loaded! ', file=sys.stderr)
         traceback.print_exc()
-        return [None for i in range(2)]
+        return [None] * 2
     except IOError:
         print('Error: The team "' + agent_file + '" could not be loaded! ', file=sys.stderr)
         traceback.print_exc()
-        return [None for i in range(2)]
+        return [None] * 2
 
     args = dict()
     args.update(cmd_line_args)  # Add command line args with priority
@@ -999,11 +1000,11 @@ def load_agents(is_red, agent_file, cmd_line_args):
     #   raise Exception('Using the keyboard requires graphics (no text display, quiet or training games)')
 
     try:
-        create_team_func = getattr(module, 'createTeam')
+        create_team_func = getattr(module, 'create_team')
     except AttributeError:
         print('Error: The team "' + agent_file + '" could not be loaded! ', file=sys.stderr)
         traceback.print_exc()
-        return [None for i in range(2)]
+        return [None] * 2
 
     index_addend = 0
     if not is_red:
@@ -1029,7 +1030,7 @@ def replay_game(layout, agents, actions, display, length, red_team_name, blue_te
         rules.process(state, game)
         time.sleep(delay)
 
-    game.gameOver = True
+    game.game_over = True
     if not game.rules.quiet:
         red_count = 0
         blue_count = 0
@@ -1037,9 +1038,9 @@ def replay_game(layout, agents, actions, display, length, red_team_name, blue_te
         for index in range(state.get_num_agents()):
             agent_state = state.data.agent_states[index]
             if index in state.get_red_team_indices():
-                red_count += agent_state.numReturned
+                red_count += agent_state.num_returned
             else:
-                blue_count += agent_state.numReturned
+                blue_count += agent_state.num_returned
 
         if blue_count >= food_to_win:  # state.getRedFood().count() == MIN_FOOD:
             print(f'The Blue team has returned at least {food_to_win} of the opponents\' dots.')
@@ -1057,7 +1058,7 @@ def replay_game(layout, agents, actions, display, length, red_team_name, blue_te
     if wait_end is True:
         print("END")
         try:
-            wait = input("PRESS ENTER TO CONTINUE")
+            input("PRESS ENTER TO CONTINUE")
         except:
             print("END")
 
@@ -1089,9 +1090,11 @@ def run_games(layouts, agents, display, length, num_games, record, num_training,
 
         g.record = None
         if record:
-            import time, pickle, game
-            components = {'layout': layout, 'agents': [game.Agent() for a in agents], 'actions': g.moveHistory,
-                          'length': length, 'redTeamName': red_team_name, 'blueTeamName': blue_team_name}
+            import time
+            import pickle
+            import game
+            components = {'layout': layout, 'agents': [game.Agent() for _ in agents], 'actions': g.move_history,
+                          'length': length, 'red_team_name': red_team_name, 'blue_team_name': blue_team_name}
             print("recorded")
             g.record = pickle.dumps(components)
             sub_folder = f'replays/contest_{contest_name}'

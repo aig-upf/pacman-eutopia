@@ -39,7 +39,7 @@ class NullGraphics:
     def draw(self, state):
         print(state)
 
-    def updateDistributions(self, dist):
+    def update_distributions(self, dist):
         pass
 
     def finish(self):

@@ -61,14 +61,14 @@ class Layout:
         else:
             self.visibility = VISIBILITY_MATRIX_CACHE[reduce(str.__add__, self.layoutText)]
 
-    def isWall(self, pos):
+    def is_wall(self, pos):
         x, col = pos
         return self.walls[x][col]
 
     def getRandomLegalPosition(self):
         x = random.choice(range(self.width))
         y = random.choice(range(self.height))
-        while self.isWall( (x, y) ):
+        while self.is_wall((x, y)):
             x = random.choice(range(self.width))
             y = random.choice(range(self.height))
         return (x,y)

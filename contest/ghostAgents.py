@@ -23,7 +23,7 @@ class GhostAgent( Agent ):
     def __init__( self, index ):
         self.index = index
 
-    def getAction( self, state ):
+    def get_action(self, state):
         dist = self.getDistribution(state)
         if len(dist) == 0:
             return Directions.STOP
@@ -54,7 +54,7 @@ class DirectionalGhost( GhostAgent ):
         ghostState = state.getGhostState( self.index )
         legalActions = state.get_legal_actions(self.index)
         pos = state.getGhostPosition( self.index )
-        isScared = ghostState.scaredTimer > 0
+        isScared = ghostState.scared_timer > 0
 
         speed = 1
         if isScared: speed = 0.5
