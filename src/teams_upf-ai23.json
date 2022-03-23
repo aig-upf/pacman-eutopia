@@ -1,0 +1,43 @@
+{"teams":[
+	{
+	"name": "upf-one",
+	"id": 1,
+	"repository": "https://github.com/AI4EDUC/pacman-contest-agent.git",
+	"last_commit": "None",
+	"members":[
+		{
+		"name": "Anna",
+		"id": "123"
+		},
+		{
+		"name": "Bob",
+		"id": "125"
+		},
+		{
+		"name": "Claire",
+		"id": "139"
+		}
+	]
+	},
+	{
+	"name": "upf-second",
+	"id": 2,
+	"repository": "https://github.com/AI4EDUC/pacman-contest-agent.git",
+	"last_commit": "None",
+	"members":[
+		{
+		"name": "Charlie",
+		"id": "335"
+		},
+		{
+		"name": "Mary",
+		"id": "742"
+		},
+		{
+		"name": "Jane",
+		"id": "201"
+		}
+	]
+	}
+]}
+

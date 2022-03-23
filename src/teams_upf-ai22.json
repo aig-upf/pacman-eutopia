@@ -2,7 +2,7 @@
 	{
 	"name": "upf-one",
 	"id": 1,
-	"repository": "https://github.com/jsego/pacman-eutopia.git",
+	"repository": "https://github.com/AI4EDUC/pacman-contest-agent.git",
 	"last_commit": "None",
 	"members":[
 		{
@@ -22,7 +22,7 @@
 	{
 	"name": "upf-second",
 	"id": 2,
-	"repository": "https://github.com/jsego/pacman-eutopia.git",
+	"repository": "https://github.com/AI4EDUC/pacman-contest-agent.git",
 	"last_commit": "None",
 	"members":[
 		{
