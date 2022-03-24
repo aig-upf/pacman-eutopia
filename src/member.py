@@ -16,3 +16,6 @@ class Member:
 
     def get_identifier(self):
         return self.identifier
+
+    def to_json_obj(self):
+        return {"name": self.name, "id": self.identifier}

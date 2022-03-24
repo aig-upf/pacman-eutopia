@@ -4,6 +4,7 @@
 	"id": 1,
 	"repository": "https://github.com/AI4EDUC/pacman-contest-agent.git",
 	"last_commit": "None",
+	"updated": false,
 	"members":[
 		{
 		"name": "Anna",
@@ -24,6 +25,7 @@
 	"id": 2,
 	"repository": "https://github.com/AI4EDUC/pacman-contest-agent.git",
 	"last_commit": "None",
+	"updated": false,
 	"members":[
 		{
 		"name": "Charlie",

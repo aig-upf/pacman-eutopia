@@ -21,3 +21,6 @@ class TeamsParser:
 
     def get_teams(self) -> List[Team]:
         return self.teams
+
+    def to_json_obj(self):
+        return {"teams": [team.to_json_obj() for team in self.teams]}
