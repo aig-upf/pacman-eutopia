@@ -64,10 +64,8 @@ class ContestManager:
 
     def dump_json_file(self, contest_name: str, dest_file_name: str) -> None:
         assert contest_name in self.contests
-        # json_str = self.contests[contest_name].to_json_str()
-        print(self.contests[contest_name])
-        json_str = json.dumps(self.contests[contest_name].to_json_obj())
-        print(json_str)
+        with open(dest_file_name, "w") as f:
+            f.write(json.dumps(self.contests[contest_name].to_json_obj()))
 
 
 def main():
@@ -75,7 +73,7 @@ def main():
     # print(teams_parser)
     contest_manager = ContestManager(json_file="contests.json")
     for contest_name in contest_manager.get_contest_names():
-        contest_manager.dump_json_file(contest_name=contest_name, dest_file_name="")
+        contest_manager.dump_json_file(contest_name=contest_name, dest_file_name=f"teams_{contest_name}.json")
 
 
 if __name__ == "__main__":
