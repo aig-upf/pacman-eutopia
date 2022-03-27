@@ -13,7 +13,7 @@
 
 
 import random
-from captureAgents import CaptureAgent
+from contest.captureAgents import CaptureAgent
 
 
 #################
