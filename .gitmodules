@@ -2,7 +2,3 @@
 	path = pacman-contest
 	url = git@github.com:jsego/pacman-contest.git
 	branch = main
-[submodule "pacman-agent"]
-	path = pacman-agent
-	url = https://github.com/jsego/pacman-agent.git
-	branch = main
