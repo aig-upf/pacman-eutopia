@@ -6,7 +6,8 @@ from git import Repo
 import os
 from team import Team
 from typing import List
-
+import contest.capture
+import sys
 
 class ContestManager:
     contests: dict
@@ -83,12 +84,22 @@ class ContestManager:
         return self.contests[contest_name].get_teams()
 
     @staticmethod
-    def submit_match(blue_team: Team, red_team: Team) -> None:
+    def get_local_team_name(contest_name: str, team: Team):
+        print(f"{contest_name}_{team.get_name()}/myTeam.py")
+        return f"{contest_name}_{team.get_name()}/myTeam.py"
+
+    def submit_match(self, contest_name: str, blue_team: Team, red_team: Team) -> None:
         """Call the two agents Slurm script"""
         print(f"Slurm task: blue={blue_team.get_name()} vs red={red_team.get_name()}")
+        # This is for local running
+        script_to_run = ["-b", self.get_local_team_name(contest_name, blue_team),
+                         "-r", self.get_local_team_name(contest_name, red_team)]
+        print(script_to_run)
+        contest.capture.run(script_to_run)
 
 
 def main():
+    print(sys.argv)
     # teams_parser = TeamsParser(json_file="teams_upf-ai22.json")
     # print(teams_parser)
     contest_manager = ContestManager(contests_json_file="contests.json")
@@ -101,7 +112,7 @@ def main():
                     continue
                 new_match = [all_teams[t1_idx], all_teams[t2_idx]]
                 random.shuffle(new_match)  # randomize blue vs red
-                contest_manager.submit_match(blue_team=new_match[0], red_team=new_match[1])
+                contest_manager.submit_match(contest_name=contest_name, blue_team=new_match[0], red_team=new_match[1])
 
         contest_manager.dump_json_file(contest_name=contest_name, dest_file_name=f"teams_{contest_name}.json")
 
