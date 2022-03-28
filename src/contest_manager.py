@@ -9,6 +9,7 @@ from typing import List
 import contest.capture
 import sys
 
+
 class ContestManager:
     contests: dict
 
@@ -92,10 +93,13 @@ class ContestManager:
         """Call the two agents Slurm script"""
         print(f"Slurm task: blue={blue_team.get_name()} vs red={red_team.get_name()}")
         # This is for local running
-        script_to_run = ["-b", self.get_local_team_name(contest_name, blue_team),
-                         "-r", self.get_local_team_name(contest_name, red_team)]
-        print(script_to_run)
-        contest.capture.run(script_to_run)
+        match_arguments = ["-b", self.get_local_team_name(contest_name, blue_team),
+                           "-r", self.get_local_team_name(contest_name, red_team)]
+        print(match_arguments)
+        contest.capture.run(match_arguments)
+
+    def generate_html(self) -> None:
+        pass
 
 
 def main():
@@ -115,6 +119,7 @@ def main():
                 contest_manager.submit_match(contest_name=contest_name, blue_team=new_match[0], red_team=new_match[1])
 
         contest_manager.dump_json_file(contest_name=contest_name, dest_file_name=f"teams_{contest_name}.json")
+    contest_manager.generate_html()
 
 
 if __name__ == "__main__":
