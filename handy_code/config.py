@@ -6,8 +6,8 @@ from pytz import timezone
 DIR_SCRIPT = sys.path[0]
 
 ERROR_SCORE = 9999
-DEFAULT_ORGANIZER = "Pacman University"
-TIMEZONE = timezone("Australia/Melbourne")
+DEFAULT_ORGANIZER = "EUTOPIA"
+TIMEZONE = timezone("Europe/Madrid")
 
 # Output directories (all inside the WWW folder):
 #  run_replays/{red_team_name}_vs_{blue_team_name}_{layout}.replay
@@ -15,9 +15,9 @@ TIMEZONE = timezone("Australia/Melbourne")
 #  replays_archive/replays_{contest_timestamp_id}.tar.gz  # lots of .replay files
 #  logs_archive/replays_{contest_timestamp_id}.tar.gz  # lots of .log files
 #  stats_archive/replays_{contest_timestamp_id}.json
-STATS_ARCHIVE_DIR = "stats-archive"
-LOGS_ARCHIVE_DIR = "logs-archive"
-REPLAYS_ARCHIVE_DIR = "replays-archive"
+SCORES_DIR = "scores"
+LOGS_DIR = "logs"
+REPLAYS_DIR = "replays"
 
 TMP_DIR = "tmp"
 

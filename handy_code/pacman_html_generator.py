@@ -3,9 +3,9 @@
 """
 Generates the HTML output given logs of the past tournament runs.
 """
-__author__      = "Sebastian Sardina, Marco Tamassia, Nir Lipovetzky, and Andrew Chester"
-__copyright__   = "Copyright 2017-2021"
-__license__     = "GPLv3"
+__author__ = "Sebastian Sardina, Marco Tamassia, Nir Lipovetzky, and Andrew Chester (refactored by Javier Segovia)"
+__copyright__ = "Copyright 2017-2022"
+__license__ = "GPLv3"
 
 #  ----------------------------------------------------------------------------------------------------------------------
 # Import standard stuff
@@ -22,8 +22,6 @@ import datetime
 from pytz import timezone
 from config import *
 
-
-# logging.basicConfig(format='%(levelname)s: %(message)s', level=logging.DEBUG, datefmt='%a, %d %b %Y %H:%M:%S')
 logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.INFO,
                     datefmt='%a, %d %b %Y %H:%M:%S')
 
@@ -31,60 +29,33 @@ DIR_SCRIPT = sys.path[0]
 FILE_FONTS = os.path.join(DIR_SCRIPT, "fonts.zip")
 FILE_CSS = os.path.join(DIR_SCRIPT, "style.css")
 
+
 # ----------------------------------------------------------------------------------------------------------------------
 # Load settings either from config.json or from the command line
 
 def load_settings():
-    DEFAULT_CONFIG_FILE = 'config.json'
-
     parser = argparse.ArgumentParser(
         description='This script generates the HTML structure given the logs of all the runs of this tournament.'
     )
     parser.add_argument(
-        dest='organizer', type=str,
+        "-o", "--organizer",
+        dest='organizer', type=str, required=True,
         help='name of the organizer of the contest'
     )
     parser.add_argument(
-        dest='www_dir', type=str,
-        help='output directory containing sats, replays, and log files'
+        "-d", "--www-dir",
+        dest='www_dir', type=str, default="www",
+        help='output directory containing scores, replays, and log files'
     )
     args = parser.parse_args()
 
-
-    # If no arguments are given, stop
-    if len(sys.argv) == 1:
-        print('No arguments given. Use -h fo help')
-        sys.exit(0)
-
     # First get the options from the configuration file if available
-    settings = {}
-    # if not args.config_file is None:
-    #     if os.path.exists(args.config_file):
-    #         with open(args.config_file, 'r') as f:
-    #             settings = json.load(f)
-    #             logging.debug('Configuration file loaded')
-    #     else:
-    #         logging.error('Configuration file selected not available')
-    #         settings = {}
+    settings = {'organizer': args.organizer, 'www_dir': args.www_dir}
+    settings['scores_dir'] = os.path.join(settings['www_dir'], SCORES_DIR)
+    settings['replays_dir'] = os.path.join(settings['www_dir'], REPLAYS_DIR)
+    settings['logs_dir'] = os.path.join(settings['www_dir'], LOGS_DIR)
 
-    # if given, set the parameters as per command line options (may override config file)
-    if args.organizer:
-        settings['organizer'] = args.organizer
-    if args.www_dir:
-        settings['www_dir'] = args.www_dir
-
-    # Check mandatory parameters are there, otherwise quit
-    missing_parameters = {'organizer', 'www_dir'} - set(settings.keys())
-    if missing_parameters:
-        logging.error('Missing parameters: %s. Aborting.' % list(sorted(missing_parameters)))
-        parser.print_help()
-        sys.exit(1)
-
-    settings['stats_archive_dir'] = os.path.join(settings['www_dir'], STATS_ARCHIVE_DIR)
-    settings['replays_archive_dir'] = os.path.join(settings['www_dir'], REPLAYS_ARCHIVE_DIR)
-    settings['logs_archive_dir'] = os.path.join(settings['www_dir'], LOGS_ARCHIVE_DIR)
-
-    logging.info('Script will run with this configuration: %s' % settings)
+    logging.info(f'Script will run with this configuration: {settings}')
 
     return settings
 
@@ -107,7 +78,6 @@ class HtmlGenerator:
         self.organizer = organizer
         self.score_thresholds = score_thresholds
 
-
     def _close(self):
         pass
 
@@ -117,70 +87,51 @@ class HtmlGenerator:
         """
         shutil.rmtree(self.www_dir)
 
-    def add_run(self, run_id, stats_dir, replays_dir, logs_dir):
+    def add_run(self, run_id, scores_dir, replays_dir, logs_dir):
         """
         (Re)Generates the HTML for the given run and updates the HTML index.
         :return:
         """
-        self._save_run_html(run_id, stats_dir, replays_dir, logs_dir)
+        self._save_run_html(run_id, scores_dir, replays_dir, logs_dir)
         self._generate_main_html()
 
-    def _save_run_html(self, run_id, stats_file, replays_file, logs_file):
+    def _save_run_html(self, run_id, scores_file, replays_file, logs_file):
         """
         Generates the HTML of a contest run and saves it in www/results_<run_id>/results.html.
 
         The URLs passed should be either:
-         - HTTP URLs, in which case the stats file is downloaded to generate the HTML
+         - HTTP URLs, in which case the scores file is downloaded to generate the HTML
          - local relative paths, which are assumed to start from self.www_dir
 
         No checks are done, so mind your parameters.
         """
         # The URLs may be in byte format - convert them to strings if needed
         try:
-            stats_file = stats_file.decode()
+            scores_file = scores_file.decode()
         except AttributeError:
             pass
         try:
-            replays_file= replays_file.decode()
+            replays_file = replays_file.decode()
         except AttributeError:
             pass
         try:
-            logs_file= logs_file.decode()
+            logs_file = logs_file.decode()
         except AttributeError:
             pass
 
-        # Get the information in the stats file
-        if stats_file.startswith('http'):  # http url
-            import urllib.request as request
-            content = request(stats_file).read()
-            data = json.loads(content)
+        scores_file_path = os.path.join(self.www_dir, scores_file)
+        with open(scores_file_path, 'r') as f:
+            score = int(next(f))
 
-        else:  # relative path
-            # prepend www/ so the file can be opened by this script, which is somewhere else
-            stats_file_path = os.path.join(self.www_dir, stats_file)
-
-            with open(stats_file_path, 'r') as f:
-                data = json.load(f)
-
-        games = data['games']
-        max_steps = data['max_steps']
-        team_stats = data['team_stats']
-        random_layouts = data['random_layouts']
-        fixed_layouts = data['fixed_layouts']
-        if 'organizer' in data.keys():
-            organizer = data['organizer']
-        else:
-            organizer = None
-        if 'timestamp_id' in data.keys():
-            date_run = data['timestamp_id']
-        else:
-            date_run = run_id
-
-        #  check if json data file contains the links to the replays and logs, if so, used them!
-        if 'url_replays' in data:
-            replays_file = data['url_replays']
-        if 'url_logs' in data:
-            logs_file = data['url_logs']
+        games = 1  # data['games']
+        max_steps = 1200  # data['max_steps']
+        # [('Blue_team', [6, 2, 0, 0, 2, 2]), ('Red_team', [0, 0, 0, 2, 2, -2])]
+        # points_pct, points, wins, draws, losses, errors, sum_score
+        team_stats = {'Blue_team': [6, 2, 0, 0, 2, 2], 'Red_team': [0, 0, 0, 2, 2, -2]}  # data['team_stats']
+        random_layouts = []  # data['random_layouts']
+        fixed_layouts = []  # data['fixed_layouts']
+        organizer = self.organizer
+        date_run = run_id
 
         if not os.path.exists(self.www_dir):
             os.makedirs(self.www_dir)
@@ -190,7 +141,7 @@ class HtmlGenerator:
 
         run_html = self._generate_output(run_id, date_run, organizer, games, team_stats, random_layouts, fixed_layouts,
                                          max_steps,
-                                         stats_file, replays_file, logs_file)
+                                         scores_file, replays_file, logs_file)
 
         html_full_path = os.path.join(self.www_dir, f'results_{run_id}.html')
         with open(html_full_path, "w") as f:
@@ -205,7 +156,7 @@ class HtmlGenerator:
         main_html = """<html><head><title>Results for PACMAN Capture the Flag the tournament</title>\n"""
         main_html += """<link rel="stylesheet" type="text/css" href="style.css"/></head>\n"""
         main_html += """<body><h1>Results Pacman Capture the Flag by Date</h1>\n"""
-        main_html += """<body><h2>Organizer: %s </h1>\n\n""" % self.organizer
+        main_html += f"""<body><h2>Organizer: {self.organizer} </h1>\n\n"""
         for d in sorted(os.listdir(self.www_dir)):
             if d.endswith('fonts'):
                 continue
@@ -217,7 +168,7 @@ class HtmlGenerator:
             print(main_html, file=f)
 
     def _generate_output(self, run_id, date_run, organizer, games, team_stats, random_layouts, fixed_layouts, max_steps,
-                         stats_dir, replays_dir, logs_dir):
+                         scores_dir, replays_dir, logs_dir):
         """
         Generates the HTML of the report of the run.
         """
@@ -228,31 +179,14 @@ class HtmlGenerator:
         output = """<html><head><title>Results for the tournament round</title>\n"""
         output += """<link rel="stylesheet" type="text/css" href="style.css"/></head>\n"""
         output += """<body><h1>PACMAN Capture the Flag Tournament</h1>\n"""
-        output += """<body><h2>Tournament Organizer: %s </h1>\n""" % organizer
+        output += f"""<body><h2>Tournament Organizer: {organizer} </h1>\n"""
         if not run_id == date_run:
-            output += """<body><h2>Name of Tournament: %s </h1>\n""" % run_id
-        output += """<body><h2>Date of Tournament: %s \n</h1>""" % date_run
+            output += f"""<body><h2>Name of Tournament: {run_id} </h1>\n"""
+        output += f"""<body><h2>Date of Tournament: {date_run} \n</h1>"""
 
         output += """<h2>Configuration: %d teams in %d (%d fixed + %d random) layouts for %d steps</h2>\n""" \
                   % (len(team_stats), len(fixed_layouts) + len(random_layouts), len(fixed_layouts), len(random_layouts),
                      max_steps)
-
-        # output += """<h2>Configuration:</h2><ul>"""
-        # output += """<li>No. of teams: %d</li>""" % len(team_stats)
-        # output += """<li>No. of layouts: %d (%d fixed + %d random)</li>""" % \
-        #           (len(fixed_layouts) + len(random_layouts), len(fixed_layouts), len(random_layouts))
-        # output += """<li>No. of steps: %d</li>""" % self.max_steps
-        # output += """</ul><br/>"""
-
-
-
-        # This actually enumerates the list of layouts, not needed... :-)
-        # if fixed_layouts:
-        #     s = '</li><li>'.join(fixed_layouts)
-        #     output += """<h3>Fixed layouts</h2><ul><li>%s</li></ul><br/>""" % s
-        # if random_layouts:
-        #     s = '</li><li>'.join(random_layouts)
-        #     output += """<h3>Random layouts</h2><ul><li>%s</li></ul><br/>""" % s
 
         output += """<br/><br/><table border="1">"""
         if len(games) == 0:
@@ -276,48 +210,49 @@ class HtmlGenerator:
             if self.score_thresholds is None:
                 score_thresholds = [-1]
             else:
-                score_thresholds = sorted(self.score_thresholds,reverse=True) + [-1]
+                score_thresholds = sorted(self.score_thresholds, reverse=True) + [-1]
 
             next_threshold_index = 0
 
             # Sort teams by points_pct v[1][0] first, then no. of wins, then score points.
-            # example list(team_stats.items() = [('TYGA_THUG', [6, 2, 0, 0, 0, 2]), ('RationalAgents_', [0, 0, 0, 2, 2, -2])]
-            sorted_team_stats = sorted(list(team_stats.items()), key=lambda v: (v[1][0], v[1][2], v[1][6]), reverse=True)
+            # example list(team_stats.items() = [('Blue_team', [6, 2, 0, 0, 2, 2]), ('Red_team', [0, 0, 0, 2, 2, -2])]
+            sorted_team_stats = sorted(list(team_stats.items()), key=lambda v: (v[1][0], v[1][2], v[1][6]),
+                                       reverse=True)
             position = 0
             for key, (points_pct, points, wins, draws, losses, errors, sum_score) in sorted_team_stats:
                 while score_thresholds[next_threshold_index] > points_pct:
-                    output +="""<tr bgcolor="#D35400"><td colspan="10" style="text-align:center">%d%% </td></tr>\n""" % score_thresholds[next_threshold_index]
-                    next_threshold_index+=1
+                    output += f"""<tr bgcolor="#D35400"><td colspan="10" style="text-align:center">{
+                    score_thresholds[next_threshold_index]}%% </td></tr>\n"""
+                    next_threshold_index += 1
                 position += 1
                 output += """<tr>"""
-                output += """<td>%d</td>""" % position
-                output += """<td>%s</td>""" % key
-                output += """<td>%d%%</td>""" % points_pct
-                output += """<td>%d</td>""" % points
-                output += """<td>%d</td>""" % wins
-                output += """<td >%d</td>""" % draws
-                output += """<td>%d</td>""" % losses
-                output += """<td>%d</td>""" % (wins + draws + losses)
-                output += """<td >%d</td>""" % errors
-                output += """<td >%d</td>""" % sum_score
-                output += """</tr>\n"""
+                output += f"""<td>{position}</td>"""
+                output += f"""<td>{key}</td>"""
+                output += f"""<td>{points_pct}%%</td>"""
+                output += f"""<td>{points}</td>"""
+                output += f"""<td>{wins}</td>"""
+                output += f"""<td >{draws}</td>"""
+                output += f"""<td>{losses}</td>"""
+                output += f"""<td>{(wins + draws + losses)}</td>"""
+                output += f"""<td >{errors}</td>"""
+                output += f"""<td >{sum_score}</td>"""
+                output += f"""</tr>\n"""
             output += "</table>"
-
 
             # Second, print each game result
             output += "\n\n<br/><br/><h2>Games</h2>\n"
 
             times_taken = [time_game for (_, _, _, _, _, time_game) in games]
             output += """<h3>No. of games: %d / Avg. game length: %s / Max game length: %s</h3>\n""" \
-                      % (len(games), str(datetime.timedelta(seconds=round(sum(times_taken) / len(times_taken),0))),
+                      % (len(games), str(datetime.timedelta(seconds=round(sum(times_taken) / len(times_taken), 0))),
                          str(datetime.timedelta(seconds=max(times_taken))))
 
             if replays_dir:
-                output += """<a href="%s">DOWNLOAD REPLAYS</a><br/>\n""" % replays_dir
+                output += f"""<a href="{replays_dir}">DOWNLOAD REPLAYS</a><br/>\n"""
             if logs_dir:
-                output += """<a href="%s">DOWNLOAD LOGS</a><br/>\n""" % logs_dir
-            if stats_dir:
-                output += """<a href="%s">DOWNLOAD STATS</a><br/>\n\n""" % stats_dir
+                output += f"""<a href="{logs_dir}">DOWNLOAD LOGS</a><br/>\n"""
+            if scores_dir:
+                output += f"""<a href="{scores_dir}">DOWNLOAD SCORES</a><br/>\n\n"""
             output += """<table border="1">"""
             output += """<tr>"""
             output += """<th>Team 1</th>"""
@@ -333,39 +268,39 @@ class HtmlGenerator:
                 # Team 1
                 output += """<td align="center">"""
                 if winner == n1:
-                    output += "<b>%s</b>" % n1
+                    output += f"<b>{n1}</b>"
                 else:
-                    output += "%s" % n1
+                    output += f"{n1}"
                 output += """</td>"""
 
                 # Team 2
                 output += """<td align="center">"""
                 if winner == n2:
-                    output += "<b>%s</b>" % n2
+                    output += f"<b>{n2}</b>"
                 else:
-                    output += "%s" % n2
+                    output += f"{n2}"
                 output += """</td>"""
 
                 # Layout
-                output += """<td>%s</td>""" % layout
+                output += f"""<td>{layout}</td>"""
 
                 # Time taken in the game
-                output += """<td>%s</td>""" % str(datetime.timedelta(seconds=time_taken))
+                output += f"""<td>{str(datetime.timedelta(seconds=time_taken))}</td>"""
 
                 # Score and Winner
                 if score == ERROR_SCORE:
                     if winner == n1:
                         output += """<td >--</td>"""
-                        output += """<td><b>ONLY FAILED: %s</b></td>""" % n2
+                        output += f"""<td><b>ONLY FAILED: {n2}</b></td>"""
                     elif winner == n2:
                         output += """<td >--</td>"""
-                        output += """<td><b>ONLY FAILED: %s</b></td>""" % n1
+                        output += f"""<td><b>ONLY FAILED: {n1}</b></td>"""
                     else:
                         output += """<td >--</td>"""
                         output += """<td><b>FAILED BOTH</b></td>"""
                 else:
-                    output += """<td>%d</td>""" % score
-                    output += """<td><b>%s</b></td>""" % winner
+                    output += f"""<td>{score}</td>"""
+                    output += f"""<td><b>{winner}</b></td>"""
 
                 output += """</tr>\n"""
 
@@ -374,43 +309,43 @@ class HtmlGenerator:
         return output
 
 
-if __name__ == '__main__':
+def main():
     settings = load_settings()
 
-    stats_dir = settings['stats_archive_dir']
-    replays_dir = settings['replays_archive_dir']
-    logs_dir = settings['logs_archive_dir']
+    scores_dir = settings['scores_dir']
+    replays_dir = settings['replays_dir']
+    logs_dir = settings['logs_dir']
 
     html_generator = HtmlGenerator(settings['www_dir'], settings['organizer'])
 
-    if stats_dir is not None:
-        pattern = re.compile(r'stats_([-+0-9T:.]+)\.json')
-
-        # Collect all files in stats directory
-        all_files = [f for f in os.listdir(stats_dir) if os.path.isfile(os.path.join(stats_dir, f))]
+    if scores_dir is not None:
+        # Collect all files in scores directory
+        all_files = [f for f in os.listdir(scores_dir) if os.path.isfile(os.path.join(scores_dir, f))]
 
         # make paths relative to www_dir
         www_dir = settings['www_dir']
-        stats_dir = os.path.relpath(stats_dir, www_dir)
+        scores_dir = os.path.relpath(scores_dir, www_dir)
         replays_dir = os.path.relpath(replays_dir, www_dir) if replays_dir else None
         logs_dir = os.path.relpath(logs_dir, www_dir) if logs_dir else None
 
-        # Process each .json stat file - 1 per contest ran
-        for stats_file_name in all_files:
-            match = pattern.match(stats_file_name)
+        # Process each score file - 1 per contest ran
+        pattern = re.compile(r'game_([-+0-9T:.]+)\.score')
+        for score_filename in all_files:
+            match = pattern.match(score_filename)
             if not match:
                 continue
-            # Extract the id for that particular content from the stat file stats_<ID-TIMESTAMP>
+            # Extract the id for that particular content from the score file game_{id}.score
             run_id = match.group(1)
 
-            replays_file_name = f'replays_{run_id}.tar'
-            logs_file_name = f'logs_{run_id}.tar'
+            replays_file_name = f'game_{run_id}.replay'
+            logs_file_name = f'game_{run_id}.log'
 
-            stats_file_full_path = os.path.join(stats_dir, stats_file_name)
+            score_file_full_path = os.path.join(scores_dir, score_filename)
             replays_file_full_path = os.path.join(replays_dir, replays_file_name) if replays_dir else None
             logs_file_full_path = os.path.join(logs_dir, logs_file_name) if logs_dir else None
 
-            replays_file_full_path += '.gz' if not os.path.exists(replays_file_full_path) else ''
-            logs_file_full_path += '.gz' if not os.path.exists(logs_file_full_path) else ''
+            html_generator.add_run(run_id, score_file_full_path, replays_file_full_path, logs_file_full_path)
 
-            html_generator.add_run(run_id, stats_file_full_path, replays_file_full_path, logs_file_full_path)
+
+if __name__ == '__main__':
+    main()
