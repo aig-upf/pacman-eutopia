@@ -6,7 +6,7 @@ from git import Repo
 import os
 from team import Team
 from typing import List
-import contest.capture
+from contest import capture
 import sys
 
 
@@ -96,7 +96,7 @@ class ContestManager:
         match_arguments = ["-b", self.get_local_team_name(contest_name, blue_team),
                            "-r", self.get_local_team_name(contest_name, red_team)]
         print(match_arguments)
-        contest.capture.run(match_arguments)
+        capture.run(match_arguments)
 
     def generate_html(self) -> None:
         pass
