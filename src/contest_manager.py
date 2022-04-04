@@ -94,7 +94,8 @@ class ContestManager:
         print(f"Slurm task: blue={blue_team.get_name()} vs red={red_team.get_name()}")
         # This is for local running
         match_arguments = ["-b", self.get_local_team_name(contest_name, blue_team),
-                           "-r", self.get_local_team_name(contest_name, red_team)]
+                           "-r", self.get_local_team_name(contest_name, red_team),
+                           "--record-log"]
         print(match_arguments)
         capture.run(match_arguments)
 

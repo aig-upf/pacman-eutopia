@@ -119,17 +119,18 @@ class HtmlGenerator:
         except AttributeError:
             pass
 
-        scores_file_path = os.path.join(self.www_dir, scores_file)
-        with open(scores_file_path, 'r') as f:
-            score = int(next(f))
+        stats_file_path = os.path.join(self.www_dir, scores_file)
+        with open(stats_file_path, 'r') as f:
+            match_data = json.load(f)
 
-        games = 1  # data['games']
-        max_steps = 1200  # data['max_steps']
+        games = match_data['games']
+        max_steps = match_data['max_steps']
         # [('Blue_team', [6, 2, 0, 0, 2, 2]), ('Red_team', [0, 0, 0, 2, 2, -2])]
         # points_pct, points, wins, draws, losses, errors, sum_score
-        team_stats = {'Blue_team': [6, 2, 0, 0, 2, 2], 'Red_team': [0, 0, 0, 2, 2, -2]}  # data['team_stats']
-        random_layouts = []  # data['random_layouts']
-        fixed_layouts = []  # data['fixed_layouts']
+        # team_stats = {'Blue_team': [6, 2, 0, 0, 2, 2], 'Red_team': [0, 0, 0, 2, 2, -2]}  # data['team_stats']
+        team_stats = match_data['team_stats']
+        random_layouts = [layout for layout in match_data['layouts'] if layout.startswith('RANDOM')]
+        fixed_layouts = [layout for layout in match_data['layouts'] if not layout.startswith('RANDOM')]
         organizer = self.organizer
         date_run = run_id
 
@@ -140,8 +141,7 @@ class HtmlGenerator:
         shutil.copy(FILE_CSS, self.www_dir)
 
         run_html = self._generate_output(run_id, date_run, organizer, games, team_stats, random_layouts, fixed_layouts,
-                                         max_steps,
-                                         scores_file, replays_file, logs_file)
+                                         max_steps, scores_file, replays_file, logs_file)
 
         html_full_path = os.path.join(self.www_dir, f'results_{run_id}.html')
         with open(html_full_path, "w") as f:
@@ -189,7 +189,7 @@ class HtmlGenerator:
                      max_steps)
 
         output += """<br/><br/><table border="1">"""
-        if len(games) == 0:
+        if not games:
             output += "No match was run."
         else:
             # First, print a table with the final standing
@@ -329,16 +329,16 @@ def main():
         logs_dir = os.path.relpath(logs_dir, www_dir) if logs_dir else None
 
         # Process each score file - 1 per contest ran
-        pattern = re.compile(r'game_([-+0-9T:.]+)\.score')
+        pattern = re.compile(r'match_([-+0-9T:.]+)\.json')
         for score_filename in all_files:
             match = pattern.match(score_filename)
             if not match:
                 continue
-            # Extract the id for that particular content from the score file game_{id}.score
+            # Extract the id for that particular content from the score file match_{id}.score
             run_id = match.group(1)
 
-            replays_file_name = f'game_{run_id}.replay'
-            logs_file_name = f'game_{run_id}.log'
+            replays_file_name = f'match_{run_id}.replay'
+            logs_file_name = f'match_{run_id}.log'
 
             score_file_full_path = os.path.join(scores_dir, score_filename)
             replays_file_full_path = os.path.join(replays_dir, replays_file_name) if replays_dir else None
