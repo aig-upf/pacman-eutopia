@@ -8,6 +8,8 @@ from team import Team
 from typing import List
 from contest import capture
 import sys
+from html_generator import HtmlGenerator
+import re
 
 
 class ContestManager:
@@ -93,14 +95,46 @@ class ContestManager:
         """Call the two agents Slurm script"""
         print(f"Slurm task: blue={blue_team.get_name()} vs red={red_team.get_name()}")
         # This is for local running
-        match_arguments = ["-b", self.get_local_team_name(contest_name, blue_team),
+        match_arguments = ["--contest-name", contest_name,
+                           "-b", self.get_local_team_name(contest_name, blue_team),
                            "-r", self.get_local_team_name(contest_name, red_team),
-                           "--record-log"]
-        print(match_arguments)
+                           "--record", "--record-log"]
+        print(match_arguments, file=sys.stdout)
         capture.run(match_arguments)
+        # sys.stdout.flush()
 
-    def generate_html(self) -> None:
-        pass
+    def generate_html(self, contest_name: str) -> None:
+        web_dir = "www"
+        organizer = "UPF"
+        web_gen = HtmlGenerator(www_dir=web_dir, contest=contest_name, organizer=organizer)
+
+        # Directories
+        scores_dir = f"{web_dir}/contest_{contest_name}/scores"
+        replays_dir = f"{web_dir}/contest_{contest_name}/replays"
+        logs_dir = f"{web_dir}/contest_{contest_name}/logs"
+
+        # Collect all files in scores directory
+        all_files = [f for f in os.listdir(scores_dir) if os.path.isfile(os.path.join(scores_dir, f))]
+
+        # Process each score file - 1 per contest ran
+        pattern = re.compile(r'match_([-+0-9T:.]+)\.json')
+        for score_filename in all_files:
+            match = pattern.match(score_filename)
+            if not match:
+                continue
+            # Extract the id for that particular content from the score file match_{id}.score
+            run_id = match.group(1)
+
+            replays_file_name = f'match_{run_id}.replay'
+            logs_file_name = f'match_{run_id}.log'
+
+            score_file_full_path = os.path.join(scores_dir, score_filename)
+            replays_file_full_path = os.path.join(replays_dir, replays_file_name) if replays_dir else None
+            logs_file_full_path = os.path.join(logs_dir, logs_file_name) if logs_dir else None
+
+            web_gen.add_run(run_id=contest_name, scores_dir=score_file_full_path, replays_dir=replays_file_full_path,
+                            logs_dir=logs_file_full_path)
+
 
 
 def main():
@@ -120,7 +154,7 @@ def main():
                 contest_manager.submit_match(contest_name=contest_name, blue_team=new_match[0], red_team=new_match[1])
 
         contest_manager.dump_json_file(contest_name=contest_name, dest_file_name=f"teams_{contest_name}.json")
-    contest_manager.generate_html()
+        contest_manager.generate_html(contest_name=contest_name)
 
 
 if __name__ == "__main__":
