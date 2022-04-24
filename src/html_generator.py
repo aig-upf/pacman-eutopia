@@ -206,7 +206,7 @@ class HtmlGenerator:
             output += """<tr>"""
             output += f"""<td>{position}</td>"""
             output += f"""<td>{key}</td>"""
-            output += f"""<td>{points_pct}%%</td>"""
+            output += f"""<td>{points_pct}%</td>"""
             output += f"""<td>{points}</td>"""
             output += f"""<td>{wins}</td>"""
             output += f"""<td >{draws}</td>"""
