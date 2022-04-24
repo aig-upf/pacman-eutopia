@@ -20,12 +20,17 @@ class ContestManager:
         self.contests = {}
         with open(contests_json_file, "r") as f:
             json_contests = json.load(f)
-            for contest_name in json_contests:
-                self.contests[contest_name] = TeamsParser(json_file="teams_" + contest_name + ".json")
-        # logging.info(self.contest_teams)
+            for contest_data_teams in json_contests["contests"]:
+                contest_name = contest_data_teams['name']
+                self.contests[contest_name] = {
+                    "teams": TeamsParser(json_file="teams_" + contest_name + ".json"),
+                    "organizer": contest_data_teams['organizer'],
+                    "last_match_id": int(contest_data_teams['last-match-id'])
+                }
+        logging.info(self.contests)
         for contest_name in self.contests:
-            contest_data = self.contests[contest_name]
-            for team in contest_data.get_teams():
+            contest_data_teams = self.contests[contest_name]["teams"]
+            for team in contest_data_teams.get_teams():
                 repo_local_dir = self.get_repo_dir(contest_name, team)
                 logging.info(f"Repository local dir: {repo_local_dir} (exists? {self.repo_exists(repo_local_dir)})")
                 if not self.repo_exists(repo_local_dir):
@@ -75,7 +80,7 @@ class ContestManager:
     def dump_json_file(self, contest_name: str, dest_file_name: str) -> None:
         assert contest_name in self.contests
         with open(dest_file_name, "w") as f:
-            f.write(json.dumps(self.contests[contest_name].to_json_obj()))
+            f.write(json.dumps(self.contests[contest_name]["teams"].to_json_obj()))
 
     # def get_new_teams(self, contest_name: str) -> List[Team]:
     #     """Return the list of new/updated teams of a given contest"""
@@ -85,7 +90,7 @@ class ContestManager:
     def get_all_teams(self, contest_name: str) -> List[Team]:
         """Returns all teams of a given contest"""
         assert contest_name in self.contests
-        return self.contests[contest_name].get_teams()
+        return self.contests[contest_name]["teams"].get_teams()
 
     @staticmethod
     def get_local_team_name(contest_name: str, team: Team):
@@ -95,60 +100,31 @@ class ContestManager:
     def submit_match(self, contest_name: str, blue_team: Team, red_team: Team) -> None:
         """Call the two agents Slurm script"""
         logging.info(f"Slurm task: blue={blue_team.get_name()} vs red={red_team.get_name()}")
+        last_match_id = self.contests[contest_name]["last_match_id"] + 1
         # This is for local running
         match_arguments = ["--contest-name", contest_name,
                            "-b", self.get_local_team_name(contest_name, blue_team),
+                           "--blue-name", blue_team.get_name(),
                            "-r", self.get_local_team_name(contest_name, red_team),
-                           "--record", "--record-log"]
+                           "--red-name", red_team.get_name(),
+                           "-m", str(last_match_id),  # set the match id to save log and score
+                           "--record", "--record-log", "-Q"]  # record log and score in super quiet mode
         logging.info(f"Match arguments: {match_arguments}")
         capture.run(match_arguments)
-        # sys.stdout.flush()
+        self.contests[contest_name]["last_match_id"] = last_match_id
 
     def generate_html(self) -> None:
         web_gen = HtmlGenerator(www_dir="www")
 
         for idx, contest_name in enumerate(self.contests):
-            web_gen.add_contest_run(run_id=idx, contest_name=contest_name, organizer="UPF")
-
-        """
-        web_dir = "www"
-        organizer = "UPF"
-        web_gen = HtmlGenerator(www_dir=web_dir)
-
-        # Directories
-        scores_dir = f"{web_dir}/contest_{contest_name}/scores"
-        replays_dir = f"{web_dir}/contest_{contest_name}/replays"
-        logs_dir = f"{web_dir}/contest_{contest_name}/logs"
-
-        # Collect all files in scores directory
-        all_files = [f for f in os.listdir(scores_dir) if os.path.isfile(os.path.join(scores_dir, f))]
-
-        # Process each score file - 1 per contest ran
-        pattern = re.compile(r'match_([-+0-9T:.]+)\.json')
-        for score_filename in all_files:
-            match = pattern.match(score_filename)
-            if not match:
-                continue
-            # Extract the id for that particular content from the score file match_{id}.score
-            run_id = match.group(1)
-
-            replays_file_name = f'match_{run_id}.replay'
-            logs_file_name = f'match_{run_id}.log'
-
-            score_file_full_path = os.path.join(scores_dir, score_filename)
-            replays_file_full_path = os.path.join(replays_dir, replays_file_name) if replays_dir else None
-            logs_file_full_path = os.path.join(logs_dir, logs_file_name) if logs_dir else None
-
-            web_gen.add_run(run_id=contest_name, scores_dir=score_file_full_path, replays_dir=replays_file_full_path,
-                            logs_dir=logs_file_full_path)
-        """
+            web_gen.add_contest_run(run_id=idx,
+                                    contest_name=contest_name,
+                                    organizer=self.contests[contest_name]["organizer"])
 
 
 def main():
     logging.basicConfig(level=logging.INFO)
     logging.info(f"Command arguments: {sys.argv}")
-    # teams_parser = TeamsParser(json_file="teams_upf-ai22.json")
-    # logging.info(teams_parser)
     contest_manager = ContestManager(contests_json_file="contests.json")
     for contest_name in contest_manager.get_contest_names():
         all_teams = contest_manager.get_all_teams(contest_name=contest_name)

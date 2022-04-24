@@ -122,7 +122,7 @@ class HtmlGenerator:
         all_files = [f for f in os.listdir(scores_dir) if os.path.isfile(os.path.join(scores_dir, f))]
 
         # Process each score file - 1 per contest ran
-        pattern = re.compile(r'match_([-+0-9T:.]+)\.json')
+        pattern = re.compile(r'match_([-+\dT:.]+)\.json')
         for score_filename in all_files:
             match = pattern.match(score_filename)
             if not match:
@@ -140,13 +140,18 @@ class HtmlGenerator:
             for team_name, data in match_data['teams_stats'].items():
                 if team_name in teams_stats:
                     prev_data = teams_stats[team_name]
-                    data += prev_data
+                    data = [a+b for (a, b) in zip(data, prev_data)]  # add the content of old and new data
                 teams_stats.update({team_name: data})
 
             if max_steps is None:
                 max_steps = match_data['max_steps']
                 random_layouts = [layout for layout in match_data['layouts'] if layout.startswith('RANDOM')]
                 fixed_layouts = [layout for layout in match_data['layouts'] if not layout.startswith('RANDOM')]
+
+        num_matches_per_team = (len(teams_stats) - 1)
+        for team_name, data in teams_stats.items():
+            data[0] = data[0]//num_matches_per_team  # averaging the percentage of points
+            teams_stats.update({team_name: data})
 
         date_run = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
@@ -300,7 +305,7 @@ class HtmlGenerator:
             output += "</td>"
 
             output += """</tr>\n"""
-            return output
+        return output
 
     def _generate_html_result(self, run_id, date_run, organizer, games, team_stats, random_layouts, fixed_layouts,
                               max_steps, scores_dir, replays_dir, logs_dir):
