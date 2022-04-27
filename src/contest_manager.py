@@ -77,10 +77,19 @@ class ContestManager:
     def get_contest_names(self):
         return [contest_name for contest_name in self.contests]
 
-    def dump_json_file(self, contest_name: str, dest_file_name: str) -> None:
+    def dump_contest_teams_json_file(self, contest_name: str, dest_file_name: str) -> None:
         assert contest_name in self.contests
         with open(dest_file_name, "w") as f:
             f.write(json.dumps(self.contests[contest_name]["teams"].to_json_obj()))
+
+    def dump_contests_json_file(self):
+        data = []
+        for contest_name in self.contests:
+            data.append({"name": contest_name,
+                         "organizer": self.contests[contest_name]["organizer"],
+                         "last-match-id": int(self.contests[contest_name]["last_match_id"])})
+        with open("contests.json", "w") as f:
+            f.write(json.dumps({"contests": data}))
 
     # def get_new_teams(self, contest_name: str) -> List[Team]:
     #     """Return the list of new/updated teams of a given contest"""
@@ -137,8 +146,9 @@ def main():
                 random.shuffle(new_match)  # randomize blue vs red
                 contest_manager.submit_match(contest_name=contest_name, blue_team=new_match[0], red_team=new_match[1])
 
-        contest_manager.dump_json_file(contest_name=contest_name, dest_file_name=f"teams_{contest_name}.json")
+        contest_manager.dump_contest_teams_json_file(contest_name=contest_name, dest_file_name=f"teams_{contest_name}.json")
     contest_manager.generate_html()
+    contest_manager.dump_contests_json_file()
 
 
 if __name__ == "__main__":
