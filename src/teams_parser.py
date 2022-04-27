@@ -22,5 +22,11 @@ class TeamsParser:
     def get_teams(self) -> List[Team]:
         return self.teams
 
+    def get_team(self, team_name) -> Team:
+        for team in self.teams:
+            if team.get_name() == team_name:
+                return team
+        return None
+
     def to_json_obj(self):
         return {"teams": [team.to_json_obj() for team in self.teams]}

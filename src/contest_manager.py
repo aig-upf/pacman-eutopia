@@ -15,9 +15,12 @@ import logging
 
 class ContestManager:
     contests: dict
+    www_dir: str
 
     def __init__(self, contests_json_file: str = ""):
         self.contests = {}
+        self.www_dir = "www"
+
         with open(contests_json_file, "r") as f:
             json_contests = json.load(f)
             for contest_data_teams in json_contests["contests"]:
@@ -46,6 +49,10 @@ class ContestManager:
                     assert team.get_last_commit() == self.get_repo_commit(repo=repo)
                 else:
                     setattr(team, "updated", False)
+
+            """Clean up old matches of updated teams, at the end there 
+            must be n*(n-1)/2 matches where n is the number of teams"""
+            self.clean_up_old_matches(contest_name, contest_data_teams)
 
     @staticmethod
     def get_repo_dir(contest_name, team):
@@ -106,6 +113,38 @@ class ContestManager:
         logging.info(f"Local team name at {contest_name}_{team.get_name()}/myTeam.py")
         return f"{contest_name}_{team.get_name()}/myTeam.py"
 
+    def clean_up_old_matches(self, contest_name: str, contest_data_teams: TeamsParser) -> None:
+        scores_dir = os.path.join(self.www_dir, f"contest_{contest_name}/scores")
+        replays_dir = os.path.join(self.www_dir, f"contest_{contest_name}/replays")
+        logs_dir = os.path.join(self.www_dir, f"contest_{contest_name}/logs")
+
+        # Collect all files in scores directory
+        all_score_files = [f for f in os.listdir(scores_dir) if os.path.isfile(os.path.join(scores_dir, f))]
+
+        pattern = re.compile(r'match_([-+\dT:.]+)\.json')
+
+        for score_filename in all_score_files:
+            match = pattern.match(score_filename)
+            if not match:
+                continue
+
+            # Extract the id for that particular content from the score file match_{id}.score
+            match_id = match.group(1)
+
+            with open(os.path.join(scores_dir, score_filename), 'r') as f:
+                match_data = json.load(f)
+                for team_name, _ in match_data["teams_stats"].items():
+                    # Delete an old match if at least one team has been updated
+                    if contest_data_teams.get_team(team_name).get_updated():
+                        os.remove(os.path.join(scores_dir, score_filename))
+                        replay_filename = score_filename[:-5]+".replay"  # remove .json and add .replay
+                        os.remove(os.path.join(replays_dir, replay_filename))
+                        log_filename = score_filename[:-5]+".log"  # remove .json and add .log
+                        os.remove(os.path.join(logs_dir, log_filename))
+                        logging.info(f"Deleted match #{match_id}, files: {score_filename}, {replay_filename}, "
+                                     f"{log_filename}")
+                        break
+
     def submit_match(self, contest_name: str, blue_team: Team, red_team: Team) -> None:
         """Call the two agents Slurm script"""
         logging.info(f"Slurm task: blue={blue_team.get_name()} vs red={red_team.get_name()}")
@@ -123,7 +162,7 @@ class ContestManager:
         self.contests[contest_name]["last_match_id"] = last_match_id
 
     def generate_html(self) -> None:
-        web_gen = HtmlGenerator(www_dir="www")
+        web_gen = HtmlGenerator(www_dir=self.www_dir)
 
         for idx, contest_name in enumerate(self.contests):
             web_gen.add_contest_run(run_id=idx,
