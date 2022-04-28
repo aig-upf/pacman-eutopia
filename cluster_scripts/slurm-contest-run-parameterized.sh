@@ -10,6 +10,8 @@
 
 ml Python
 source venv/bin/activate
-python pacman-contest/src/contest/capture.py --contest-name $1 -b src/$2 --blue-name $3 -r src/$4 --red-name $5 -m $6 --record --record-log -Q
+python pacman-contest/src/contest/capture.py --contest-name $1 -b src/$2 --blue-name $3 -r src/$4 --red-name $5 -m 21 --record --record-log -Q &
+python pacman-contest/src/contest/capture.py --contest-name $1 -b src/$2 --blue-name $3 -r src/$4 --red-name $5 -m 22 --record --record-log -Q &
+python pacman-contest/src/contest/capture.py --contest-name $1 -b src/$2 --blue-name $3 -r src/$4 --red-name $5 -m 23 --record --record-log -Q
 deactivate
 

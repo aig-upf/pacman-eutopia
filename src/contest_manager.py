@@ -87,7 +87,7 @@ class ContestManager:
     def dump_contest_teams_json_file(self, contest_name: str, dest_file_name: str) -> None:
         assert contest_name in self.contests
         with open(dest_file_name, "w") as f:
-            f.write(json.dumps(self.contests[contest_name]["teams"].to_json_obj()))
+            f.write(json.dumps(self.contests[contest_name]["teams"].to_json_obj(), sort_keys=True, indent=4))
 
     def dump_contests_json_file(self):
         data = []
@@ -96,7 +96,7 @@ class ContestManager:
                          "organizer": self.contests[contest_name]["organizer"],
                          "last-match-id": int(self.contests[contest_name]["last_match_id"])})
         with open("contests.json", "w") as f:
-            f.write(json.dumps({"contests": data}))
+            f.write(json.dumps({"contests": data}, sort_keys=True, indent=4))
 
     # def get_new_teams(self, contest_name: str) -> List[Team]:
     #     """Return the list of new/updated teams of a given contest"""
