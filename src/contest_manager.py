@@ -118,6 +118,10 @@ class ContestManager:
         replays_dir = os.path.join(self.www_dir, f"contest_{contest_name}/replays")
         logs_dir = os.path.join(self.www_dir, f"contest_{contest_name}/logs")
 
+        # No need to clean up matches if folders have not been created yet
+        if not os.path.isdir(scores_dir) or not os.path.isdir(replays_dir) or not os.path.isdir(logs_dir):
+            return
+
         # Collect all files in scores directory
         all_score_files = [f for f in os.listdir(scores_dir) if os.path.isfile(os.path.join(scores_dir, f))]
 

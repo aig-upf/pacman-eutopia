@@ -19,13 +19,13 @@ import zipfile
 import logging
 import re
 import datetime
-from pytz import timezone
 
 logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.INFO,
                     datefmt='%a, %d %b %Y %H:%M:%S')
 
 # ----------------------------------------------------------------------------------------------------------------------
 # Load settings either from config.json or from the command line
+
 
 def load_settings():
     parser = argparse.ArgumentParser(
@@ -221,10 +221,10 @@ class HtmlGenerator:
     def _generate_matches_table(self, games, scores_dir, replays_dir, logs_dir):
         output = "<h2>Games</h2>\n"
 
-        times_taken = [time_game for (_, _, _, _, _, time_game, _) in games]
+        g_times = [g_time for (_, _, _, _, _, g_time, _) in games]
         output += f"<h3>No. of games: {len(games)} / "
-        output += f"Avg. game length: {str(datetime.timedelta(seconds=round(sum(times_taken) / len(times_taken), 0)))} / "
-        output += f"Max game length: {datetime.timedelta(seconds=max(times_taken))}</h3>\n\n"
+        output += f"Avg. game length: {str(datetime.timedelta(seconds=round(sum(g_times) / len(g_times), 0)))} / "
+        output += f"Max game length: {datetime.timedelta(seconds=max(g_times))}</h3>\n\n"
 
         score_dir = (scores_dir[4:] if scores_dir.startswith("www/") else scores_dir)
         replays_dir = (replays_dir[4:] if replays_dir.startswith("www/") else replays_dir)
