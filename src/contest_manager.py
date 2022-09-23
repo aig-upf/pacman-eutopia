@@ -173,7 +173,7 @@ class ContestManager:
                            "-r", self.get_local_team_name(contest_name, red_team),
                            "--red-name", red_team.get_name(),
                            "-m", str(last_match_id),  # set the match id to save log and score
-                           "--record", "--record-log", "-Q", "-c", "True"]  # record log and score in super quiet mode
+                           "--record", "--record-log", "-Q", "-c"]  # record log and score in super quiet mode
 
         logging.info(f"Match arguments: {match_arguments}")
         #capture.run(match_arguments)
