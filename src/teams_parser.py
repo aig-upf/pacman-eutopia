@@ -30,3 +30,4 @@ class TeamsParser:
 
     def to_json_obj(self):
         return {"teams": [team.to_json_obj() for team in self.teams]}
+        

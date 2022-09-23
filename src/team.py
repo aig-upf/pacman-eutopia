@@ -10,6 +10,7 @@ class Team:
     repository: str = ""
     last_commit: str = ""
     updated: bool = False
+    syntax_error: bool = False
     members: List[Member] = field(default_factory=list)
 
     def __init__(self, json_team: dict) -> None:
@@ -20,6 +21,7 @@ class Team:
         self.last_commit = json_team["last_commit"]
         self.updated = json_team["updated"]
         self.members = []
+        self.syntax_error = json_team["syntax_error"]
         for json_member in json_team["members"]:
             self.members.append(Member(json_member=json_member))
 
@@ -37,6 +39,9 @@ class Team:
 
     def get_updated(self) -> bool:
         return self.updated
+        
+    def get_syntax_error(self) -> bool:
+        return self.syntax_error
 
     def get_members(self) -> List[Member]:
         return self.members
@@ -48,5 +53,6 @@ class Team:
             "repository": self.repository,
             "last_commit": self.last_commit,
             "updated": self.updated,
+            "syntax_error": self.syntax_error,
             "members": [member.to_json_obj() for member in self.members]
         }

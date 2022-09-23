@@ -1,1 +1,48 @@
-{"teams": [{"name": "upf-one", "id": 1, "repository": "https://github.com/jsego/pacman-agent.git", "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747", "updated": false, "members": [{"name": "Anna", "id": "123"}, {"name": "Bob", "id": "125"}, {"name": "Claire", "id": "139"}]}, {"name": "upf-second", "id": 2, "repository": "https://github.com/jsego/pacman-agent.git", "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747", "updated": false, "members": [{"name": "Charlie", "id": "335"}, {"name": "Mary", "id": "742"}, {"name": "Jane", "id": "201"}]}]}
+{
+    "teams": [
+        {
+            "id": 1,
+            "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747",
+            "members": [
+                {
+                    "id": "123",
+                    "name": "Anna"
+                },
+                {
+                    "id": "125",
+                    "name": "Bob"
+                },
+                {
+                    "id": "139",
+                    "name": "Claire"
+                }
+            ],
+            "name": "upf-one",
+            "repository": "https://github.com/jsego/pacman-agent.git",
+            "syntax_error": false,
+            "updated": true
+        },
+        {
+            "id": 2,
+            "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747",
+            "members": [
+                {
+                    "id": "335",
+                    "name": "Charlie"
+                },
+                {
+                    "id": "742",
+                    "name": "Mary"
+                },
+                {
+                    "id": "201",
+                    "name": "Jane"
+                }
+            ],
+            "name": "upf-second",
+            "repository": "https://github.com/jsego/pacman-agent.git",
+            "syntax_error": false,
+            "updated": true
+        }
+    ]
+}

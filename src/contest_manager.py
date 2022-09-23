@@ -11,7 +11,7 @@ import sys
 from html_generator import HtmlGenerator
 import re
 import logging
-
+from clean_error_agents import syntax_error
 
 class ContestManager:
     contests: dict
@@ -20,7 +20,9 @@ class ContestManager:
     def __init__(self, contests_json_file: str = ""):
         self.contests = {}
         self.www_dir = "www"
-
+        self.matches = {}
+        self.match_counter = 1
+	
         with open(contests_json_file, "r") as f:
             json_contests = json.load(f)
             for contest_data_teams in json_contests["contests"]:
@@ -35,6 +37,7 @@ class ContestManager:
             contest_data_teams = self.contests[contest_name]["teams"]
             for team in contest_data_teams.get_teams():
                 repo_local_dir = self.get_repo_dir(contest_name, team)
+                
                 logging.info(f"Repository local dir: {repo_local_dir} (exists? {self.repo_exists(repo_local_dir)})")
                 if not self.repo_exists(repo_local_dir):
                     setattr(team, "last_commit", "")
@@ -49,6 +52,11 @@ class ContestManager:
                     assert team.get_last_commit() == self.get_repo_commit(repo=repo)
                 else:
                     setattr(team, "updated", False)
+                error = syntax_error(repo_local_dir+'/myTeam.py')
+                if error == True:
+                    setattr(team, "syntax_error", True)
+
+                    
 
             """Clean up old matches of updated teams, at the end there 
             must be n*(n-1)/2 matches where n is the number of teams"""
@@ -97,6 +105,10 @@ class ContestManager:
                          "last-match-id": int(self.contests[contest_name]["last_match_id"])})
         with open("contests.json", "w") as f:
             f.write(json.dumps({"contests": data}, sort_keys=True, indent=4))
+            
+    def dump_matches_json_file(self):
+        with open("matches.json", "w") as f:
+            json.dump(self.matches, f)
 
     # def get_new_teams(self, contest_name: str) -> List[Team]:
     #     """Return the list of new/updated teams of a given contest"""
@@ -148,6 +160,7 @@ class ContestManager:
                         logging.info(f"Deleted match #{match_id}, files: {score_filename}, {replay_filename}, "
                                      f"{log_filename}")
                         break
+                        
 
     def submit_match(self, contest_name: str, blue_team: Team, red_team: Team) -> None:
         """Call the two agents Slurm script"""
@@ -160,10 +173,17 @@ class ContestManager:
                            "-r", self.get_local_team_name(contest_name, red_team),
                            "--red-name", red_team.get_name(),
                            "-m", str(last_match_id),  # set the match id to save log and score
-                           "--record", "--record-log", "-Q"]  # record log and score in super quiet mode
+                           "--record", "--record-log", "-Q", "-c", "True"]  # record log and score in super quiet mode
+
         logging.info(f"Match arguments: {match_arguments}")
-        capture.run(match_arguments)
+        #capture.run(match_arguments)
         self.contests[contest_name]["last_match_id"] = last_match_id
+        self.matches[self.match_counter] = match_arguments
+        self.match_counter += 1
+        print(self.matches)
+        	
+        
+        	
 
     def generate_html(self) -> None:
         web_gen = HtmlGenerator(www_dir=self.www_dir)
@@ -178,20 +198,30 @@ def main():
     logging.basicConfig(level=logging.INFO)
     logging.info(f"Command arguments: {sys.argv}")
     contest_manager = ContestManager(contests_json_file="contests.json")
-    for contest_name in contest_manager.get_contest_names():
-        all_teams = contest_manager.get_all_teams(contest_name=contest_name)
-        for t1_idx in range(0, len(all_teams)):
-            for t2_idx in range(t1_idx+1, len(all_teams)):
-                # Allow only new vs all (not old vs old)
-                if not all_teams[t1_idx].get_updated() and not all_teams[t2_idx].get_updated():
-                    continue
-                new_match = [all_teams[t1_idx], all_teams[t2_idx]]
-                random.shuffle(new_match)  # randomize blue vs red
-                contest_manager.submit_match(contest_name=contest_name, blue_team=new_match[0], red_team=new_match[1])
 
-        contest_manager.dump_contest_teams_json_file(contest_name=contest_name, dest_file_name=f"teams_{contest_name}.json")
-    contest_manager.generate_html()
-    contest_manager.dump_contests_json_file()
+    if sys.argv[1] == 'step 1':
+        print('Step 1...')
+        for contest_name in contest_manager.get_contest_names():
+            all_teams = contest_manager.get_all_teams(contest_name=contest_name)
+            for t1_idx in range(0, len(all_teams)):
+		    
+                for t2_idx in range(t1_idx+1, len(all_teams)):
+    	        # Allow only new vs all (not old vs old)
+                        if not all_teams[t1_idx].get_updated() and not all_teams[t2_idx].get_updated():
+                            continue
+                        new_match = [all_teams[t1_idx], all_teams[t2_idx]]
+                        random.shuffle(new_match)  # randomize blue vs red
+                        if new_match[0].get_syntax_error() == False and new_match[1].get_syntax_error() == False: 
+                            contest_manager.submit_match(contest_name=contest_name, blue_team=new_match[0], red_team=new_match[1])
+
+            contest_manager.dump_contest_teams_json_file(contest_name=contest_name, dest_file_name=f"teams_{contest_name}.json")
+
+        contest_manager.dump_contests_json_file()
+        contest_manager.dump_matches_json_file()
+    if sys.argv[1] == 'step 2':	    
+        contest_manager.generate_html()
+
+
 
 
 if __name__ == "__main__":

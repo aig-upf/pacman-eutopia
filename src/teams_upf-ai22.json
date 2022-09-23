@@ -1,1 +1,114 @@
-{"teams": [{"name": "firstTeamName2022", "id": 1, "repository": "https://github.com/jsego/pacman-agent.git", "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747", "updated": false, "members": [{"name": "Anna", "id": "123"}, {"name": "Bob", "id": "125"}, {"name": "Claire", "id": "139"}]}, {"name": "secondTeamName2022", "id": 2, "repository": "https://github.com/jsego/pacman-agent.git", "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747", "updated": false, "members": [{"name": "Charlie", "id": "335"}, {"name": "Mary", "id": "742"}, {"name": "Jane", "id": "201"}]}, {"name": "thirdTeamName2022", "id": 3, "repository": "https://github.com/jsego/pacman-agent.git", "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747", "updated": false, "members": [{"name": "London", "id": "66"}, {"name": "Paris", "id": "43"}, {"name": "Rome", "id": "95"}]}]}
+{
+    "teams": [
+        {
+            "id": 1,
+            "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747",
+            "members": [
+                {
+                    "id": "123",
+                    "name": "Anna"
+                },
+                {
+                    "id": "125",
+                    "name": "Bob"
+                },
+                {
+                    "id": "139",
+                    "name": "Claire"
+                }
+            ],
+            "name": "firstTeamName2022",
+            "repository": "https://github.com/jsego/pacman-agent.git",
+            "syntax_error": false,
+            "updated": true
+        },
+        {
+            "id": 2,
+            "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747",
+            "members": [
+                {
+                    "id": "335",
+                    "name": "Charlie"
+                },
+                {
+                    "id": "742",
+                    "name": "Mary"
+                },
+                {
+                    "id": "201",
+                    "name": "Jane"
+                }
+            ],
+            "name": "secondTeamName2022",
+            "repository": "https://github.com/jsego/pacman-agent.git",
+            "syntax_error": false,
+            "updated": true
+        },
+        {
+            "id": 3,
+            "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747",
+            "members": [
+                {
+                    "id": "66",
+                    "name": "London"
+                },
+                {
+                    "id": "43",
+                    "name": "Paris"
+                },
+                {
+                    "id": "95",
+                    "name": "Rome"
+                }
+            ],
+            "name": "thirdTeamName2022",
+            "repository": "https://github.com/jsego/pacman-agent.git",
+            "syntax_error": false,
+            "updated": true
+        },
+        {
+            "id": 4,
+            "last_commit": "45e22be4b21960fdb64601878a22496214a6c2b3",
+            "members": [
+                {
+                    "id": "30",
+                    "name": "Student 1"
+                },
+                {
+                    "id": "43",
+                    "name": "Student 2"
+                },
+                {
+                    "id": "95",
+                    "name": "Student 3"
+                }
+            ],
+            "name": "fourthTeamName2022",
+            "repository": "https://github.com/SergioCalo/pacman-agent-error.git",
+            "syntax_error": true,
+            "updated": true
+        },
+        {
+            "id": 5,
+            "last_commit": "12174774b962b20da4773328272cbdcfcd3c0562",
+            "members": [
+                {
+                    "id": "300",
+                    "name": "Student 4"
+                },
+                {
+                    "id": "430",
+                    "name": "Student 5"
+                },
+                {
+                    "id": "950",
+                    "name": "Student 6"
+                }
+            ],
+            "name": "teamSlow2022",
+            "repository": "https://github.com/SergioCalo/pacman-agent-slow.git",
+            "syntax_error": false,
+            "updated": true
+        }
+    ]
+}

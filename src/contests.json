@@ -1,13 +1,14 @@
 {
-"contests":[
-	{"name": "upf-ai22", 
-	 "organizer": "UPF",
-	 "last-match-id": -1
-	},
-	
-	{"name": "upf-ai23", 
-	 "organizer": "UPF",
-	 "last-match-id": -1
-	}
-]
+    "contests": [
+        {
+            "last-match-id": 130,
+            "name": "upf-ai22",
+            "organizer": "UPF"
+        },
+        {
+            "last-match-id": 25,
+            "name": "upf-ai23",
+            "organizer": "UPF"
+        }
+    ]
 }

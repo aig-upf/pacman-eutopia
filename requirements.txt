@@ -1,4 +1,4 @@
--e git+git@github.com:jsego/pacman-contest.git@753820dc33a14d3a6621ab45a96cca1f8a0f3b7f#egg=contest&subdirectory=../../pacman-contest
+-e git+git@github.com:jsego/pacman-contest.git@753820dc33a14d3a6621ab45a96cca1f8a0f3b7f#egg=contest
 frozendict==2.3.2
 gitdb==4.0.9
 GitPython==3.1.27

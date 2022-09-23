@@ -3,7 +3,8 @@
 #SBATCH -p short
 #SBATCH -N 1
 #SBATCH -n 2 
-#SBATCH --chdir=/homedtic/jsegovia/pacman-eutopia/src
+
+#SBATCH --chdir=/homedtic/scalo/pacman-eutopia2/pacman-contest/src/contest
 #SBATCH --time=2:00
 #SBATCH -o %N.%J.out # STDOUT
 #SBATCH -e %N.%j.err # STDERR
