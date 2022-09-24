@@ -11,7 +11,7 @@ import sys
 from html_generator import HtmlGenerator
 import re
 import logging
-from clean_error_agents import syntax_error
+
 
 class ContestManager:
     contests: dict
@@ -52,7 +52,7 @@ class ContestManager:
                     assert team.get_last_commit() == self.get_repo_commit(repo=repo)
                 else:
                     setattr(team, "updated", False)
-                error = syntax_error(repo_local_dir+'/myTeam.py')
+                error = self.check_syntax_error(repo_local_dir+'/myTeam.py')
                 if error == True:
                     setattr(team, "syntax_error", True)
 
@@ -109,6 +109,18 @@ class ContestManager:
     def dump_matches_json_file(self):
         with open("matches.json", "w") as f:
             json.dump(self.matches, f)
+    
+    def check_syntax_error(self,filename):
+        source = open(filename, 'r').read() + '\n'
+        try:
+            compile(source, filename, 'exec')
+            return False
+        except:
+            print('-------------------')
+            print('ATTENTION')
+            print("An error occurred in file: ", filename)
+            return True
+
 
     # def get_new_teams(self, contest_name: str) -> List[Team]:
     #     """Return the list of new/updated teams of a given contest"""
@@ -199,7 +211,7 @@ def main():
     logging.info(f"Command arguments: {sys.argv}")
     contest_manager = ContestManager(contests_json_file="contests.json")
 
-    if sys.argv[1] == 'step 1':
+    if sys.argv[1] == 'prepare_matches':
         print('Step 1...')
         for contest_name in contest_manager.get_contest_names():
             all_teams = contest_manager.get_all_teams(contest_name=contest_name)
@@ -218,7 +230,40 @@ def main():
 
         contest_manager.dump_contests_json_file()
         contest_manager.dump_matches_json_file()
-    if sys.argv[1] == 'step 2':	    
+        with open ('slurm-array.sh', 'w') as rsh:
+            with open("matches.json","r") as f:
+                matches_json = f.read()
+                matches_json = json.loads(matches_json)
+                rsh.write('''\
+#!/bin/bash
+#SBATCH -J array-matches
+#SBATCH -p medium
+#SBATCH -N 1
+#SBATCH -n 1
+#SBATCH --chdir=/homedtic/scalo/pacman-eutopia/src
+#SBATCH --time=7:00
+''')
+                rsh.write('#SBATCH --array=1-%d:1' % len(matches_json))
+                rsh.write('''\
+                \n#SBATCH -o slurm-outputs/%N.%J.out # STDOUT
+#SBATCH -e slurm-outputs/%N.%j.err # STDERR
+
+#ml Python
+module --ignore-cache load "Python"
+source ../venv/bin/activate
+python contest_manager.py "run_matches" $SLURM_ARRAY_TASK_ID
+
+deactivate
+            ''' )
+
+
+    if sys.argv[1] == 'run_matches':	    
+        with open("matches.json","r") as f:
+            matches = f.read()
+            matches = json.loads(matches)
+            capture.run(matches[sys.argv[2]])
+        
+    if sys.argv[1] == 'html':	    
         contest_manager.generate_html()
 
 
