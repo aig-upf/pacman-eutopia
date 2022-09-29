@@ -3,6 +3,7 @@
         {
             "id": 1,
             "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747",
+            "loading_error": false,
             "members": [
                 {
                     "id": "123",
@@ -25,6 +26,7 @@
         {
             "id": 2,
             "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747",
+            "loading_error": false,
             "members": [
                 {
                     "id": "335",
@@ -47,6 +49,7 @@
         {
             "id": 3,
             "last_commit": "3cf7c4575f34acc1887aba1b2061c10ce1289747",
+            "loading_error": false,
             "members": [
                 {
                     "id": "66",
@@ -69,6 +72,7 @@
         {
             "id": 4,
             "last_commit": "45e22be4b21960fdb64601878a22496214a6c2b3",
+            "loading_error": true,
             "members": [
                 {
                     "id": "30",
@@ -90,7 +94,8 @@
         },
         {
             "id": 5,
-            "last_commit": "12174774b962b20da4773328272cbdcfcd3c0562",
+            "last_commit": "3c27650d8d4e379cf9857287f8ca5fedf8a637b1",
+            "loading_error": false,
             "members": [
                 {
                     "id": "300",
@@ -107,6 +112,29 @@
             ],
             "name": "teamSlow2022",
             "repository": "https://github.com/SergioCalo/pacman-agent-slow.git",
+            "syntax_error": false,
+            "updated": true
+        },
+        {
+            "id": 6,
+            "last_commit": "2a7919622b539875fad5954a8fc9c5ad5484c4b6",
+            "loading_error": true,
+            "members": [
+                {
+                    "id": "300",
+                    "name": "Student 4"
+                },
+                {
+                    "id": "430",
+                    "name": "Student 5"
+                },
+                {
+                    "id": "950",
+                    "name": "Student 6"
+                }
+            ],
+            "name": "teamPytorch2022",
+            "repository": "https://github.com/SergioCalo/pacman-agent-pytorch.git",
             "syntax_error": false,
             "updated": true
         }

@@ -53,8 +53,12 @@ class ContestManager:
                 else:
                     setattr(team, "updated", False)
                 error = self.check_syntax_error(repo_local_dir+'/myTeam.py')
+                loading_error = self.check_loading_errors(False, repo_local_dir+'/myTeam.py')
+                print(loading_error)
                 if error == True:
                     setattr(team, "syntax_error", True)
+                if loading_error == [None,None]:
+                    setattr(team, "loading_error", True)
 
                     
 
@@ -120,7 +124,17 @@ class ContestManager:
             print('ATTENTION')
             print("An error occurred in file: ", filename)
             return True
+            
 
+    
+    def check_loading_errors(self, isRed, filename):
+        try:
+            return capture.load_agents(isRed, filename, [])   
+              
+        except:
+            print('EXCEPT')
+            print('Error: The team "' + filename + '" could not be loaded! ')
+            return True
 
     # def get_new_teams(self, contest_name: str) -> List[Team]:
     #     """Return the list of new/updated teams of a given contest"""
@@ -224,10 +238,10 @@ def main():
                         new_match = [all_teams[t1_idx], all_teams[t2_idx]]
                         random.shuffle(new_match)  # randomize blue vs red
                         if new_match[0].get_syntax_error() == False and new_match[1].get_syntax_error() == False: 
-                            contest_manager.submit_match(contest_name=contest_name, blue_team=new_match[0], red_team=new_match[1])
+                            if new_match[0].get_loading_error() == False and new_match[1].get_loading_error() == False: 
+                                contest_manager.submit_match(contest_name=contest_name, blue_team=new_match[0], red_team=new_match[1])
 
             contest_manager.dump_contest_teams_json_file(contest_name=contest_name, dest_file_name=f"teams_{contest_name}.json")
-
         contest_manager.dump_contests_json_file()
         contest_manager.dump_matches_json_file()
         with open ('slurm-array.sh', 'w') as rsh:
