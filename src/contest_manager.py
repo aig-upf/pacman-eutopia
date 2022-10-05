@@ -244,31 +244,17 @@ def main():
             contest_manager.dump_contest_teams_json_file(contest_name=contest_name, dest_file_name=f"teams_{contest_name}.json")
         contest_manager.dump_contests_json_file()
         contest_manager.dump_matches_json_file()
-        with open ('slurm-array.sh', 'w') as rsh:
-            with open("matches.json","r") as f:
+        with open("matches.json","r") as f:
                 matches_json = f.read()
                 matches_json = json.loads(matches_json)
-                rsh.write('''\
-#!/bin/bash
-#SBATCH -J array-matches
-#SBATCH -p medium
-#SBATCH -N 1
-#SBATCH -n 1
-#SBATCH --chdir=/homedtic/scalo/pacman-eutopia/src
-#SBATCH --time=7:00
-''')
-                rsh.write('#SBATCH --array=1-%d:1' % len(matches_json))
-                rsh.write('''\
-                \n#SBATCH -o slurm-outputs/%N.%J.out # STDOUT
-#SBATCH -e slurm-outputs/%N.%j.err # STDERR
 
-#ml Python
-module --ignore-cache load "Python"
-source ../venv/bin/activate
-python contest_manager.py "run_matches" $SLURM_ARRAY_TASK_ID
+        with open('slurm-array-template.sh', 'r') as template:
+            filedata = template.read()
 
-deactivate
-            ''' )
+        filedata = filedata.replace('$1', str(len(matches_json)))
+        print(filedata)
+        with open('slurm-array.sh', 'w') as file:
+            file.write(filedata)
 
 
     if sys.argv[1] == 'run_matches':	    
