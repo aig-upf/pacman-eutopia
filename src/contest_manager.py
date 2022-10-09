@@ -14,8 +14,29 @@ import logging
 import importlib.util
 import importlib.machinery
 import pathlib
+import argparseg
 
+#-------------------------------------
+def load_settings():
+    parser = argparse.ArgumentParser(
+            description='This script generates the HTML structure given the logs of all the runs of this tournament.'
+        )
+    parser.add_argument(
+        "-s", "--step",
+        dest='step', type=str, required=True,
+        help='name of the step'
+        )
 
+   
+    args = parser.parse_args()
+
+    # First get the options from the configuration file if available
+    settings = {'step': args.step}
+
+    logging.info(f'Contest manager settings: {settings}')
+
+    return settings
+#-----------------    
 
 
 class ContestManager:
@@ -148,8 +169,6 @@ class ContestManager:
 
 
     
-    
-    
     def load_agents(self, is_red, agent_file, cmd_line_args=[]):
             if not agent_file.endswith(".py"):
                 agent_file += ".py"
@@ -258,8 +277,9 @@ def main():
     logging.basicConfig(level=logging.INFO)
     logging.info(f"Command arguments: {sys.argv}")
     contest_manager = ContestManager(contests_json_file="contests.json")
+    settings = load_settings()
 
-    if sys.argv[1] == 'prepare_matches':
+    if settings['step'] == 'prepare_matches':
         print('Step 1...')
         for contest_name in contest_manager.get_contest_names():
             all_teams = contest_manager.get_all_teams(contest_name=contest_name)
@@ -290,13 +310,13 @@ def main():
             file.write(filedata)
 
 
-    if sys.argv[1] == 'run_matches':	    
+    if settings['step']  == 'run_matches':	    
         with open("matches.json","r") as f:
             matches = f.read()
             matches = json.loads(matches)
             capture.run(matches[sys.argv[2]])
         
-    if sys.argv[1] == 'html':	    
+    if settings['step']  == 'html':	    
         contest_manager.generate_html()
 
 
