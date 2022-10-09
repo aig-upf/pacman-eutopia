@@ -3,7 +3,7 @@
 """
 Generates the HTML output given logs of the past tournament runs.
 """
-__author__ = "Sebastian Sardina, Marco Tamassia, Nir Lipovetzky, and Andrew Chester (refactored by Javier Segovia)"
+__author__ = "Sebastian Sardina, Marco Tamassia, Nir Lipovetzky, and Andrew Chester (refactored by Javier Segovia and Sergio Calo)"
 __copyright__ = "Copyright 2017-2022"
 __license__ = "GPLv3"
 
@@ -100,12 +100,13 @@ class HtmlGenerator:
         scores_dir = os.path.join(self.www_dir, f"contest_{contest_name}/scores")
         replays_dir = os.path.join(self.www_dir, f"contest_{contest_name}/replays")
         logs_dir = os.path.join(self.www_dir, f"contest_{contest_name}/logs")
+        errors_dir = os.path.join(self.www_dir, f"contest_{contest_name}/errors")
 
         self._save_run_html(organizer=organizer, run_id=run_id, scores_dir=scores_dir, replays_dir=replays_dir,
-                            logs_dir=logs_dir)
+                            logs_dir=logs_dir, errors_dir=errors_dir)
         self._generate_main_html()
 
-    def _save_run_html(self, organizer: str, run_id: int, scores_dir: str, replays_dir: str, logs_dir: str):
+    def _save_run_html(self, organizer: str, run_id: int, scores_dir: str, replays_dir: str, logs_dir: str, errors_dir: str):
         """
         Generates the HTML of a contest run and saves it in www/results_<run_id>/results.html.
 
@@ -156,7 +157,7 @@ class HtmlGenerator:
         date_run = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
 
         run_html = self._generate_html_result(run_id, date_run, organizer, games, teams_stats, random_layouts,
-                                              fixed_layouts, max_steps, scores_dir, replays_dir, logs_dir)
+                                              fixed_layouts, max_steps, scores_dir, replays_dir, logs_dir, errors_dir)
 
         html_full_path = os.path.join(self.www_dir, f'results_{run_id}.html')
         with open(html_full_path, "w") as f:
@@ -217,6 +218,35 @@ class HtmlGenerator:
             output += f"""</tr>\n"""
         output += "</table>"
         return output
+        
+    def _generate_disqualified_table(self, errors_dir):
+        output = "<h2>Disqualified</h2>\n"
+
+        output += f"<h3>Disqualified teams</h3>"
+
+
+        output += """<table border="1">"""
+        output += """<tr>"""
+        output += """<th>Team</th>"""
+        output += """<th>Log file</th>"""
+        output += """</tr>\n"""
+        disqualified_teams = os.listdir(errors_dir)
+        for team in disqualified_teams:
+            output += """<tr>"""
+
+            # Team 1
+            output += """<td align="center">"""
+            output += f"<b>{team}</b>"
+            
+            # Logs file
+            logs_filename = f"{team}" 
+            logs_file_path = os.path.join(errors_dir[4:], team)
+            output += "<td align=\"center\">"
+            output += f"<a href=\"{logs_file_path}\">{logs_filename}</a>\n"
+            output += "</td>"
+
+            output += """</tr>\n"""
+        return output
 
     def _generate_matches_table(self, games, scores_dir, replays_dir, logs_dir):
         output = "<h2>Games</h2>\n"
@@ -229,6 +259,7 @@ class HtmlGenerator:
         score_dir = (scores_dir[4:] if scores_dir.startswith("www/") else scores_dir)
         replays_dir = (replays_dir[4:] if replays_dir.startswith("www/") else replays_dir)
         logs_dir = (logs_dir[4:] if logs_dir.startswith("www/") else logs_dir)
+
 
         output += """<table border="1">"""
         output += """<tr>"""
@@ -308,7 +339,7 @@ class HtmlGenerator:
         return output
 
     def _generate_html_result(self, run_id, date_run, organizer, games, team_stats, random_layouts, fixed_layouts,
-                              max_steps, scores_dir, replays_dir, logs_dir):
+                              max_steps, scores_dir, replays_dir, logs_dir, errors_dir):
         """
         Generates the HTML of the report of the run.
         """
@@ -332,8 +363,10 @@ class HtmlGenerator:
         else:
             # First, print a table with the final standing
             output += self._generate_ranking(team_stats=team_stats)
+            
+            output += "\n\n<br/><br/>"
+            output += self._generate_disqualified_table(errors_dir=errors_dir)
 
-            # Second, print each game result
             output += "\n\n<br/><br/>"
             output += self._generate_matches_table(games=games, scores_dir=scores_dir, replays_dir=replays_dir,
                                                    logs_dir=logs_dir)

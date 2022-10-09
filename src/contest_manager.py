@@ -11,6 +11,11 @@ import sys
 from html_generator import HtmlGenerator
 import re
 import logging
+import importlib.util
+import importlib.machinery
+import pathlib
+
+
 
 
 class ContestManager:
@@ -52,11 +57,15 @@ class ContestManager:
                     assert team.get_last_commit() == self.get_repo_commit(repo=repo)
                 else:
                     setattr(team, "updated", False)
-                error = self.check_syntax_error(repo_local_dir+'/myTeam.py')
-                loading_error = self.check_loading_errors(False, repo_local_dir+'/myTeam.py')
-                print(loading_error)
+                error_dir = os.path.join(self.www_dir, f"contest_{contest_name}/errors")
+                if not os.path.exists(error_dir):
+                    os.makedirs(error_dir)
+                error = self.check_syntax_error(repo_local_dir, contest_name)
+                loading_error = self.check_loading_errors(False, repo_local_dir, contest_name)
+
                 if error == True:
                     setattr(team, "syntax_error", True)
+                        
                 if loading_error == [None,None]:
                     setattr(team, "loading_error", True)
 
@@ -114,33 +123,58 @@ class ContestManager:
         with open("matches.json", "w") as f:
             json.dump(self.matches, f)
     
-    def check_syntax_error(self,filename):
-        source = open(filename, 'r').read() + '\n'
+    def check_syntax_error(self,filename, contest_name):
+        source = open(filename+'/myTeam.py', 'r').read() + '\n'
         try:
             compile(source, filename, 'exec')
-            return False
-        except:
-            print('-------------------')
-            print('ATTENTION')
-            print("An error occurred in file: ", filename)
+        except Exception as Argument:
+            with open(f"www/contest_{contest_name}/errors/{filename}.log", 'w') as file:
+                file.write(str(Argument))
+                file.close()
             return True
-            
-
     
-    def check_loading_errors(self, isRed, filename):
+    def check_loading_errors(self, isRed, filename, contest_name):
         try:
-            return capture.load_agents(isRed, filename, [])   
-              
-        except:
-            print('EXCEPT')
-            print('Error: The team "' + filename + '" could not be loaded! ')
+            self.load_agents(isRed, filename+'/myTeam.py')
+        except Exception as Argument:
+            with open(f"www/contest_{contest_name}/errors/{filename}.log", 'w') as file:
+                file.write(str(Argument))
+                file.close()
             return True
-
     # def get_new_teams(self, contest_name: str) -> List[Team]:
     #     """Return the list of new/updated teams of a given contest"""
     #     assert contest_name in self.contests
     #     return [team for team in self.contests[contest_name].get_teams() if team.get_updated()]
 
+
+    
+    
+    
+    def load_agents(self, is_red, agent_file, cmd_line_args=[]):
+            if not agent_file.endswith(".py"):
+                agent_file += ".py"
+
+            module_name = pathlib.Path(agent_file).stem
+            agent_file = os.path.abspath(agent_file)
+
+        # just in case other files not in the distribution are loaded
+            sys.path.append(os.path.split(agent_file)[0])
+
+
+        # SS: new way of loading Python modules - Python 3.4+
+            loader = importlib.machinery.SourceFileLoader(module_name, agent_file)
+            spec = importlib.util.spec_from_loader(module_name, loader)
+            module = importlib.util.module_from_spec(spec)
+            loader.exec_module(module)  # will be added to sys.modules dict
+
+
+            create_team_func = getattr(module, 'create_team')
+
+
+            return 'All good'
+    
+    
+    
     def get_all_teams(self, contest_name: str) -> List[Team]:
         """Returns all teams of a given contest"""
         assert contest_name in self.contests
@@ -252,7 +286,6 @@ def main():
             filedata = template.read()
 
         filedata = filedata.replace('$1', str(len(matches_json)))
-        print(filedata)
         with open('slurm-array.sh', 'w') as file:
             file.write(filedata)
 

@@ -21,7 +21,7 @@
             "name": "firstTeamName2022",
             "repository": "https://github.com/jsego/pacman-agent.git",
             "syntax_error": false,
-            "updated": true
+            "updated": false
         },
         {
             "id": 2,
@@ -44,7 +44,7 @@
             "name": "secondTeamName2022",
             "repository": "https://github.com/jsego/pacman-agent.git",
             "syntax_error": false,
-            "updated": true
+            "updated": false
         },
         {
             "id": 3,
@@ -67,7 +67,7 @@
             "name": "thirdTeamName2022",
             "repository": "https://github.com/jsego/pacman-agent.git",
             "syntax_error": false,
-            "updated": true
+            "updated": false
         },
         {
             "id": 4,
@@ -90,7 +90,7 @@
             "name": "fourthTeamName2022",
             "repository": "https://github.com/SergioCalo/pacman-agent-error.git",
             "syntax_error": true,
-            "updated": true
+            "updated": false
         },
         {
             "id": 5,
