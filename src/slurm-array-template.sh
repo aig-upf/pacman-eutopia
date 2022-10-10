@@ -12,7 +12,7 @@
 #ml Python
 module --ignore-cache load "Python"
 source ../venv/bin/activate
-python contest_manager.py "run_matches" $SLURM_ARRAY_TASK_ID
+python contest_manager.py -s "run_matches" -t $SLURM_ARRAY_TASK_ID
 
 deactivate
             

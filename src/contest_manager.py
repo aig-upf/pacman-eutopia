@@ -14,7 +14,7 @@ import logging
 import importlib.util
 import importlib.machinery
 import pathlib
-import argparseg
+import argparse
 
 #-------------------------------------
 def load_settings():
@@ -26,12 +26,17 @@ def load_settings():
         dest='step', type=str, required=True,
         help='name of the step'
         )
+    parser.add_argument(
+        "-t", "--task",
+        dest='task', type=str, required=False,
+        help='task number. Argument used when parallelizing games in the cluster'
+        )
 
    
     args = parser.parse_args()
 
     # First get the options from the configuration file if available
-    settings = {'step': args.step}
+    settings = {'step': args.step, 'task': args.task}
 
     logging.info(f'Contest manager settings: {settings}')
 
@@ -314,7 +319,7 @@ def main():
         with open("matches.json","r") as f:
             matches = f.read()
             matches = json.loads(matches)
-            capture.run(matches[sys.argv[2]])
+            capture.run(matches[settings['task'] ])
         
     if settings['step']  == 'html':	    
         contest_manager.generate_html()
