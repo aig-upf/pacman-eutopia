@@ -64,6 +64,8 @@ class ContestManager:
                     "last_match_id": int(contest_data_teams['last-match-id'])
                 }
         logging.info(self.contests)
+        if not os.path.exists('slurm-outputs'):
+                    os.makedirs('slurm-outputs')
         for contest_name in self.contests:
             contest_data_teams = self.contests[contest_name]["teams"]
             for team in contest_data_teams.get_teams():

@@ -246,6 +246,7 @@ class HtmlGenerator:
             output += "</td>"
 
             output += """</tr>\n"""
+        output += "</table>"
         return output
 
     def _generate_matches_table(self, games, scores_dir, replays_dir, logs_dir):
