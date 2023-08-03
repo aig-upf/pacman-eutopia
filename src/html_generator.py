@@ -19,6 +19,7 @@ import zipfile
 import logging
 import re
 import datetime
+from bs4 import BeautifulSoup
 
 logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.INFO,
                     datefmt='%a, %d %b %Y %H:%M:%S')
@@ -74,14 +75,19 @@ class HtmlGenerator:
         self.www_dir = www_dir
         self.font_source = font_source
         self.file_fonts = os.path.join(self.font_source, "fonts.zip")
-        self.file_css = os.path.join(self.font_source, "style.css")
+        #self.file_css = os.path.join(self.font_source, "style.css")
+        self.file_css = os.path.join('static', "style.css")
+
         self.error_score = 9999
 
         # Preparing fonts and style
         os.makedirs(f"{self.www_dir}", exist_ok=True)
         contest_zip_file = zipfile.ZipFile(self.file_fonts)
         contest_zip_file.extractall(self.www_dir)
-        shutil.copy(self.file_css, self.www_dir)
+        #shutil.copy(self.file_css, self.www_dir)
+        os.makedirs(os.path.join(self.www_dir, 'static'), exist_ok=True)
+        shutil.copy(self.file_css, os.path.join(self.www_dir, 'static'))
+
 
     def _close(self):
         pass
@@ -105,7 +111,20 @@ class HtmlGenerator:
         self._save_run_html(organizer=organizer, run_id=run_id, scores_dir=scores_dir, replays_dir=replays_dir,
                             logs_dir=logs_dir, errors_dir=errors_dir)
         self._generate_main_html()
+    # Load the template HTML content
+        with open("template.html", "r") as file:
+            template_html_content = file.read()
+        # Load the generated HTML content
+        with open(f"www/results_{run_id}.html", "r") as file:
+            html_generated = file.read()
 
+        # Insert the generated HTML content into the template
+        new_html_content = self.insert_html_content(html_generated, template_html_content)
+
+        # Save the new HTML content to a file
+        with open(f"www/results_{run_id}_template.html", "w") as file:
+            file.write(new_html_content)
+    
     def _save_run_html(self, organizer: str, run_id: int, scores_dir: str, replays_dir: str, logs_dir: str, errors_dir: str):
         """
         Generates the HTML of a contest run and saves it in www/results_<run_id>/results.html.
@@ -134,7 +153,7 @@ class HtmlGenerator:
 
             with open(os.path.join(scores_dir, score_filename), 'r') as f:
                 match_data = json.load(f)
-
+            
             games.extend(match_data['games'])
             # points_pct, points, wins, draws, losses, errors, sum_score
             # team_stats = {'Blue_team': [6, 2, 0, 0, 2, 2], 'Red_team': [0, 0, 0, 2, 2, -2]}  # data['team_stats']
@@ -201,6 +220,7 @@ class HtmlGenerator:
         # example list(team_stats.items() = [('Blue_team', [6, 2, 0, 0, 2, 2]), ('Red_team', [0, 0, 0, 2, 2, -2])]
         sorted_team_stats = sorted(list(team_stats.items()), key=lambda v: (v[1][0], v[1][2], v[1][6]),
                                    reverse=True)
+        sorted_team_stats = sorted_team_stats[:5]  # only keep the top 5
         position = 0
         for key, (points_pct, points, wins, draws, losses, errors, sum_score) in sorted_team_stats:
             position += 1
@@ -345,7 +365,7 @@ class HtmlGenerator:
         Generates the HTML of the report of the run.
         """
         output = """<html><head><title>Results for the tournament round</title>\n"""
-        output += """<link rel="stylesheet" type="text/css" href="style.css"/></head>\n"""
+        output += f"""<link rel="stylesheet" type="text/css" href="{self.file_css}"/></head>\n"""
         output += """<body><h1>PACMAN Capture the Flag Tournament</h1>\n"""
         output += f"""<h2>Tournament Organizer: {organizer} </h2>\n"""
         output += f"""<h3>Name of Tournament: {run_id} </h3>\n"""
@@ -375,7 +395,70 @@ class HtmlGenerator:
         output += "\n\n</table></body></html>"
 
         return output
+    
 
+    def insert_html_content(self, html_generated, template_html_content):
+        # Parse the HTML content with BeautifulSoup
+        soup = BeautifulSoup(template_html_content, 'html.parser')
+
+        # Find the 'information' tag
+        info_tag = soup.find('h2', string='Information')
+
+        # Create a new tag with the generated content
+        new_tag = soup.new_tag("div")
+        new_tag.append(BeautifulSoup(html_generated, 'html.parser')) 
+
+        # Insert the new tag after the 'information' tag
+        if info_tag:
+            info_tag.insert_after(new_tag)
+
+        # Return the modified HTML content
+        return str(soup)
+    
+    def find_team_info(self, team_name):
+        """
+        Finds information for a specific team and its neighbors in ranking.
+        """
+        # Load all team statistics
+        teams_stats = self.get_all_team_stats()
+
+        # Sort teams by their scores
+        sorted_teams = sorted(teams_stats.items(), key=lambda x: x[1], reverse=True)
+
+        # Find the specific team
+        for i, team in enumerate(sorted_teams):
+            if team[0] == team_name:
+                # Found the team
+                team_info = {'team': team}
+
+                # Get the team above
+                if i > 0:
+                    team_info['above'] = sorted_teams[i - 1]
+
+                # Get the team below
+                if i < len(sorted_teams) - 1:
+                    team_info['below'] = sorted_teams[i + 1]
+
+                return team_info
+
+        # No such team
+        return None
+
+    def get_all_team_stats(self):
+    
+    #Loads team statistics from a JSON file.
+    
+    # Define the path to the JSON file
+    
+        json_file_path = "/path/to/team_stats.json"
+
+        # Open the JSON file
+        with open(json_file_path, "r") as json_file:
+            # Load the data from the JSON file
+            data = json.load(json_file)
+
+        # Return the team statistics
+        return data['teams_stats']
 
 def main():
     settings = load_settings()
