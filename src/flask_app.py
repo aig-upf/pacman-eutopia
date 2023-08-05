@@ -22,9 +22,9 @@ def get_team_names():
 
 @app.route('/download/<year>/<file_type>/<file_name>')
 def download_file(year, file_type, file_name):
-    # 获取当前工作目录
+    # Get current working directory
     current_dir = os.getcwd()
-    # 根据当前工作目录构造文件路径
+    # Construct file paths from the current working directory
     file_path = os.path.join(current_dir, f'www/contest_upf-ai{year}/{file_type}s/{file_name}')
     print(file_path)
     return send_file(file_path, as_attachment=True)
@@ -42,16 +42,16 @@ def tournament_page():
 @app.route('/get_matches')
 def get_matches():
     selected_team = request.args.get('team_name')
-    selected_year = request.args.get('year')  # 获取选定的年份
+    selected_year = request.args.get('year')  # Get the selected year
     matches = []
-    directory = f'./www/contest_upf-ai{selected_year}/scores'  # 根据年份构建路径
+    directory = f'./www/contest_upf-ai{selected_year}/scores'  # Construct pathways based on year
     for filename in os.listdir(directory):
         if filename.startswith('match_') and filename.endswith('.json'):
             with open(os.path.join(directory, filename), 'r') as file:
                 data = json.load(file)
                 for game in data['games']:
                     if selected_team in game[:2]:
-                        # 根据文件类型添加正确的后缀
+                        # Add the correct suffix based on the file type
                         score_file = filename
                         replay_file = filename.replace('.json', '.replay')
                         log_file = filename.replace('.json', '.log')

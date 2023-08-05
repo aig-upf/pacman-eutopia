@@ -84,7 +84,7 @@
     fetch(`/get_matches?year=${selectedYear}&team_name=${selectedTeam}`)
       .then(response => response.json())
       .then(data => {
-        // 构建表格并显示比赛详细信息
+        // Build the table and display the match details
         var table = '<table><tr><th>Team 1</th><th>Team 2</th><th>Layout</th><th>Time</th><th>Score</th><th>Winner</th><th>Score file</th><th>Replay file</th><th>Log file</th></tr>';
         data.matches.forEach(match => {
           table += `<tr><td>${match.team1}</td><td>${match.team2}</td><td>${match.layout}</td><td>${match.time}</td><td>${match.score}</td><td>${match.winner}</td>`;
@@ -102,23 +102,23 @@
       .then(response => response.json())
       .then(data => {
         var teamSelect = document.getElementById('teamSelect');
-        teamSelect.innerHTML = ''; // 清空现有选项
+        teamSelect.innerHTML = ''; // Clear existing options
         data.teams.forEach(team => {
           var option = document.createElement('option');
           option.value = team;
           option.text = team;
           teamSelect.appendChild(option);
         });
-        updateMatches(); // 更新比赛
+        updateMatches(); // Update the contest
       });
   }
 
-  // 当年份选择器更改时更新队伍
+  // Update the team when the year selector changes
   document.getElementById('yearSelect').addEventListener('change', updateTeams);
-  // 当队伍选择器更改时更新比赛
+  // Update matches when team selector changes
   document.getElementById('teamSelect').addEventListener('change', updateMatches);
 
-  // 初始加载时更新队伍
+  // Update team on initial load
   updateTeams();
 </script>
 
