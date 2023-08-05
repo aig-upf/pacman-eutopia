@@ -1,75 +1,87 @@
-from flask import Flask, jsonify, render_template
-from flask import send_file
-from flask import request
+from flask import Flask, render_template, jsonify, request
 import os
 import json
-from html_generator import HtmlGenerator
+from flask import send_file
 
 app = Flask(__name__, static_folder='./www/static', template_folder='./www')
-html_generator = HtmlGenerator(www_dir='./www')
 
-def find_match(team1, team2):
-    directory = './www/scores'  # replace with your directory
-    for filename in os.listdir(directory):
-        if filename.endswith('.json'):
-            with open(os.path.join(directory, filename), 'r') as file:
-                data = json.load(file)
-                for match in data['games']:
-                    if (match[0] == team1 and match[1] == team2) or \
-                       (match[0] == team2 and match[1] == team1):
-                        # Return the match id
-                        return match[-1]
-    return None
+def get_team_names():
+    team_names = set()
+    directories = [
+        './www/contest_upf-ai22/scores',
+        './www/contest_upf-ai23/scores'
+    ]  # Directories for both years
+    for directory in directories:
+        for filename in os.listdir(directory):
+            if filename.startswith('match_') and filename.endswith('.json'):
+                with open(os.path.join(directory, filename), 'r') as file:
+                    data = json.load(file)
+                    for team_name in data['teams_stats']:
+                        team_names.add(team_name)
+    return list(team_names)
 
-def count_json_files(directory):
-    files = os.listdir(directory)
-    json_files = [file for file in files if file.endswith('.json')]
-    return len(json_files)
+@app.route('/download/<year>/<file_type>/<file_name>')
+def download_file(year, file_type, file_name):
+    # 获取当前工作目录
+    current_dir = os.getcwd()
+    # 根据当前工作目录构造文件路径
+    file_path = os.path.join(current_dir, f'www/contest_upf-ai{year}/{file_type}s/{file_name}')
+    print(file_path)
+    return send_file(file_path, as_attachment=True)
 
-@app.route('/json_count')
-def json_count():
-    directory = './www/scores'  # replace with your directory
-    num_json_files = count_json_files(directory)
-    return jsonify({'count': num_json_files})
+
+
+
+
 
 @app.route('/tournament')
 def tournament_page():
-    directory = './www/scores'  # replace with your directory
-    num_json_files = count_json_files(directory)
-    print(f'Count: {num_json_files}')
-    return render_template('results_0_template.html', count=num_json_files)
+    team_names = get_team_names()
+    return render_template('results_0_template.html', team_names=team_names)
 
-@app.route('/search_match', methods=['GET'])
-def search_match():
-    team1 = request.args.get('team1')
-    team2 = request.args.get('team2')
-    match = find_match(team1, team2)
-    if match:
-        return render_template('results_0_template.html', match_id=match['match_id'])
-    else:
-        return "No match found", 404
-
-@app.route('/get_match_video/<int:match_id>')
-def get_match_video(match_id):
-    # your directory where the videos are stored
-    video_directory = '.'
-    
-    # the path to the video file
-    video_file_path = os.path.join(video_directory, f'match_{match_id}.mp4')
-    
-    # return the video file
-    return send_file(video_file_path, mimetype='video/mp4')
-
-@app.route('/search_team', methods=['GET'])
-def search_team():
-    team_name = request.args.get('team_name')
-    team_info = html_generator.find_team_info(team_name)
-    if team_info is None:
-        return "No team found", 404
-    else:
-        return jsonify(team_info)
+@app.route('/get_matches')
+def get_matches():
+    selected_team = request.args.get('team_name')
+    selected_year = request.args.get('year')  # 获取选定的年份
+    matches = []
+    directory = f'./www/contest_upf-ai{selected_year}/scores'  # 根据年份构建路径
+    for filename in os.listdir(directory):
+        if filename.startswith('match_') and filename.endswith('.json'):
+            with open(os.path.join(directory, filename), 'r') as file:
+                data = json.load(file)
+                for game in data['games']:
+                    if selected_team in game[:2]:
+                        # 根据文件类型添加正确的后缀
+                        score_file = filename
+                        replay_file = filename.replace('.json', '.replay')
+                        log_file = filename.replace('.json', '.log')
+                        match = {
+                            'team1': game[0],
+                            'team2': game[1],
+                            'layout': game[2],
+                            'time': game[3],
+                            'score': game[5],
+                            'winner': game[0] if game[5] > 0 else game[1],
+                            'score_file': f"/download/{selected_year}/score/{score_file}",
+                            'replay_file': f"/download/{selected_year}/replay/{replay_file}",
+                            'log_file': f"/download/{selected_year}/log/{log_file}"
+                        }
+                        matches.append(match)
+    return jsonify({'matches': matches})
 
 
+@app.route('/get_teams')
+def get_teams():
+    selected_year = request.args.get('year')
+    directory = f'./www/contest_upf-ai{selected_year}/scores'
+    team_names = set()
+    for filename in os.listdir(directory):
+        if filename.startswith('match_') and filename.endswith('.json'):
+            with open(os.path.join(directory, filename), 'r') as file:
+                data = json.load(file)
+                for team_name in data['teams_stats']:
+                    team_names.add(team_name)
+    return jsonify({'teams': list(team_names)})
 
 if __name__ == '__main__':
     app.run(debug=True)
