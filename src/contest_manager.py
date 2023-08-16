@@ -316,12 +316,20 @@ def main():
         with open('slurm-array.sh', 'w') as file:
             file.write(filedata)
 
+# Modified the source code to add a loop
+#    if settings['step'] == 'run_matches':	    
+#        with open("matches.json", "r") as f:
+#            matches = json.load(f)
+#            for match_id, match_args in matches.items():
+#                logging.info(f"Running match {match_id}")
+#                capture.run(match_args)
 
     if settings['step']  == 'run_matches':	    
         with open("matches.json","r") as f:
             matches = f.read()
             matches = json.loads(matches)
             capture.run(matches[settings['task'] ])
+
         
     if settings['step']  == 'html':	    
         contest_manager.generate_html()
