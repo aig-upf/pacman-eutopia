@@ -166,15 +166,15 @@ def serve_video(selected_year, match_name):
 
     # Construct the corresponding replay file path based on selected_year
     if selected_year == 'default':
-        replay_directory = '/Users/player/Documents/GitHub/pacman-eutopia/src/www/contest_default/replays'
+        replay_directory = './www/contest_default/replays'
     else:
-        replay_directory = f'/Users/player/Documents/GitHub/pacman-eutopia/src/www/contest_upf-{selected_year}/replays'
+        replay_directory = f'./www/contest_upf-{selected_year}/replays'
     
     # Build the full .replay file path from match_name
     replay_path = os.path.join(replay_directory, f'{match_name}.replay')
 
-    # mp4 files directory
-    mp4_directory = '/Users/player/Documents/GitHub/pacman-eutopia/src/contest_video'
+    # mp4 files directory 
+    mp4_directory = './contest_video'
     # Build the corresponding .mp4 file path
     mp4_path = os.path.join(mp4_directory, f'{match_name}.mp4')
     
@@ -229,8 +229,8 @@ def serve_best_match_video():
     logging.info("Match Name: %s", contest_name)
 
     # Please modify according to the actual situation
-    replay_directory = f'/Users/player/Documents/GitHub/pacman-eutopia/src/www/contest_{contest_name}/replays'
-    mp4_directory = '/Users/player/Documents/GitHub/pacman-eutopia/src/contest_video'
+    replay_directory = f'./www/contest_{contest_name}/replays'
+    mp4_directory = './contest_video'
     
     replay_path = os.path.join(replay_directory, f'{match_name}.replay')
     mp4_path = os.path.join(mp4_directory, f'{match_name}.mp4')
