@@ -265,6 +265,5 @@ def serve_best_match_video():
             # Returns an error message if the .replay file does not exist
             return jsonify({'error': 'Replay file not found'}), 404
 
-
 if __name__ == '__main__':
     app.run(debug=True)
