@@ -269,7 +269,6 @@ class ContestManager:
         print(self.matches)
         	
         
-        	
 
     def generate_html(self) -> None:
         web_gen = HtmlGenerator(www_dir=self.www_dir)

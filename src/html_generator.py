@@ -22,6 +22,7 @@ import datetime
 from bs4 import BeautifulSoup
 import glob
 
+# Setup logging configuration
 logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logging.INFO,
                     datefmt='%a, %d %b %Y %H:%M:%S')
 
@@ -30,6 +31,11 @@ logging.basicConfig(format='%(asctime)s %(levelname)-8s %(message)s', level=logg
 
 
 def load_settings():
+    """
+    Parses the command line arguments and returns a settings dictionary.
+    
+    :return: A dictionary containing the settings specified in the command line arguments.
+    """
     parser = argparse.ArgumentParser(
         description='This script generates the HTML structure given the logs of all the runs of this tournament.'
     )
@@ -122,7 +128,7 @@ class HtmlGenerator:
         with open(f"www/results_{run_id}_template.html", "w") as file:
             file.write(new_html_content)
     
-        #def _save_run_html(self, organizer: str, run_id: int, scores_dir: str, replays_dir: str, logs_dir: str, errors_dir: str):
+    #def _save_run_html(self, organizer: str, run_id: int, scores_dir: str, replays_dir: str, logs_dir: str, errors_dir: str):
     def _save_run_html(self, organizer: str, run_id: int, contest_names: list):
         """
         Generates the HTML of a contest run and saves it in www/results_<run_id>/results.html.
@@ -131,6 +137,7 @@ class HtmlGenerator:
         all_games = []
         all_teams_stats = {}
 
+        
         for contest_name in contest_names:
             scores_dir = os.path.join(self.www_dir, f"contest_{contest_name}/scores")
             replays_dir = os.path.join(self.www_dir, f"contest_{contest_name}/replays")
@@ -180,6 +187,25 @@ class HtmlGenerator:
             data[0] = data[0]//num_matches_per_team
             all_teams_stats[team_name] = data
 
+
+        # Step 1: Find the top team
+        # After populating all_teams_stats, sort it to find the top team
+        sorted_team_stats = sorted(list(all_teams_stats.items()), key=lambda v: (v[1][0], v[1][2], v[1][6]), reverse=True)
+        top_team = sorted_team_stats[0][0]  # Name of the top team
+
+        # Step 2: Find the highest scoring match for the top team
+        def find_highest_scoring_match_for_team(games, team_name):
+            highest_score = -float('inf')
+            best_match = None
+            for game in games:
+                n1, n2, layout, score, winner, time_taken, match_id = game
+                if team_name in (n1, n2) and score > highest_score:
+                    highest_score = score
+                    best_match = game
+            return best_match
+
+        best_match_for_top_team = find_highest_scoring_match_for_team(all_games, top_team)
+
         date_run = datetime.datetime.now().strftime("%d/%m/%Y %H:%M:%S")
         run_html = self._generate_html_result(run_id, date_run, organizer, all_games, all_teams_stats, random_layouts,
                                           fixed_layouts, max_steps, scores_dir, replays_dir, logs_dir, errors_dir)
@@ -187,6 +213,25 @@ class HtmlGenerator:
         html_full_path = os.path.join(self.www_dir, f'results_{run_id}.html')
         with open(html_full_path, "w") as f:
             print(run_html, file=f)
+        
+        best_match_for_top_team = find_highest_scoring_match_for_team(all_games, top_team)
+        # Extract the ID of the highest scoring game
+        best_match_id = best_match_for_top_team[-1]
+
+        # Find the contest_name associated with the best_match_id
+        best_contest_name = None
+        for contest_name in contest_names:
+            scores_dir = os.path.join(self.www_dir, f"contest_{contest_name}/scores")
+            all_files = [f for f in os.listdir(scores_dir) if os.path.isfile(os.path.join(scores_dir, f))]
+            if any(str(best_match_id) in filename for filename in all_files):
+                best_contest_name = contest_name
+                break
+
+        # Print race ID (for debugging)
+        print(best_match_id)   
+        # save best_match_id to a file
+        with open('best_match_info.txt', 'w') as file:
+            json.dump({'best_match_id': str(best_match_id), 'contest_name': best_contest_name}, file)
 
 
     def _generate_main_html(self):
@@ -399,7 +444,6 @@ class HtmlGenerator:
         if not games:
             output += "No match was run."
         else:
-            # First, print a table with the final standing
             output += self._generate_ranking(team_stats=team_stats)
             
             output += "\n\n<br/><br/>"
@@ -409,9 +453,9 @@ class HtmlGenerator:
             output += self._generate_matches_table(games=games, scores_dir=scores_dir, replays_dir=replays_dir,
                                                    logs_dir=logs_dir)
 
-        output += "\n\n</table></body></html>"
+        output += "\n\n</table>"
 
-        # 添加处理 "Show Next 10 Games" 和 "Collapse" 按钮点击事件的 JavaScript 代码
+        # Add JavaScript code to handle the "Show Next 10 Games" and "Collapse" button clicks.
         output += '''
         <script>
         var currentShownGames = 10;
@@ -440,10 +484,21 @@ class HtmlGenerator:
         }
         </script>
         '''
+
+        video_container = '''
+        <div id="video-player-container">
+        <h2>Top Score Match Video</h2>
+        <video id="videoPlayer" controls>
+        <source src="/videos/best_match.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+        </video>
+        </div>
+        '''
+        output += video_container
+
         output += "</body></html>"
 
         return output
-    
 
     def insert_html_content(self, html_generated, template_html_content):
         # Parse the HTML content with BeautifulSoup
@@ -471,14 +526,16 @@ class HtmlGenerator:
         dir_path = os.path.join(self.www_dir, 'contest_')
         contest_dirs = glob.glob(f"{dir_path}*")
         contest_names = [f.replace(dir_path, '') for f in contest_dirs if f != 'contest_default']
-    
+        logging.info(contest_names)  # Recorded to log file
         return contest_names
 
 
 def main():
+    """
+    Main function of the script. 
+    """
     settings = load_settings()
     html_generator = HtmlGenerator(settings['www_dir'])
-
     html_generator.add_contest_run(run_id=0, organizer=settings['organizer'])
 
 

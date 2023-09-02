@@ -16,11 +16,11 @@ logging.basicConfig(
 
 logging.debug("This is a debug message")
 
-
+# Initialize Flask app
 app = Flask(__name__, static_folder='./www/static', template_folder='./www')
 
 
-
+# Function to get all contest directories
 def get_all_contest_directories(base_dir='./www'):
 
     directories = []
@@ -32,7 +32,7 @@ def get_all_contest_directories(base_dir='./www'):
     return directories
 
 
-
+# Function to get team names
 def get_team_names():
     team_names = set()
     directories = get_all_contest_directories()
@@ -45,12 +45,13 @@ def get_team_names():
                         team_names.add(team_name)
     return list(team_names)
 
+# Function to generate video asynchronously
 def generate_video_async(replay_path):
     command = ['python', 'capture.py', f'--replay={replay_path}']
     process = subprocess.Popen(command)
     return process
 
-
+# Route to download files
 @app.route('/download/<year>/<file_type>/<file_name>')
 def download_file(year, file_type, file_name):
     if year == "default":
@@ -65,9 +66,7 @@ def download_file(year, file_type, file_name):
     logging.debug("File Path: %s", file_path)
     return send_file(file_path, as_attachment=True)
 
-
-
-
+# Route to get full ranking of teams
 @app.route('/get_full_ranking')
 def get_full_ranking():
     # Collect all team statistics
@@ -90,14 +89,13 @@ def get_full_ranking():
     # Return the sorted team stats as JSON
     return jsonify({'ranking': sorted_team_stats})
 
-
-
-
+# Route to display the tournament page
 @app.route('/tournament')
 def tournament_page():
     team_names = get_team_names()
     return render_template('results_0_template.html', team_names=team_names)
 
+# Route to get matches based on team name and year
 @app.route('/get_matches')
 def get_matches():
     selected_team = request.args.get('team_name')
@@ -135,7 +133,7 @@ def get_matches():
                         matches.append(match)
     return jsonify({'matches': matches})
 
-
+# Route to get teams based on year
 @app.route('/get_teams')
 def get_teams():
     selected_year = request.args.get('year')
@@ -153,7 +151,7 @@ def get_teams():
                     team_names.add(team_name)
     return jsonify({'teams': list(team_names)})
 
-
+# Route to get available years
 @app.route('/get_years')
 def get_years():
     base_dir = './www'
@@ -161,23 +159,23 @@ def get_years():
     years.extend([folder.split('-')[-1] for folder in os.listdir(base_dir) if folder.startswith('contest_upf-ai')]) 
     return jsonify({'years': years})
 
-
+# Route to serve video files
 @app.route('/videos/<selected_year>/<match_name>.mp4')
 def serve_video(selected_year, match_name):
     logging.info("serve_video function was called with selected_year: %s and match_name: %s", selected_year, match_name)
 
-    # 根据 selected_year 构建相应的 replay 文件路径
+    # Construct the corresponding replay file path based on selected_year
     if selected_year == 'default':
         replay_directory = '/Users/player/Documents/GitHub/pacman-eutopia/src/www/contest_default/replays'
     else:
         replay_directory = f'/Users/player/Documents/GitHub/pacman-eutopia/src/www/contest_upf-{selected_year}/replays'
     
-    # 根据 match_name 构建完整的 .replay 文件路径
+    # Build the full .replay file path from match_name
     replay_path = os.path.join(replay_directory, f'{match_name}.replay')
 
-    # mp4 文件保存的目录
+    # mp4 files directory
     mp4_directory = '/Users/player/Documents/GitHub/pacman-eutopia/src/contest_video'
-    # 构建对应的 .mp4 文件路径
+    # Build the corresponding .mp4 file path
     mp4_path = os.path.join(mp4_directory, f'{match_name}.mp4')
     
     logging.debug("Selected Year: %s", selected_year)
@@ -185,32 +183,87 @@ def serve_video(selected_year, match_name):
     logging.debug("Replay Path: %s", replay_path)
     logging.debug("MP4 Path: %s", mp4_path)
 
-    # 检查 .mp4 文件是否存在
+    # Check for the existence of .mp4 files
     if os.path.exists(mp4_path):
         logging.info(".MP4 file found. Sending file: %s", mp4_path)
-        # 如果 .mp4 文件存在，将其作为响应返回
+        # If the .mp4 file exists, return it as the response
         return send_file(mp4_path, mimetype='video/mp4')
     else:
         logging.debug(".MP4 file not found. Checking for .replay file...")
-        # 如果 .mp4 文件不存在，检查 .replay 文件是否存在
+        # If the .mp4 file does not exist, check if the .replay file exists
         if os.path.exists(replay_path):
             logging.debug(".Replay file found. Starting async video generation...")
             
-            #capture.py的路径
+            #capture.py's path
             capture_script_path = '/Users/player/Documents/GitHub/pacman-eutopia/pacman-contest/src/contest/capture.py'
             
-            # 启动异步进程生成视频
+            # Start an asynchronous process to generate the video
             command = ['python', capture_script_path, f'--replay={replay_path}']
-            process = Popen(command)  # 使用 Popen 异步执行命令
+            process = Popen(command)  # Asynchronous command execution with Popen
             
-            # 立即回应客户端，告知视频正在生成
+            # Immediately respond to the client to advise that the video is being generated
             return jsonify({'status': 'Video is being generated, please check back later'}), 202
         
         else:
             logging.error(".Replay file not found.")
-            # 如果 .replay 文件不存在，返回一个错误消息
+            # Returns an error message if the .replay file does not exist
             return jsonify({'error': 'Replay file not found'}), 404
+        
+# Route to serve best match video
+@app.route('/videos/best_match.mp4')
+def serve_best_match_video():
+    try:
+        # Read best_match_id from file
+        with open('best_match_info.txt', 'r') as file:
+            match_info = json.load(file)
+            best_match_id = match_info['best_match_id']
+            contest_name = match_info['contest_name']
 
+    except FileNotFoundError:
+        # If the file does not exist, you can log an error and return an error response
+        logging.error("Best Match ID file not found.")
+        return jsonify({'error': 'Best Match ID file not found'}), 404
+
+    match_name = f'match_{best_match_id}'
+    logging.info("Match Name: %s", match_name)
+    logging.info("Match Name: %s", contest_name)
+
+    # Please modify according to the actual situation
+    replay_directory = f'/Users/player/Documents/GitHub/pacman-eutopia/src/www/contest_{contest_name}/replays'
+    mp4_directory = '/Users/player/Documents/GitHub/pacman-eutopia/src/contest_video'
+    
+    replay_path = os.path.join(replay_directory, f'{match_name}.replay')
+    mp4_path = os.path.join(mp4_directory, f'{match_name}.mp4')
+    
+    logging.info("replay_path: %s", replay_path)
+    logging.info("mp4_path: %s", mp4_path)
+
+
+    # Check for the existence of .mp4 files
+    if os.path.exists(mp4_path):
+        logging.info(".MP4 file found. Sending file: %s", mp4_path)
+        # If the .mp4 file exists, return it as the response
+        return send_file(mp4_path, mimetype='video/mp4')
+    else:
+        logging.debug(".MP4 file not found. Checking for .replay file...")
+        # If the .mp4 file does not exist, check if the .replay file exists
+        if os.path.exists(replay_path):
+            logging.debug(".Replay file found. Starting async video generation...")
+            
+            # capture.py's path
+            capture_script_path = '/Users/player/Documents/GitHub/pacman-eutopia/pacman-contest/src/contest/capture.py'
+            
+            # Start an asynchronous process to generate the video
+            command = ['python', capture_script_path, f'--replay={replay_path}']
+            process = Popen(command)  # Asynchronous command execution with Popen
+            
+            # Immediately respond to the client to advise that the video is being generated
+            return jsonify({'status': 'Video is being generated, please check back later'}), 202
+        
+        else:
+            logging.error(".Replay file not found.")
+            # Returns an error message if the .replay file does not exist
+            return jsonify({'error': 'Replay file not found'}), 404
 
 
 if __name__ == '__main__':
