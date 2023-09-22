@@ -249,9 +249,9 @@ def serve_best_match_video():
         # If the .mp4 file does not exist, check if the .replay file exists
         if os.path.exists(replay_path):
             logging.debug(".Replay file found. Starting async video generation...")
-            
+
             # capture.py's path
-            capture_script_path = '/Users/player/Documents/GitHub/pacman-eutopia/pacman-contest/src/contest/capture.py'
+            capture_script_path = './src/contest/capture.py'
             
             # Start an asynchronous process to generate the video
             command = ['python', capture_script_path, f'--replay={replay_path}']
