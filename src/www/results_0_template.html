@@ -7,17 +7,6 @@
 <meta content="width=device-width" name="viewport"/>
 <meta content="Framer 722a0e4" name="generator"/>
 <title>PACMAN Tournament Info</title>
-<meta content="Made with Framer" name="description"/>
-<meta content="https://framerusercontent.com/sites/3z7pn3yiEAhFQAHzOi7tGG/searchIndex-ljeaxkoq.vsr.json" name="framer-search-index"/>
-<link href="https://framerusercontent.com/sites/icons/default-favicon.v3.png" rel="icon"/>
-<!-- Open Graph / Facebook -->
-<meta content="website" property="og:type"/>
-<meta content="PACMAN Tournament Info" property="og:title"/>
-<meta content="Made with Framer" property="og:description"/>
-<!-- Twitter -->
-<meta content="summary_large_image" name="twitter:card"/>
-<meta content="PACMAN Tournament Info" name="twitter:title"/>
-<meta content="Made with Framer" name="twitter:description"/>
 <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/><link href="https://pacman-tournament-info.framer.ai/" rel="canonical"/><link href="https://framerusercontent.com/sites/3z7pn3yiEAhFQAHzOi7tGG/chunk-2GCIBZGY.mjs" rel="modulepreload"/>
 <link href="https://framerusercontent.com/sites/3z7pn3yiEAhFQAHzOi7tGG/chunk-ELYU6EKT.mjs" rel="modulepreload"/>
 <link href="https://framerusercontent.com/sites/3z7pn3yiEAhFQAHzOi7tGG/Lq7I3uGltEnFbVBsfj1AvjbV_Rbionmu7g9yJe6onN8.4WTBADAJ.mjs" rel="modulepreload"/>
@@ -32,115 +21,550 @@
 <!-- End of bodyStart -->
 <div data-framer-hydrate-v2='{"routeId":"augiA20Il"}' data-framer-page-optimized-at="2023-06-27T13:06:40.196Z" data-framer-ssr-released-at="2023-06-26T15:39:12.473Z" id="main"><div class="framer-9Q7x6" style="display:contents"><div class="framer-72rtr7" style="min-height:100%;width:auto"><div class="framer-9mp6r1" data-framer-name="Hero" name="Hero"><div class="framer-3ijpii" data-framer-name="Menu" name="Menu"><div class="framer-1gm53kf" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><p class="framer-text" style='--font-selector:R0Y7TnVuaXRvLXJlZ3VsYXI=;--framer-font-family:"Nunito", "Nunito Placeholder", sans-serif;--framer-text-alignment:left;--framer-text-color:rgb(61, 52, 139)'>PACMAN Tournament</p></div><div class="framer-1d0w9k7" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none">
 <button class="framer-text" onclick="toggleDropdown()" style='--font-selector:R0Y7TnVuaXRvLXJlZ3VsYXI=;--framer-font-family:"Nunito", "Nunito Placeholder", sans-serif;--framer-text-color:rgb(61, 52, 139)'>Home</button>
-<div id="dropdown" style="display: none;">
-<select id="match-selector">
-                {% for i in range(count) %}
-                    <option value="{{ i + 1 }}">Match {{ i }}</option>
-                {% endfor %}
-            </select>
 </div>
-</div>
-<!-- New code for the video player -->
-<div id="video-player" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50%; height: 50%; background: white; padding: 20px; display: none; z-index: 100;">
-<video controls="" id="match-video" style="width: 100%; height: 100%;"></video>
-<button onclick="closeVideoPlayer()">Close</button>
-</div>
-<!-- Updated JavaScript code -->
-<script>
-    function toggleDropdown() {
-        var dropdown = document.getElementById("dropdown");
-        dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
-    }
-
-    function closeVideoPlayer() {
-        var videoPlayer = document.getElementById('video-player');
-        videoPlayer.style.display = 'none';
-    }
-
-    document.getElementById('match-selector').addEventListener('change', function() {
-        var match_id = this.value;
-        var video = document.getElementById('match-video');
-        var videoPlayer = document.getElementById('video-player');
-        
-        fetch('/get_match_video/' + match_id)
-            .then(response => response.blob())
-            .then(blob => {
-                var url = URL.createObjectURL(blob);
-                video.src = url;
-                video.play();
-                videoPlayer.style.display = 'block';
-            });
-    });
-</script>
 </div>
 <div class="framer-jik0nl" data-border="true" data-framer-name="Text" name="Text"><svg class="framer-udg5r7" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none" viewbox="0 0 475 88"><foreignobject height="100%" style="overflow:visible;transform-origin:center center" transform="scale(1)" width="100%"><h1 class="framer-text" style='--font-selector:R0Y7Qm93bGJ5IE9uZS1yZWd1bGFy;--framer-font-family:"Bowlby One", sans-serif;--framer-font-size:88.96920024653373px;--framer-line-height:1em;--framer-text-alignment:center;--framer-text-color:rgb(61, 52, 139);--framer-text-transform:uppercase'>paCman!</h1></foreignobject></svg><div class="framer-1227ctq" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><h1 class="framer-text" style='--font-selector:R0Y7TnVuaXRvLXJlZ3VsYXI=;--framer-font-family:"Nunito", "Nunito Placeholder", sans-serif;--framer-font-size:20px;--framer-line-height:1.4em;--framer-text-alignment:left;--framer-text-color:rgb(61, 52, 139)'>PACMAN Capture the Flag Tournament </h1></div></div><div class="framer-1yj4cz1" data-framer-name="Image" name="Image"><div class="framer-xy48p5" style="transform:rotate(-15deg)"><div class="framer-1p2r87r" data-framer-name="Image" name="Image"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" sizes="calc(max((100vw - 6px) / 3, 200px) * 2 + 20px)" src="./static/PACMAN Tournament Info_files/LaEpPm5oinW9naHpOhXUKm4G9Y.png" srcset="https://framerusercontent.com/images/LaEpPm5oinW9naHpOhXUKm4G9Y.png?scale-down-to=512 512w, https://framerusercontent.com/images/LaEpPm5oinW9naHpOhXUKm4G9Y.png 554w" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-swesb8" data-framer-name="Image" name="Image"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" sizes="max((100vw - 6px) / 3, 200px)" src="./static/PACMAN Tournament Info_files/fWfaFI0DAwbJHGRfNzdvHGcyM4.png" srcset="https://framerusercontent.com/images/fWfaFI0DAwbJHGRfNzdvHGcyM4.png?scale-down-to=512 470w, https://framerusercontent.com/images/fWfaFI0DAwbJHGRfNzdvHGcyM4.png 672w" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-39j2mo" data-framer-name="Image" name="Image"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" sizes="max((100vw - 6px) / 3, 200px)" src="./static/PACMAN Tournament Info_files/fWfaFI0DAwbJHGRfNzdvHGcyM4.png" srcset="https://framerusercontent.com/images/fWfaFI0DAwbJHGRfNzdvHGcyM4.png?scale-down-to=512 470w, https://framerusercontent.com/images/fWfaFI0DAwbJHGRfNzdvHGcyM4.png 672w" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1rv2ozr" data-framer-name="Image" name="Image"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" src="./static/PACMAN Tournament Info_files/wLEncg2KSDAx29q9qcXjULugras.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div></div></div></div><div class="framer-1816yvj" data-framer-name="Text" name="Text"><div class="framer-1r0zx4i" data-framer-name="Content" name="Content"><div class="framer-hyog6e" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><h2 class="framer-text" style='--font-selector:R0Y7Qm93bGJ5IE9uZS1yZWd1bGFy;--framer-font-family:"Bowlby One", sans-serif;--framer-font-size:48px;--framer-text-alignment:left;--framer-text-color:rgb(255, 255, 255)'>Information</h2><div><html><head><title>Results for the tournament round</title>
 <link href="static/style.css" rel="stylesheet" type="text/css"/></head>
 <body><h1>PACMAN Capture the Flag Tournament</h1>
 <h2>Tournament Organizer: UPF </h2>
 <h3>Name of Tournament: 0 </h3>
-<h3>Date of Tournament: 01/08/2023 18:54:23 
+<h3>Date of Tournament: 22/09/2023 19:24:51 
 </h3><h3>Configuration:
-<ul><li>Number of teams: 2</li><li>Layouts: 1 (1 fixed + 0 random)</li><li>Max steps: 1200 steps</li></ul></h3>
+<ul><li>Number of teams: 16</li><li>Layouts: 1 (1 fixed + 0 random)</li><li>Max steps: 1200 steps</li></ul></h3>
 <br/><br/><table border="1"><tr><th>Position</th><th>Team</th><th>Points %</th><th>Points</th><th>Win</th><th>Tie</th><th>Lost</th><th>TOTAL</th><th>FAILED</th><th>Score Balance</th></tr>
-<tr><td>1</td><td>Blue</td><td>100.0%</td><td>3</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>18</td></tr>
-<tr><td>2</td><td>Red</td><td>0.0%</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>ninthTeamName2022</td><td>40.0%</td><td>18</td><td>4</td><td>6</td><td>2</td><td>12</td><td>0</td><td>55</td></tr>
+<tr><td>2</td><td>thirdTeamName2022</td><td>40.0%</td><td>18</td><td>3</td><td>9</td><td>1</td><td>13</td><td>0</td><td>37</td></tr>
+<tr><td>3</td><td>secondTeamName2022</td><td>37.0%</td><td>17</td><td>3</td><td>8</td><td>2</td><td>13</td><td>0</td><td>37</td></tr>
+<tr><td>4</td><td>firstTeamName2022</td><td>37.0%</td><td>17</td><td>2</td><td>11</td><td>0</td><td>13</td><td>0</td><td>19</td></tr>
+<tr><td>5</td><td>eighthTeamName2022</td><td>35.0%</td><td>16</td><td>2</td><td>10</td><td>1</td><td>13</td><td>0</td><td>19</td></tr>
 </table>
 <br/><br/><h2>Disqualified</h2>
 <h3>Disqualified teams</h3><table border="1"><tr><th>Team</th><th>Log file</th></tr>
 </table>
 <br/><br/><h2>Games</h2>
-<h3>No. of games: 1 / Avg. game length: 0:00:38 / Max game length: 0:00:38</h3>
+<h3>No. of games: 81 / Avg. game length: 0:00:37 / Max game length: 0:02:12</h3>
 <table border="1"><tr><th>Team 1</th><th>Team 2</th><th>Layout</th><th>Time</th><th>Score</th><th>Winner</th><th>Score file</th><th>Replay file</th><th>Log file</th></tr>
-<tr><td align="center">Red</td><td align="center">Green</td><td>defaultCapture.lay</td><td>0:00:38</td><td>18</td><td><b>Blue</b></td><td align="center"><a href="contest_default/scores/match_0.json">match_0.json</a>
-</td><td align="center"><a href="contest_default/replays/match_0.replay">match_0.replay</a>
-</td><td align="center"><a href="contest_default/logs/match_0.log">match_0.log</a>
+<tr class="game-row" style=""><td align="center">Red</td><td align="center">Green</td><td>defaultCapture.lay</td><td>0:00:38</td><td>18</td><td><b>Blue</b></td><td align="center"><a download="match_0.json" href="contest_upf-ai23/scores/match_0.json">match_0.json</a>
+</td><td align="center"><a download="match_0.replay" href="contest_upf-ai23/replays/match_0.replay">match_0.replay</a>
+</td><td align="center"><a download="match_0.log" href="contest_upf-ai23/logs/match_0.log">match_0.log</a>
 </td></tr>
-</table></body></html>
-</div></div><div class="framer-1059rjc" data-framer-name="Paragraphs" name="Paragraphs"><div class="framer-mwvj5e" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"></div></div><div class="framer-179u31d" data-border="true" data-framer-name="Decoration" name="Decoration" style="transform:rotate(134deg)"></div></div></div><div class="framer-naamf6" data-framer-name="Section" name="Section"><div class="framer-1g6xmy8" data-framer-name="Wrapper" name="Wrapper"><div class="framer-11aaozj hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1m6b4nf hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1hjht6w hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1je5jm6"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-ow121z" data-border="true" data-framer-name="Decoration" name="Decoration" style="transform:rotate(134deg)"><div class="framer-1yit5x2" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><p class="framer-text" style="--framer-text-alignment:center"><br class="framer-text trailing-break"/></p></div></div></div><div class="framer-tmwzq3" data-framer-name="Wrapper" name="Wrapper"><div class="framer-1qar1nl" data-framer-name="Left" name="Left"><div class="framer-5jhst7" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><h3 class="framer-text" style='--font-selector:R0Y7Qm93bGJ5IE9uZS1yZWd1bGFy;--framer-font-family:"Bowlby One", sans-serif;--framer-font-size:32px;--framer-text-alignment:left;--framer-text-color:rgb(255, 255, 255)'>SEARCH COMPETITION</h3></div>
-<form action="/search" method="get">
-<input id="query1" name="q1" placeholder="Search team 1..." type="search"/>
-<span> vs </span>
-<input id="query2" name="q2" placeholder="Search team 2..." type="search"/>
-<input type="submit" value="Go"/>
-</form>
+<tr class="game-row" style=""><td align="center">teamSlow2022</td><td align="center"><b>eleventhTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>eleventhTeamName2022</b></td><td align="center"><a download="match_173.json" href="contest_upf-ai23/scores/match_173.json">match_173.json</a>
+</td><td align="center"><a download="match_173.replay" href="contest_upf-ai23/replays/match_173.replay">match_173.replay</a>
+</td><td align="center"><a download="match_173.log" href="contest_upf-ai23/logs/match_173.log">match_173.log</a>
+</td></tr>
+<tr class="game-row" style=""><td align="center">thirdTeamName2022</td><td align="center">firstTeamName2022</td><td>defaultCapture.lay</td><td>0:00:45</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_132.json" href="contest_upf-ai23/scores/match_132.json">match_132.json</a>
+</td><td align="center"><a download="match_132.replay" href="contest_upf-ai23/replays/match_132.replay">match_132.replay</a>
+</td><td align="center"><a download="match_132.log" href="contest_upf-ai23/logs/match_132.log">match_132.log</a>
+</td></tr>
+<tr class="game-row" style=""><td align="center">thirdTeamName2022</td><td align="center">thirteenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_165.json" href="contest_upf-ai23/scores/match_165.json">match_165.json</a>
+</td><td align="center"><a download="match_165.replay" href="contest_upf-ai23/replays/match_165.replay">match_165.replay</a>
+</td><td align="center"><a download="match_165.log" href="contest_upf-ai23/logs/match_165.log">match_165.log</a>
+</td></tr>
+<tr class="game-row" style=""><td align="center">secondTeamName2022</td><td align="center">eighthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:45</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_149.json" href="contest_upf-ai23/scores/match_149.json">match_149.json</a>
+</td><td align="center"><a download="match_149.replay" href="contest_upf-ai23/replays/match_149.replay">match_149.replay</a>
+</td><td align="center"><a download="match_149.log" href="contest_upf-ai23/logs/match_149.log">match_149.log</a>
+</td></tr>
+<tr class="game-row" style=""><td align="center">sixthTeamName2022</td><td align="center">eleventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_190.json" href="contest_upf-ai23/scores/match_190.json">match_190.json</a>
+</td><td align="center"><a download="match_190.replay" href="contest_upf-ai23/replays/match_190.replay">match_190.replay</a>
+</td><td align="center"><a download="match_190.log" href="contest_upf-ai23/logs/match_190.log">match_190.log</a>
+</td></tr>
+<tr class="game-row" style=""><td align="center">eighthTeamName2022</td><td align="center">ninthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_201.json" href="contest_upf-ai23/scores/match_201.json">match_201.json</a>
+</td><td align="center"><a download="match_201.replay" href="contest_upf-ai23/replays/match_201.replay">match_201.replay</a>
+</td><td align="center"><a download="match_201.log" href="contest_upf-ai23/logs/match_201.log">match_201.log</a>
+</td></tr>
+<tr class="game-row" style=""><td align="center"><b>sixthTeamName2022</b></td><td align="center">seventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:28</td><td>18</td><td><b>sixthTeamName2022</b></td><td align="center"><a download="match_186.json" href="contest_upf-ai23/scores/match_186.json">match_186.json</a>
+</td><td align="center"><a download="match_186.replay" href="contest_upf-ai23/replays/match_186.replay">match_186.replay</a>
+</td><td align="center"><a download="match_186.log" href="contest_upf-ai23/logs/match_186.log">match_186.log</a>
+</td></tr>
+<tr class="game-row" style=""><td align="center"><b>seventhTeamName2022</b></td><td align="center">teamSlow2022</td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>seventhTeamName2022</b></td><td align="center"><a download="match_169.json" href="contest_upf-ai23/scores/match_169.json">match_169.json</a>
+</td><td align="center"><a download="match_169.replay" href="contest_upf-ai23/replays/match_169.replay">match_169.replay</a>
+</td><td align="center"><a download="match_169.log" href="contest_upf-ai23/logs/match_169.log">match_169.log</a>
+</td></tr>
+<tr class="game-row" style=""><td align="center">teamSlow2022</td><td align="center"><b>secondTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>secondTeamName2022</b></td><td align="center"><a download="match_145.json" href="contest_upf-ai23/scores/match_145.json">match_145.json</a>
+</td><td align="center"><a download="match_145.replay" href="contest_upf-ai23/replays/match_145.replay">match_145.replay</a>
+</td><td align="center"><a download="match_145.log" href="contest_upf-ai23/logs/match_145.log">match_145.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center"><b>twelfthTeamName2022</b></td><td align="center">secondTeamName2022</td><td>defaultCapture.lay</td><td>0:00:40</td><td>18</td><td><b>twelfthTeamName2022</b></td><td align="center"><a download="match_153.json" href="contest_upf-ai23/scores/match_153.json">match_153.json</a>
+</td><td align="center"><a download="match_153.replay" href="contest_upf-ai23/replays/match_153.replay">match_153.replay</a>
+</td><td align="center"><a download="match_153.log" href="contest_upf-ai23/logs/match_153.log">match_153.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">eleventhTeamName2022</td><td align="center">secondTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_152.json" href="contest_upf-ai23/scores/match_152.json">match_152.json</a>
+</td><td align="center"><a download="match_152.replay" href="contest_upf-ai23/replays/match_152.replay">match_152.replay</a>
+</td><td align="center"><a download="match_152.log" href="contest_upf-ai23/logs/match_152.log">match_152.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">thirdTeamName2022</td><td align="center"><b>secondTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:39</td><td>18</td><td><b>secondTeamName2022</b></td><td align="center"><a download="match_144.json" href="contest_upf-ai23/scores/match_144.json">match_144.json</a>
+</td><td align="center"><a download="match_144.replay" href="contest_upf-ai23/replays/match_144.replay">match_144.replay</a>
+</td><td align="center"><a download="match_144.log" href="contest_upf-ai23/logs/match_144.log">match_144.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">sixthTeamName2022</td><td align="center">eighthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:45</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_187.json" href="contest_upf-ai23/scores/match_187.json">match_187.json</a>
+</td><td align="center"><a download="match_187.replay" href="contest_upf-ai23/replays/match_187.replay">match_187.replay</a>
+</td><td align="center"><a download="match_187.log" href="contest_upf-ai23/logs/match_187.log">match_187.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">teamSlow2022</td><td align="center"><b>sixthTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>sixthTeamName2022</b></td><td align="center"><a download="match_168.json" href="contest_upf-ai23/scores/match_168.json">match_168.json</a>
+</td><td align="center"><a download="match_168.replay" href="contest_upf-ai23/replays/match_168.replay">match_168.replay</a>
+</td><td align="center"><a download="match_168.log" href="contest_upf-ai23/logs/match_168.log">match_168.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">fourteenthTeamName2022</td><td align="center">seventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_200.json" href="contest_upf-ai23/scores/match_200.json">match_200.json</a>
+</td><td align="center"><a download="match_200.replay" href="contest_upf-ai23/replays/match_200.replay">match_200.replay</a>
+</td><td align="center"><a download="match_200.log" href="contest_upf-ai23/logs/match_200.log">match_200.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">sixthTeamName2022</td><td align="center">twelfthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_191.json" href="contest_upf-ai23/scores/match_191.json">match_191.json</a>
+</td><td align="center"><a download="match_191.replay" href="contest_upf-ai23/replays/match_191.replay">match_191.replay</a>
+</td><td align="center"><a download="match_191.log" href="contest_upf-ai23/logs/match_191.log">match_191.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">seventhTeamName2022</td><td align="center">secondTeamName2022</td><td>defaultCapture.lay</td><td>0:00:45</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_148.json" href="contest_upf-ai23/scores/match_148.json">match_148.json</a>
+</td><td align="center"><a download="match_148.replay" href="contest_upf-ai23/replays/match_148.replay">match_148.replay</a>
+</td><td align="center"><a download="match_148.log" href="contest_upf-ai23/logs/match_148.log">match_148.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">thirdTeamName2022</td><td align="center">twelfthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_164.json" href="contest_upf-ai23/scores/match_164.json">match_164.json</a>
+</td><td align="center"><a download="match_164.replay" href="contest_upf-ai23/replays/match_164.replay">match_164.replay</a>
+</td><td align="center"><a download="match_164.log" href="contest_upf-ai23/logs/match_164.log">match_164.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">teamSlow2022</td><td align="center"><b>firstTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>firstTeamName2022</b></td><td align="center"><a download="match_133.json" href="contest_upf-ai23/scores/match_133.json">match_133.json</a>
+</td><td align="center"><a download="match_133.replay" href="contest_upf-ai23/replays/match_133.replay">match_133.replay</a>
+</td><td align="center"><a download="match_133.log" href="contest_upf-ai23/logs/match_133.log">match_133.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center"><b>tenthTeamName2022</b></td><td align="center">teamSlow2022</td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>tenthTeamName2022</b></td><td align="center"><a download="match_172.json" href="contest_upf-ai23/scores/match_172.json">match_172.json</a>
+</td><td align="center"><a download="match_172.replay" href="contest_upf-ai23/replays/match_172.replay">match_172.replay</a>
+</td><td align="center"><a download="match_172.log" href="contest_upf-ai23/logs/match_172.log">match_172.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">tenthTeamName2022</td><td align="center">seventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_196.json" href="contest_upf-ai23/scores/match_196.json">match_196.json</a>
+</td><td align="center"><a download="match_196.replay" href="contest_upf-ai23/replays/match_196.replay">match_196.replay</a>
+</td><td align="center"><a download="match_196.log" href="contest_upf-ai23/logs/match_196.log">match_196.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">eighthTeamName2022</td><td align="center">fifthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_179.json" href="contest_upf-ai23/scores/match_179.json">match_179.json</a>
+</td><td align="center"><a download="match_179.replay" href="contest_upf-ai23/replays/match_179.replay">match_179.replay</a>
+</td><td align="center"><a download="match_179.log" href="contest_upf-ai23/logs/match_179.log">match_179.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">ninthTeamName2022</td><td align="center">tenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_207.json" href="contest_upf-ai23/scores/match_207.json">match_207.json</a>
+</td><td align="center"><a download="match_207.replay" href="contest_upf-ai23/replays/match_207.replay">match_207.replay</a>
+</td><td align="center"><a download="match_207.log" href="contest_upf-ai23/logs/match_207.log">match_207.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">ninthTeamName2022</td><td align="center">firstTeamName2022</td><td>defaultCapture.lay</td><td>0:00:43</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_138.json" href="contest_upf-ai23/scores/match_138.json">match_138.json</a>
+</td><td align="center"><a download="match_138.replay" href="contest_upf-ai23/replays/match_138.replay">match_138.replay</a>
+</td><td align="center"><a download="match_138.log" href="contest_upf-ai23/logs/match_138.log">match_138.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">ninthTeamName2022</td><td align="center">fifthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_180.json" href="contest_upf-ai23/scores/match_180.json">match_180.json</a>
+</td><td align="center"><a download="match_180.replay" href="contest_upf-ai23/replays/match_180.replay">match_180.replay</a>
+</td><td align="center"><a download="match_180.log" href="contest_upf-ai23/logs/match_180.log">match_180.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">firstTeamName2022</td><td align="center">fourteenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_143.json" href="contest_upf-ai23/scores/match_143.json">match_143.json</a>
+</td><td align="center"><a download="match_143.replay" href="contest_upf-ai23/replays/match_143.replay">match_143.replay</a>
+</td><td align="center"><a download="match_143.log" href="contest_upf-ai23/logs/match_143.log">match_143.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">secondTeamName2022</td><td align="center"><b>fourteenthTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:39</td><td>18</td><td><b>fourteenthTeamName2022</b></td><td align="center"><a download="match_155.json" href="contest_upf-ai23/scores/match_155.json">match_155.json</a>
+</td><td align="center"><a download="match_155.replay" href="contest_upf-ai23/replays/match_155.replay">match_155.replay</a>
+</td><td align="center"><a download="match_155.log" href="contest_upf-ai23/logs/match_155.log">match_155.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center"><b>thirteenthTeamName2022</b></td><td align="center">teamSlow2022</td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>thirteenthTeamName2022</b></td><td align="center"><a download="match_175.json" href="contest_upf-ai23/scores/match_175.json">match_175.json</a>
+</td><td align="center"><a download="match_175.replay" href="contest_upf-ai23/replays/match_175.replay">match_175.replay</a>
+</td><td align="center"><a download="match_175.log" href="contest_upf-ai23/logs/match_175.log">match_175.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">fifthTeamName2022</td><td align="center">firstTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_134.json" href="contest_upf-ai23/scores/match_134.json">match_134.json</a>
+</td><td align="center"><a download="match_134.replay" href="contest_upf-ai23/replays/match_134.replay">match_134.replay</a>
+</td><td align="center"><a download="match_134.log" href="contest_upf-ai23/logs/match_134.log">match_134.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">thirdTeamName2022</td><td align="center">eleventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_163.json" href="contest_upf-ai23/scores/match_163.json">match_163.json</a>
+</td><td align="center"><a download="match_163.replay" href="contest_upf-ai23/replays/match_163.replay">match_163.replay</a>
+</td><td align="center"><a download="match_163.log" href="contest_upf-ai23/logs/match_163.log">match_163.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">seventhTeamName2022</td><td align="center"><b>thirdTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:27</td><td>18</td><td><b>thirdTeamName2022</b></td><td align="center"><a download="match_159.json" href="contest_upf-ai23/scores/match_159.json">match_159.json</a>
+</td><td align="center"><a download="match_159.replay" href="contest_upf-ai23/replays/match_159.replay">match_159.replay</a>
+</td><td align="center"><a download="match_159.log" href="contest_upf-ai23/logs/match_159.log">match_159.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">sixthTeamName2022</td><td align="center">thirdTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_158.json" href="contest_upf-ai23/scores/match_158.json">match_158.json</a>
+</td><td align="center"><a download="match_158.replay" href="contest_upf-ai23/replays/match_158.replay">match_158.replay</a>
+</td><td align="center"><a download="match_158.log" href="contest_upf-ai23/logs/match_158.log">match_158.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">thirdTeamName2022</td><td align="center">tenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_162.json" href="contest_upf-ai23/scores/match_162.json">match_162.json</a>
+</td><td align="center"><a download="match_162.replay" href="contest_upf-ai23/replays/match_162.replay">match_162.replay</a>
+</td><td align="center"><a download="match_162.log" href="contest_upf-ai23/logs/match_162.log">match_162.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">firstTeamName2022</td><td align="center">sixthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_135.json" href="contest_upf-ai23/scores/match_135.json">match_135.json</a>
+</td><td align="center"><a download="match_135.replay" href="contest_upf-ai23/replays/match_135.replay">match_135.replay</a>
+</td><td align="center"><a download="match_135.log" href="contest_upf-ai23/logs/match_135.log">match_135.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center"><b>twelfthTeamName2022</b></td><td align="center">teamSlow2022</td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>twelfthTeamName2022</b></td><td align="center"><a download="match_174.json" href="contest_upf-ai23/scores/match_174.json">match_174.json</a>
+</td><td align="center"><a download="match_174.replay" href="contest_upf-ai23/replays/match_174.replay">match_174.replay</a>
+</td><td align="center"><a download="match_174.log" href="contest_upf-ai23/logs/match_174.log">match_174.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">secondTeamName2022</td><td align="center">thirteenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_154.json" href="contest_upf-ai23/scores/match_154.json">match_154.json</a>
+</td><td align="center"><a download="match_154.replay" href="contest_upf-ai23/replays/match_154.replay">match_154.replay</a>
+</td><td align="center"><a download="match_154.log" href="contest_upf-ai23/logs/match_154.log">match_154.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">firstTeamName2022</td><td align="center">thirteenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_142.json" href="contest_upf-ai23/scores/match_142.json">match_142.json</a>
+</td><td align="center"><a download="match_142.replay" href="contest_upf-ai23/replays/match_142.replay">match_142.replay</a>
+</td><td align="center"><a download="match_142.log" href="contest_upf-ai23/logs/match_142.log">match_142.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">fifthTeamName2022</td><td align="center"><b>tenthTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:23</td><td>18</td><td><b>tenthTeamName2022</b></td><td align="center"><a download="match_181.json" href="contest_upf-ai23/scores/match_181.json">match_181.json</a>
+</td><td align="center"><a download="match_181.replay" href="contest_upf-ai23/replays/match_181.replay">match_181.replay</a>
+</td><td align="center"><a download="match_181.log" href="contest_upf-ai23/logs/match_181.log">match_181.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">thirteenthTeamName2022</td><td align="center">ninthTeamName2022</td><td>defaultCapture.lay</td><td>0:02:12</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_210.json" href="contest_upf-ai23/scores/match_210.json">match_210.json</a>
+</td><td align="center"><a download="match_210.replay" href="contest_upf-ai23/replays/match_210.replay">match_210.replay</a>
+</td><td align="center"><a download="match_210.log" href="contest_upf-ai23/logs/match_210.log">match_210.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">firstTeamName2022</td><td align="center">tenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_139.json" href="contest_upf-ai23/scores/match_139.json">match_139.json</a>
+</td><td align="center"><a download="match_139.replay" href="contest_upf-ai23/replays/match_139.replay">match_139.replay</a>
+</td><td align="center"><a download="match_139.log" href="contest_upf-ai23/logs/match_139.log">match_139.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">eighthTeamName2022</td><td align="center">fourteenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_206.json" href="contest_upf-ai23/scores/match_206.json">match_206.json</a>
+</td><td align="center"><a download="match_206.replay" href="contest_upf-ai23/replays/match_206.replay">match_206.replay</a>
+</td><td align="center"><a download="match_206.log" href="contest_upf-ai23/logs/match_206.log">match_206.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center"><b>seventhTeamName2022</b></td><td align="center">eleventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:23</td><td>18</td><td><b>seventhTeamName2022</b></td><td align="center"><a download="match_197.json" href="contest_upf-ai23/scores/match_197.json">match_197.json</a>
+</td><td align="center"><a download="match_197.replay" href="contest_upf-ai23/replays/match_197.replay">match_197.replay</a>
+</td><td align="center"><a download="match_197.log" href="contest_upf-ai23/logs/match_197.log">match_197.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">fifthTeamName2022</td><td align="center">seventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_178.json" href="contest_upf-ai23/scores/match_178.json">match_178.json</a>
+</td><td align="center"><a download="match_178.replay" href="contest_upf-ai23/replays/match_178.replay">match_178.replay</a>
+</td><td align="center"><a download="match_178.log" href="contest_upf-ai23/logs/match_178.log">match_178.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">fifthTeamName2022</td><td align="center">thirdTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_157.json" href="contest_upf-ai23/scores/match_157.json">match_157.json</a>
+</td><td align="center"><a download="match_157.replay" href="contest_upf-ai23/replays/match_157.replay">match_157.replay</a>
+</td><td align="center"><a download="match_157.log" href="contest_upf-ai23/logs/match_157.log">match_157.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">firstTeamName2022</td><td align="center">twelfthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_141.json" href="contest_upf-ai23/scores/match_141.json">match_141.json</a>
+</td><td align="center"><a download="match_141.replay" href="contest_upf-ai23/replays/match_141.replay">match_141.replay</a>
+</td><td align="center"><a download="match_141.log" href="contest_upf-ai23/logs/match_141.log">match_141.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">eleventhTeamName2022</td><td align="center">fifthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:45</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_182.json" href="contest_upf-ai23/scores/match_182.json">match_182.json</a>
+</td><td align="center"><a download="match_182.replay" href="contest_upf-ai23/replays/match_182.replay">match_182.replay</a>
+</td><td align="center"><a download="match_182.log" href="contest_upf-ai23/logs/match_182.log">match_182.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">thirteenthTeamName2022</td><td align="center">eighthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_205.json" href="contest_upf-ai23/scores/match_205.json">match_205.json</a>
+</td><td align="center"><a download="match_205.replay" href="contest_upf-ai23/replays/match_205.replay">match_205.replay</a>
+</td><td align="center"><a download="match_205.log" href="contest_upf-ai23/logs/match_205.log">match_205.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center"><b>eighthTeamName2022</b></td><td align="center">seventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:23</td><td>18</td><td><b>eighthTeamName2022</b></td><td align="center"><a download="match_194.json" href="contest_upf-ai23/scores/match_194.json">match_194.json</a>
+</td><td align="center"><a download="match_194.replay" href="contest_upf-ai23/replays/match_194.replay">match_194.replay</a>
+</td><td align="center"><a download="match_194.log" href="contest_upf-ai23/logs/match_194.log">match_194.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">ninthTeamName2022</td><td align="center"><b>thirdTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:35</td><td>18</td><td><b>thirdTeamName2022</b></td><td align="center"><a download="match_161.json" href="contest_upf-ai23/scores/match_161.json">match_161.json</a>
+</td><td align="center"><a download="match_161.replay" href="contest_upf-ai23/replays/match_161.replay">match_161.replay</a>
+</td><td align="center"><a download="match_161.log" href="contest_upf-ai23/logs/match_161.log">match_161.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">firstTeamName2022</td><td align="center">seventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:43</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_136.json" href="contest_upf-ai23/scores/match_136.json">match_136.json</a>
+</td><td align="center"><a download="match_136.replay" href="contest_upf-ai23/replays/match_136.replay">match_136.replay</a>
+</td><td align="center"><a download="match_136.log" href="contest_upf-ai23/logs/match_136.log">match_136.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">ninthTeamName2022</td><td align="center">twelfthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_209.json" href="contest_upf-ai23/scores/match_209.json">match_209.json</a>
+</td><td align="center"><a download="match_209.replay" href="contest_upf-ai23/replays/match_209.replay">match_209.replay</a>
+</td><td align="center"><a download="match_209.log" href="contest_upf-ai23/logs/match_209.log">match_209.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">sixthTeamName2022</td><td align="center">fifthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_177.json" href="contest_upf-ai23/scores/match_177.json">match_177.json</a>
+</td><td align="center"><a download="match_177.replay" href="contest_upf-ai23/replays/match_177.replay">match_177.replay</a>
+</td><td align="center"><a download="match_177.log" href="contest_upf-ai23/logs/match_177.log">match_177.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">twelfthTeamName2022</td><td align="center">seventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_198.json" href="contest_upf-ai23/scores/match_198.json">match_198.json</a>
+</td><td align="center"><a download="match_198.replay" href="contest_upf-ai23/replays/match_198.replay">match_198.replay</a>
+</td><td align="center"><a download="match_198.log" href="contest_upf-ai23/logs/match_198.log">match_198.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center"><b>fourteenthTeamName2022</b></td><td align="center">teamSlow2022</td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>fourteenthTeamName2022</b></td><td align="center"><a download="match_176.json" href="contest_upf-ai23/scores/match_176.json">match_176.json</a>
+</td><td align="center"><a download="match_176.replay" href="contest_upf-ai23/replays/match_176.replay">match_176.replay</a>
+</td><td align="center"><a download="match_176.log" href="contest_upf-ai23/logs/match_176.log">match_176.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">thirteenthTeamName2022</td><td align="center">seventhTeamName2022</td><td>defaultCapture.lay</td><td>0:01:21</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_199.json" href="contest_upf-ai23/scores/match_199.json">match_199.json</a>
+</td><td align="center"><a download="match_199.replay" href="contest_upf-ai23/replays/match_199.replay">match_199.replay</a>
+</td><td align="center"><a download="match_199.log" href="contest_upf-ai23/logs/match_199.log">match_199.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center"><b>ninthTeamName2022</b></td><td align="center">eleventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:27</td><td>18</td><td><b>ninthTeamName2022</b></td><td align="center"><a download="match_208.json" href="contest_upf-ai23/scores/match_208.json">match_208.json</a>
+</td><td align="center"><a download="match_208.replay" href="contest_upf-ai23/replays/match_208.replay">match_208.replay</a>
+</td><td align="center"><a download="match_208.log" href="contest_upf-ai23/logs/match_208.log">match_208.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center"><b>firstTeamName2022</b></td><td align="center">eighthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:29</td><td>18</td><td><b>firstTeamName2022</b></td><td align="center"><a download="match_137.json" href="contest_upf-ai23/scores/match_137.json">match_137.json</a>
+</td><td align="center"><a download="match_137.replay" href="contest_upf-ai23/replays/match_137.replay">match_137.replay</a>
+</td><td align="center"><a download="match_137.log" href="contest_upf-ai23/logs/match_137.log">match_137.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">eighthTeamName2022</td><td align="center">thirdTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_160.json" href="contest_upf-ai23/scores/match_160.json">match_160.json</a>
+</td><td align="center"><a download="match_160.replay" href="contest_upf-ai23/replays/match_160.replay">match_160.replay</a>
+</td><td align="center"><a download="match_160.log" href="contest_upf-ai23/logs/match_160.log">match_160.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center"><b>ninthTeamName2022</b></td><td align="center">seventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:31</td><td>18</td><td><b>ninthTeamName2022</b></td><td align="center"><a download="match_195.json" href="contest_upf-ai23/scores/match_195.json">match_195.json</a>
+</td><td align="center"><a download="match_195.replay" href="contest_upf-ai23/replays/match_195.replay">match_195.replay</a>
+</td><td align="center"><a download="match_195.log" href="contest_upf-ai23/logs/match_195.log">match_195.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">eighthTeamName2022</td><td align="center">twelfthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_204.json" href="contest_upf-ai23/scores/match_204.json">match_204.json</a>
+</td><td align="center"><a download="match_204.replay" href="contest_upf-ai23/replays/match_204.replay">match_204.replay</a>
+</td><td align="center"><a download="match_204.log" href="contest_upf-ai23/logs/match_204.log">match_204.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">twelfthTeamName2022</td><td align="center">fifthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_183.json" href="contest_upf-ai23/scores/match_183.json">match_183.json</a>
+</td><td align="center"><a download="match_183.replay" href="contest_upf-ai23/replays/match_183.replay">match_183.replay</a>
+</td><td align="center"><a download="match_183.log" href="contest_upf-ai23/logs/match_183.log">match_183.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">firstTeamName2022</td><td align="center">eleventhTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_140.json" href="contest_upf-ai23/scores/match_140.json">match_140.json</a>
+</td><td align="center"><a download="match_140.replay" href="contest_upf-ai23/replays/match_140.replay">match_140.replay</a>
+</td><td align="center"><a download="match_140.log" href="contest_upf-ai23/logs/match_140.log">match_140.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">teamSlow2022</td><td align="center"><b>thirdTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>thirdTeamName2022</b></td><td align="center"><a download="match_156.json" href="contest_upf-ai23/scores/match_156.json">match_156.json</a>
+</td><td align="center"><a download="match_156.replay" href="contest_upf-ai23/replays/match_156.replay">match_156.replay</a>
+</td><td align="center"><a download="match_156.log" href="contest_upf-ai23/logs/match_156.log">match_156.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">teamSlow2022</td><td align="center"><b>fifthTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>fifthTeamName2022</b></td><td align="center"><a download="match_167.json" href="contest_upf-ai23/scores/match_167.json">match_167.json</a>
+</td><td align="center"><a download="match_167.replay" href="contest_upf-ai23/replays/match_167.replay">match_167.replay</a>
+</td><td align="center"><a download="match_167.log" href="contest_upf-ai23/logs/match_167.log">match_167.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">sixthTeamName2022</td><td align="center"><b>ninthTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:35</td><td>18</td><td><b>ninthTeamName2022</b></td><td align="center"><a download="match_188.json" href="contest_upf-ai23/scores/match_188.json">match_188.json</a>
+</td><td align="center"><a download="match_188.replay" href="contest_upf-ai23/replays/match_188.replay">match_188.replay</a>
+</td><td align="center"><a download="match_188.log" href="contest_upf-ai23/logs/match_188.log">match_188.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">teamSlow2022</td><td align="center"><b>ninthTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>ninthTeamName2022</b></td><td align="center"><a download="match_171.json" href="contest_upf-ai23/scores/match_171.json">match_171.json</a>
+</td><td align="center"><a download="match_171.replay" href="contest_upf-ai23/replays/match_171.replay">match_171.replay</a>
+</td><td align="center"><a download="match_171.log" href="contest_upf-ai23/logs/match_171.log">match_171.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">tenthTeamName2022</td><td align="center">secondTeamName2022</td><td>defaultCapture.lay</td><td>0:00:43</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_151.json" href="contest_upf-ai23/scores/match_151.json">match_151.json</a>
+</td><td align="center"><a download="match_151.replay" href="contest_upf-ai23/replays/match_151.replay">match_151.replay</a>
+</td><td align="center"><a download="match_151.log" href="contest_upf-ai23/logs/match_151.log">match_151.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">secondTeamName2022</td><td align="center">sixthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:45</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_147.json" href="contest_upf-ai23/scores/match_147.json">match_147.json</a>
+</td><td align="center"><a download="match_147.replay" href="contest_upf-ai23/replays/match_147.replay">match_147.replay</a>
+</td><td align="center"><a download="match_147.log" href="contest_upf-ai23/logs/match_147.log">match_147.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">thirteenthTeamName2022</td><td align="center">fifthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_184.json" href="contest_upf-ai23/scores/match_184.json">match_184.json</a>
+</td><td align="center"><a download="match_184.replay" href="contest_upf-ai23/replays/match_184.replay">match_184.replay</a>
+</td><td align="center"><a download="match_184.log" href="contest_upf-ai23/logs/match_184.log">match_184.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">eleventhTeamName2022</td><td align="center">eighthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_203.json" href="contest_upf-ai23/scores/match_203.json">match_203.json</a>
+</td><td align="center"><a download="match_203.replay" href="contest_upf-ai23/replays/match_203.replay">match_203.replay</a>
+</td><td align="center"><a download="match_203.log" href="contest_upf-ai23/logs/match_203.log">match_203.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">sixthTeamName2022</td><td align="center">thirteenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_192.json" href="contest_upf-ai23/scores/match_192.json">match_192.json</a>
+</td><td align="center"><a download="match_192.replay" href="contest_upf-ai23/replays/match_192.replay">match_192.replay</a>
+</td><td align="center"><a download="match_192.log" href="contest_upf-ai23/logs/match_192.log">match_192.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">fourteenthTeamName2022</td><td align="center">sixthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_193.json" href="contest_upf-ai23/scores/match_193.json">match_193.json</a>
+</td><td align="center"><a download="match_193.replay" href="contest_upf-ai23/replays/match_193.replay">match_193.replay</a>
+</td><td align="center"><a download="match_193.log" href="contest_upf-ai23/logs/match_193.log">match_193.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">eighthTeamName2022</td><td align="center">tenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:43</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_202.json" href="contest_upf-ai23/scores/match_202.json">match_202.json</a>
+</td><td align="center"><a download="match_202.replay" href="contest_upf-ai23/replays/match_202.replay">match_202.replay</a>
+</td><td align="center"><a download="match_202.log" href="contest_upf-ai23/logs/match_202.log">match_202.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">fifthTeamName2022</td><td align="center">fourteenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_185.json" href="contest_upf-ai23/scores/match_185.json">match_185.json</a>
+</td><td align="center"><a download="match_185.replay" href="contest_upf-ai23/replays/match_185.replay">match_185.replay</a>
+</td><td align="center"><a download="match_185.log" href="contest_upf-ai23/logs/match_185.log">match_185.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">fifthTeamName2022</td><td align="center">secondTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_146.json" href="contest_upf-ai23/scores/match_146.json">match_146.json</a>
+</td><td align="center"><a download="match_146.replay" href="contest_upf-ai23/replays/match_146.replay">match_146.replay</a>
+</td><td align="center"><a download="match_146.log" href="contest_upf-ai23/logs/match_146.log">match_146.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">ninthTeamName2022</td><td align="center"><b>secondTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:28</td><td>18</td><td><b>secondTeamName2022</b></td><td align="center"><a download="match_150.json" href="contest_upf-ai23/scores/match_150.json">match_150.json</a>
+</td><td align="center"><a download="match_150.replay" href="contest_upf-ai23/replays/match_150.replay">match_150.replay</a>
+</td><td align="center"><a download="match_150.log" href="contest_upf-ai23/logs/match_150.log">match_150.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">teamSlow2022</td><td align="center"><b>eighthTeamName2022</b></td><td>defaultCapture.lay</td><td>0:00:06</td><td>1</td><td><b>eighthTeamName2022</b></td><td align="center"><a download="match_170.json" href="contest_upf-ai23/scores/match_170.json">match_170.json</a>
+</td><td align="center"><a download="match_170.replay" href="contest_upf-ai23/replays/match_170.replay">match_170.replay</a>
+</td><td align="center"><a download="match_170.log" href="contest_upf-ai23/logs/match_170.log">match_170.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">firstTeamName2022</td><td align="center">secondTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_131.json" href="contest_upf-ai23/scores/match_131.json">match_131.json</a>
+</td><td align="center"><a download="match_131.replay" href="contest_upf-ai23/replays/match_131.replay">match_131.replay</a>
+</td><td align="center"><a download="match_131.log" href="contest_upf-ai23/logs/match_131.log">match_131.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">thirdTeamName2022</td><td align="center">fourteenthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:43</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_166.json" href="contest_upf-ai23/scores/match_166.json">match_166.json</a>
+</td><td align="center"><a download="match_166.replay" href="contest_upf-ai23/replays/match_166.replay">match_166.replay</a>
+</td><td align="center"><a download="match_166.log" href="contest_upf-ai23/logs/match_166.log">match_166.log</a>
+</td></tr>
+<tr class="game-row" style="display: none;"><td align="center">tenthTeamName2022</td><td align="center">sixthTeamName2022</td><td>defaultCapture.lay</td><td>0:00:44</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_189.json" href="contest_upf-ai23/scores/match_189.json">match_189.json</a>
+</td><td align="center"><a download="match_189.replay" href="contest_upf-ai23/replays/match_189.replay">match_189.replay</a>
+</td><td align="center"><a download="match_189.log" href="contest_upf-ai23/logs/match_189.log">match_189.log</a>
+</td></tr>
+</table><button id="showNextGamesButton" onclick="showNextGames()">Show Next 10 Games</button><button id="collapseGamesButton" onclick="collapseGames()" style="display: none;">Collapse</button>
 
-{% if match_id %}
-<video controls="" height="240" width="320">
-<source src="{{ url_for('get_match_video', match_id=match_id) }}" type="video/mp4"/>
-    Your browser does not support the video tag.
-</video>
-{% endif %}
-
-<form action="/search_team" method="get">
-<label for="team_name">Enter a team name:</label>
-<input id="team_name" name="team_name" type="text"/>
-<input type="submit" value="Search"/>
-</form>
 <script>
-    $(document).ready(function(){
-      $("form").on("submit", function(event){
-        event.preventDefault();
-        var team_name = $("#team_name").val();
-        $.getJSON("/search_team", {team_name: team_name}, function(data){
-          var html = "<table><tr><th>Team Name</th><th>Wins</th><th>Losses</th><th>Points</th><th>Points %</th></tr>";
-          var team_stats = data.teams_stats[team_name];
-          if (team_stats) {
-            html += "<tr><td>" + team_name + "</td>";
-            html += "<td>" + team_stats[2] + "</td>";  // wins
-            html += "<td>" + team_stats[4] + "</td>";  // losses
-            html += "<td>" + team_stats[1] + "</td>";  // points
-            html += "<td>" + team_stats[0] + "%</td></tr>";  // points %
-          }
-          html += "</table>";
-          $("#results").html(html);
+        var currentShownGames = 10;
+
+        function showNextGames() {
+            var rows = document.getElementsByClassName("game-row");
+            var endIndex = Math.min(currentShownGames + 10, rows.length);
+            for (var i = currentShownGames; i < endIndex; i++) {
+                rows[i].style.display = "";
+            }
+            currentShownGames = endIndex;
+            if (currentShownGames >= rows.length) {
+                document.getElementById("showNextGamesButton").style.display = "none";
+                document.getElementById("collapseGamesButton").style.display = "";
+            }
+        }
+
+        function collapseGames() {
+            var rows = document.getElementsByClassName("game-row");
+            for (var i = 10; i < rows.length; i++) {
+                rows[i].style.display = "none";
+            }
+            currentShownGames = 10;
+            document.getElementById("showNextGamesButton").style.display = "";
+            document.getElementById("collapseGamesButton").style.display = "none";
+        }
+        </script>
+<div id="video-player-container">
+<h2>Top Score Match Video</h2>
+<video controls="" id="videoPlayer">
+<source src="/videos/best_match.mp4" type="video/mp4"/>
+        Your browser does not support the video tag.
+        </video>
+</div>
+</body></html>
+</div></div><div class="framer-1059rjc" data-framer-name="Paragraphs" name="Paragraphs"><div class="framer-mwvj5e" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"></div></div><div class="framer-179u31d" data-border="true" data-framer-name="Decoration" name="Decoration" style="transform:rotate(134deg)"></div></div></div><div class="framer-naamf6" data-framer-name="Section" name="Section"><div class="framer-1g6xmy8" data-framer-name="Wrapper" name="Wrapper"><div class="framer-11aaozj hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1m6b4nf hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1hjht6w hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1je5jm6"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-ow121z" data-border="true" data-framer-name="Decoration" name="Decoration" style="transform:rotate(134deg)"><div class="framer-1yit5x2" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><p class="framer-text" style="--framer-text-alignment:center"><br class="framer-text trailing-break"/></p></div></div></div><div class="framer-tmwzq3" data-framer-name="Wrapper" name="Wrapper"><div class="framer-1qar1nl" data-framer-name="Left" name="Left">
+<!-- Search Competition -->
+<div style="margin-bottom: 20px;">
+<h3 style="font-family: 'Bowlby One', sans-serif; font-size: 32px; color: rgb(255, 255, 255); margin-bottom: 10px;">SEARCH COMPETITION</h3>
+<select id="yearSelect">
+<option value="default">default</option>
+<!-- Other years will be dynamically loaded -->
+</select>
+<select id="teamSelect" style="margin-left: 20px; height: 32px;">
+<option value="default">default</option>
+<!-- Other years will be dynamically loaded -->
+</select>
+</div>
+<!-- Table Container -->
+<div id="tableContainer" style="width: 100%; overflow-x: auto;">
+<div id="matchDetails"></div>
+</div>
+<script>
+// Function to map a year to a directory name
+function getDirectoryFromYear(year) {
+    if (year === "default") {
+        return "default";
+    } else {
+        return "contest_upf-" + year;  // This will return 'contest_upf-ai22', 'contest_upf-ai23', etc.
+    }
+}
+
+// Function to update match details based on selected year and team
+function updateMatches() {
+    var selectedYear = getDirectoryFromYear(document.getElementById('yearSelect').value);
+    var selectedTeam = document.getElementById('teamSelect').value;
+
+
+    fetch(`/get_matches?year=${selectedYear}&team_name=${selectedTeam}`)
+      .then(response => response.json())
+      .then(data => {
+        // Build the table and display the match details
+        var table = '<table><tr><th>Team 1</th><th>Team 2</th><th>Layout</th><th>Time</th><th>Score</th><th>Winner</th><th>Score file</th><th>Replay file</th><th>Log file</th></tr>';
+        data.matches.forEach(match => {
+          table += `<tr><td>${match.team1}</td><td>${match.team2}</td><td>${match.layout}</td><td>${match.time}</td><td>${match.score}</td><td>${match.winner}</td>`;
+          table += `<td><a href="${match.score_file}" download>Download Score</a></td>`; // Modified to Score file download link
+          table += `<td><a href="${match.replay_file}" download>Download Replay</a>`;
+          table += `<button onclick="playVideo('${match.match_id}')">Play</button></td>`; // The Replay file column contains a download link and a play button.
+          table += `<td><a href="${match.log_file}" download>Download Log</a></td></tr>`; // Download link in the Log file section
         });
+        table += '</table>';
+        document.getElementById('matchDetails').innerHTML = table;
       });
+}
+
+// Function to update the team list based on selected year
+function updateTeams() {
+    var selectedYear = getDirectoryFromYear(document.getElementById('yearSelect').value);
+
+    fetch(`/get_teams?year=${selectedYear}`)
+      .then(response => response.json())
+      .then(data => {
+        var teamSelect = document.getElementById('teamSelect');
+        teamSelect.innerHTML = ''; // Clear existing options
+        data.teams.forEach(team => {
+          var option = document.createElement('option');
+          option.value = team;
+          option.text = team;
+          teamSelect.appendChild(option);
+        });
+        updateMatches(); // Update the contest
+      });
+}
+
+// Function to update the year list
+function updateYears() {
+  fetch('/get_years')
+    .then(response => response.json())
+    .then(data => {
+      var yearSelect = document.getElementById('yearSelect');
+      yearSelect.innerHTML = ''; // Clear existing options
+      data.years.forEach(year => {
+        var option = document.createElement('option');
+        option.value = year;
+        option.text = year;
+        yearSelect.appendChild(option);
+      });
+      updateTeams(); // Update the teams after filling years
     });
-  </script>
-<div id="results"></div>
-</div><div class="framer-hoee7r" data-framer-name="Decoration" name="Decoration"><div class="framer-xt2mey" style="transform:rotate(90deg)"></div><div class="framer-w6pfxt" style="transform:rotate(-30deg)"></div><div class="framer-85bvi2" style="transform:rotate(-60deg)"></div><div class="framer-17rtv5x" style="transform:rotate(30deg)"></div><div class="framer-q2cyvh" style="transform:rotate(60deg)"></div><div class="framer-b49a2w"></div></div></div></div><div class="framer-gsw81a"><div class="framer-1m99xvz-container"></div><div class="framer-mwnp52" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><p class="framer-text" style="--framer-text-alignment:center"><br class="framer-text trailing-break"/></p></div></div><div class="framer-1ujjqfz" data-framer-name="Footer" name="Footer"><div class="framer-14z9fb5" data-framer-name="Copyright" name="Copyright"><div class="framer-19v4aem" data-framer-name="Icons" name="Icons"></div><div class="framer-1wmbps3" data-framer-name="Spacer" name="Spacer"></div><div class="framer-14pcb6k" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><p class="framer-text" style='--font-selector:R0Y7TnVuaXRvLXJlZ3VsYXI=;--framer-font-family:"Nunito", "Nunito Placeholder", sans-serif;--framer-line-height:1.5em;--framer-text-alignment:center;--framer-text-color:rgb(255, 255, 255)'> 2023 PACMAN Capture the Flag Tournament powered by UPF</p></div></div></div></div><div id="overlay"></div></div></div><div id="svg-templates" style="position: absolute; overflow: hidden; top: 0; left: 0; width: 0; height: 0">
+}
+
+// Update the team when the year selector changes
+document.getElementById('yearSelect').addEventListener('change', updateTeams);
+// Update matches when team selector changes
+document.getElementById('teamSelect').addEventListener('change', updateMatches);
+
+// Update the years when the page loads
+updateYears();
+
+// Function to play a video based on matchId
+function playVideo(matchId) {
+    console.log('playVideo called with matchId:', matchId);
+    
+    var selectedYear = document.getElementById('yearSelect').value;
+    var videoPath = `/videos/${selectedYear}/${matchId}.mp4`;
+
+    fetch(videoPath)
+    .then(response => {
+        if (response.status === 200) {
+            // If the video exists, create a new video playback window
+            var videoWindow = window.open("", "Video Player", "width=400,height=300");
+            videoWindow.document.write(`
+                <video width="400" controls>
+                    <source src="${videoPath}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            `);
+        } else {
+            // If the video does not exist, display a warning message
+            alert("Video file not found, the video is being generated, please wait");
+        }
+    });
+}
+
+</script>
+</div>
+<div class="framer-hoee7r" data-framer-name="Decoration" name="Decoration">
+<div class="framer-xt2mey" style="transform:rotate(90deg)"></div>
+<div class="framer-w6pfxt" style="transform:rotate(-30deg)"></div>
+<div class="framer-85bvi2" style="transform:rotate(-60deg)"></div>
+<div class="framer-17rtv5x" style="transform:rotate(30deg)"></div>
+<div class="framer-q2cyvh" style="transform:rotate(60deg)"></div>
+<div class="framer-b49a2w"></div>
+</div>
+</div>
+</div>
+<!-- Framer Container -->
+<div class="framer-gsw81a">
+<div class="framer-1m99xvz-container"></div>
+<div class="framer-mwnp52" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none">
+<p class="framer-text" style="--framer-text-alignment:center">
+<br class="framer-text trailing-break"/>
+</p>
+</div>
+</div>
+<!-- Footer Section -->
+<div class="framer-1ujjqfz" data-framer-name="Footer" name="Footer">
+<div class="framer-14z9fb5" data-framer-name="Copyright" name="Copyright">
+<div class="framer-19v4aem" data-framer-name="Icons" name="Icons"></div>
+<div class="framer-1wmbps3" data-framer-name="Spacer" name="Spacer"></div>
+<div class="framer-14pcb6k" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none">
+<p class="framer-text" style='--font-selector:R0Y7TnVuaXRvLXJlZ3VsYXI=;--framer-font-family:"Nunito", "Nunito Placeholder", sans-serif;--framer-line-height:1.5em;--framer-text-alignment:center;--framer-text-color:rgb(255, 255, 255)'>
+                2023 PACMAN Capture the Flag Tournament powered by UPF
+            </p>
+</div>
+</div>
+</div>
+</div>
+<div id="overlay"></div>
+</div>
+</div>
+<!-- SVG Templates -->
+<div id="svg-templates" style="position: absolute; overflow: hidden; top: 0; left: 0; width: 0; height: 0">
 </div>
 <script data-framer-appear-animation="no-preference"></script>
 <script data-framer-bundle="" src="./PACMAN Tournament Info_files/_script0.E6CKKQI7.mjs" type="module"></script>
 <!-- End of bodyEnd -->
-</body></html>
+</body>
+</html>
