@@ -216,7 +216,12 @@ class HtmlGenerator:
         
         best_match_for_top_team = find_highest_scoring_match_for_team(all_games, top_team)
         # Extract the ID of the highest scoring game
-        best_match_id = best_match_for_top_team[-1]
+        if best_match_for_top_team is not None:
+            best_match_id = best_match_for_top_team[-1]
+        else:
+        # Handle the case where there is no match for the top team.
+        # Maybe set best_match_id to a default value or raise an exception.
+            best_match_id = None
 
         # Find the contest_name associated with the best_match_id
         best_contest_name = None
