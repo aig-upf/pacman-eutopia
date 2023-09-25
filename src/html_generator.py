@@ -500,13 +500,31 @@ class HtmlGenerator:
         video_container = '''
         <div id="video-player-container">
         <h2>Top Score Match Video</h2>
+        <button id="toggle-video-btn">Hide Video</button>
         <video id="videoPlayer" controls>
         <source src="/videos/best_match.mp4" type="video/mp4">
         Your browser does not support the video tag.
         </video>
         </div>
         '''
+
+        toggle_video_script = '''
+        <script>
+        document.getElementById("toggle-video-btn").addEventListener("click", function() {
+            var video = document.getElementById("videoPlayer");
+            if (video.style.display !== "none") {
+                video.style.display = "none";
+                this.innerHTML = "Show Video";
+            } else {
+                video.style.display = "block";
+                this.innerHTML = "Hide Video";
+            }
+        });
+        </script>
+        '''
+
         output += video_container
+        output += toggle_video_script
 
         output += "</body></html>"
 
