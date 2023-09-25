@@ -133,17 +133,19 @@ class HtmlGenerator:
         """
         Generates the HTML of a contest run and saves it in www/results_<run_id>/results.html.
         """
+        logging.info("Starting the _save_run_html function.")
+
         random_layouts, fixed_layouts, max_steps = [], [], None
         all_games = []
         all_teams_stats = {}
 
-        
+
         for contest_name in contest_names:
             scores_dir = os.path.join(self.www_dir, f"contest_{contest_name}/scores")
             replays_dir = os.path.join(self.www_dir, f"contest_{contest_name}/replays")
             logs_dir = os.path.join(self.www_dir, f"contest_{contest_name}/logs")
             errors_dir = os.path.join(self.www_dir, f"contest_{contest_name}/errors")
-        
+
             games = []
             teams_stats = {}
 
@@ -176,11 +178,14 @@ class HtmlGenerator:
                 fixed_layouts.extend([layout for layout in match_data['layouts'] if not layout.startswith('RANDOM') and layout not in fixed_layouts])
 
             all_games.extend(games)
+            print(all_games)
             for team_name, data in teams_stats.items():
                 if team_name in all_teams_stats:
                     prev_data = all_teams_stats[team_name]
                     data = [a+b for (a, b) in zip(data, prev_data)]
                 all_teams_stats[team_name] = data
+        
+        logging.info("Number of all games collected: %d", len(all_games))
 
         num_matches_per_team = (len(all_teams_stats) - 1)
         for team_name, data in all_teams_stats.items():
@@ -192,6 +197,7 @@ class HtmlGenerator:
         # After populating all_teams_stats, sort it to find the top team
         sorted_team_stats = sorted(list(all_teams_stats.items()), key=lambda v: (v[1][0], v[1][2], v[1][6]), reverse=True)
         top_team = sorted_team_stats[0][0]  # Name of the top team
+        logging.info("Top team determined: %s", top_team)
 
         # Step 2: Find the highest scoring match for the top team
         def find_highest_scoring_match_for_team(games, team_name):
@@ -213,15 +219,14 @@ class HtmlGenerator:
         html_full_path = os.path.join(self.www_dir, f'results_{run_id}.html')
         with open(html_full_path, "w") as f:
             print(run_html, file=f)
-        
-        best_match_for_top_team = find_highest_scoring_match_for_team(all_games, top_team)
-        # Extract the ID of the highest scoring game
+
         if best_match_for_top_team is not None:
             best_match_id = best_match_for_top_team[-1]
+            logging.info("Best match for top team found with ID: %s", best_match_for_top_team[-1])
         else:
-        # Handle the case where there is no match for the top team.
-        # Maybe set best_match_id to a default value or raise an exception.
+            logging.warning("No best match found for the top team.")
             best_match_id = None
+
 
         # Find the contest_name associated with the best_match_id
         best_contest_name = None
@@ -231,10 +236,12 @@ class HtmlGenerator:
             if any(str(best_match_id) in filename for filename in all_files):
                 best_contest_name = contest_name
                 break
-
+        
+        logging.info("Contest name associated with best match ID: %s", best_contest_name)
         # Print race ID (for debugging)
         print(best_match_id)   
         # save best_match_id to a file
+        logging.info("Writing to best_match_info.txt with data: %s", {'best_match_id': str(best_match_id), 'contest_name': best_contest_name})
         with open('best_match_info.txt', 'w') as file:
             json.dump({'best_match_id': str(best_match_id), 'contest_name': best_contest_name}, file)
 
