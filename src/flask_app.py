@@ -51,7 +51,7 @@ def generate_video_async(replay_path):
     process = subprocess.Popen(command)
     return process
 
-# Route to download files
+# Download various types of files based on year, file type, and filename
 @app.route('/download/<year>/<file_type>/<file_name>')
 def download_file(year, file_type, file_name):
     if year == "default":
@@ -133,7 +133,7 @@ def get_matches():
                         matches.append(match)
     return jsonify({'matches': matches})
 
-# Route to get teams based on year
+# Get list of teams based on the selected year
 @app.route('/get_teams')
 def get_teams():
     selected_year = request.args.get('year')
@@ -224,14 +224,17 @@ def serve_best_match_video():
         logging.error("Best Match ID file not found.")
         return jsonify({'error': 'Best Match ID file not found'}), 404
 
+    # Generate the match and contest name strings
     match_name = f'match_{best_match_id}'
     logging.info("Match Name: %s", match_name)
     logging.info("Match Name: %s", contest_name)
 
-    # Please modify according to the actual situation
+    # Define the directories where replay and MP4 files are stored
+    # Modify these paths as needed to fit your directory structure
     replay_directory = f'./www/contest_{contest_name}/replays'
     mp4_directory = './contest_video'
-    
+
+    # Construct the full paths to the replay and MP4 files
     replay_path = os.path.join(replay_directory, f'{match_name}.replay')
     mp4_path = os.path.join(mp4_directory, f'{match_name}.mp4')
     
@@ -250,7 +253,7 @@ def serve_best_match_video():
         if os.path.exists(replay_path):
             logging.debug(".Replay file found. Starting async video generation...")
 
-            # capture.py's path
+            # Define the path to the capture script responsible for video generation
             capture_script_path = './src/contest/capture.py'
             
             # Start an asynchronous process to generate the video
@@ -262,7 +265,7 @@ def serve_best_match_video():
         
         else:
             logging.error(".Replay file not found.")
-            # Returns an error message if the .replay file does not exist
+            # If the .replay file also doesn't exist, return a 404 error
             return jsonify({'error': 'Replay file not found'}), 404
 
 
