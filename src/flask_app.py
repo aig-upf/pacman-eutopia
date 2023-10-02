@@ -195,8 +195,8 @@ def serve_video(selected_year, match_name):
             logging.debug(".Replay file found. Starting async video generation...")
             
             #capture.py's path
-            capture_script_path = '/Users/player/Documents/GitHub/pacman-eutopia/pacman-contest/src/contest/capture.py'
-            
+            capture_script_path = '../pacman-contest/src/contest/capture.py'
+
             # Start an asynchronous process to generate the video
             command = ['python', capture_script_path, f'--replay={replay_path}']
             process = Popen(command)  # Asynchronous command execution with Popen
@@ -254,8 +254,8 @@ def serve_best_match_video():
             logging.debug(".Replay file found. Starting async video generation...")
 
             # Define the path to the capture script responsible for video generation
-            capture_script_path = './src/contest/capture.py'
-            
+            capture_script_path = '../pacman-contest/src/contest/capture.py'
+
             # Start an asynchronous process to generate the video
             command = ['python', capture_script_path, f'--replay={replay_path}']
             process = Popen(command)  # Asynchronous command execution with Popen
