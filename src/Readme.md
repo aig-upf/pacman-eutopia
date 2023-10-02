@@ -1,4 +1,6 @@
-Flask_app.py 1. Overview
+Flask_app.py 
+
+1. Overview
 This is a web application built using the Flask framework to manage and display information about a contest called "Pacman Contest". The application provides several routes (API interfaces) to perform the following functions. 
 
 1. Get a directory of all competitions. 
@@ -46,3 +48,21 @@ This function is used to serve a video of a match. It accepts the selected year 
 
 serve_best_match_video()
 This function is used to serve the best match video.
+
+
+File folder:
+1. src/contest_video
+Folder for all contest videos(Video merged with .png files)
+
+2. src/frames
+Save each of Pacman's moves as a frame in .ps files
+
+3. src/frames_png
+Convert every .ps file to .png files
+
+4. src/static
+Stored html page styles, flask_app.py would access it.
+
+File:
+1. best_match.info.txt
+Saved the best matches
