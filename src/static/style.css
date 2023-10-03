@@ -133,3 +133,14 @@
     margin: 0;
     
 }
+
+.custom-select {
+    width: 200px;  /* 你可以根据需要调整这个宽度 */
+    height: 32px;  /* 这是你原来给 `teamSelect` 设置的高度 */
+    font-family: 'Montserrat', sans-serif;  /* 使用你的主要字体 */
+    font-size: 14px;  /* 设置字体大小，可以根据需要调整 */
+    background-color: #FFF;  /* 为下拉框设置一个背景颜色 */
+    border: 1px solid #ccc;  /* 为下拉框设置一个边框 */
+    padding: 4px;  /* 为下拉框设置一些内边距 */
+    border-radius: 4px;  /* 为下拉框设置圆角 */
+}
