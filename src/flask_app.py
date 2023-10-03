@@ -63,7 +63,7 @@ def download_file(year, file_type, file_name):
         # Construct file paths using the relative directory
         file_path = f'./www/contest_upf-{extracted_year}/{file_type}s/{file_name}'
     
-    logging.debug("File Path: %s", file_path)
+    logging.debug("Trying to access file at: %s", file_path)
     return send_file(file_path, as_attachment=True)
 
 # Route to get full ranking of teams
@@ -101,11 +101,16 @@ def get_matches():
     selected_team = request.args.get('team_name')
     selected_year = request.args.get('year')  # Get the selected year
 
+    logging.debug(f"Selected team: {selected_team}")
+    logging.debug(f"Selected year: {selected_year}")
+
     if selected_year == "default":
         directory = './www/contest_default/scores'
     else:
         directory = f'./www/contest_upf-ai{selected_year[-2:]}/scores'  # Construct pathways based on year
     
+    logging.debug(f"Directory being searched: {directory}")
+
     matches = []
     for filename in os.listdir(directory):
         if filename.startswith('match_') and filename.endswith('.json'):
@@ -131,6 +136,9 @@ def get_matches():
                             'log_file': f"/download/{selected_year}/log/{log_file}"
                         }
                         matches.append(match)
+                        logging.debug(f"Match found for team {selected_team}: {match}")
+    
+    logging.debug(f"Total matches found for team {selected_team}: {len(matches)}")
     return jsonify({'matches': matches})
 
 # Get list of teams based on the selected year
