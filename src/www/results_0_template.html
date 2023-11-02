@@ -7,17 +7,6 @@
 <meta content="width=device-width" name="viewport"/>
 <meta content="Framer 722a0e4" name="generator"/>
 <title>PACMAN Tournament Info</title>
-<meta content="Made with Framer" name="description"/>
-<meta content="https://framerusercontent.com/sites/3z7pn3yiEAhFQAHzOi7tGG/searchIndex-ljeaxkoq.vsr.json" name="framer-search-index"/>
-<link href="https://framerusercontent.com/sites/icons/default-favicon.v3.png" rel="icon"/>
-<!-- Open Graph / Facebook -->
-<meta content="website" property="og:type"/>
-<meta content="PACMAN Tournament Info" property="og:title"/>
-<meta content="Made with Framer" property="og:description"/>
-<!-- Twitter -->
-<meta content="summary_large_image" name="twitter:card"/>
-<meta content="PACMAN Tournament Info" name="twitter:title"/>
-<meta content="Made with Framer" name="twitter:description"/>
 <link crossorigin="" href="https://fonts.gstatic.com/" rel="preconnect"/><link href="https://pacman-tournament-info.framer.ai/" rel="canonical"/><link href="https://framerusercontent.com/sites/3z7pn3yiEAhFQAHzOi7tGG/chunk-2GCIBZGY.mjs" rel="modulepreload"/>
 <link href="https://framerusercontent.com/sites/3z7pn3yiEAhFQAHzOi7tGG/chunk-ELYU6EKT.mjs" rel="modulepreload"/>
 <link href="https://framerusercontent.com/sites/3z7pn3yiEAhFQAHzOi7tGG/Lq7I3uGltEnFbVBsfj1AvjbV_Rbionmu7g9yJe6onN8.4WTBADAJ.mjs" rel="modulepreload"/>
@@ -32,115 +21,238 @@
 <!-- End of bodyStart -->
 <div data-framer-hydrate-v2='{"routeId":"augiA20Il"}' data-framer-page-optimized-at="2023-06-27T13:06:40.196Z" data-framer-ssr-released-at="2023-06-26T15:39:12.473Z" id="main"><div class="framer-9Q7x6" style="display:contents"><div class="framer-72rtr7" style="min-height:100%;width:auto"><div class="framer-9mp6r1" data-framer-name="Hero" name="Hero"><div class="framer-3ijpii" data-framer-name="Menu" name="Menu"><div class="framer-1gm53kf" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><p class="framer-text" style='--font-selector:R0Y7TnVuaXRvLXJlZ3VsYXI=;--framer-font-family:"Nunito", "Nunito Placeholder", sans-serif;--framer-text-alignment:left;--framer-text-color:rgb(61, 52, 139)'>PACMAN Tournament</p></div><div class="framer-1d0w9k7" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none">
 <button class="framer-text" onclick="toggleDropdown()" style='--font-selector:R0Y7TnVuaXRvLXJlZ3VsYXI=;--framer-font-family:"Nunito", "Nunito Placeholder", sans-serif;--framer-text-color:rgb(61, 52, 139)'>Home</button>
-<div id="dropdown" style="display: none;">
-<select id="match-selector">
-                {% for i in range(count) %}
-                    <option value="{{ i + 1 }}">Match {{ i }}</option>
-                {% endfor %}
-            </select>
 </div>
-</div>
-<!-- New code for the video player -->
-<div id="video-player" style="position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 50%; height: 50%; background: white; padding: 20px; display: none; z-index: 100;">
-<video controls="" id="match-video" style="width: 100%; height: 100%;"></video>
-<button onclick="closeVideoPlayer()">Close</button>
-</div>
-<!-- Updated JavaScript code -->
-<script>
-    function toggleDropdown() {
-        var dropdown = document.getElementById("dropdown");
-        dropdown.style.display = dropdown.style.display === "none" ? "block" : "none";
-    }
-
-    function closeVideoPlayer() {
-        var videoPlayer = document.getElementById('video-player');
-        videoPlayer.style.display = 'none';
-    }
-
-    document.getElementById('match-selector').addEventListener('change', function() {
-        var match_id = this.value;
-        var video = document.getElementById('match-video');
-        var videoPlayer = document.getElementById('video-player');
-        
-        fetch('/get_match_video/' + match_id)
-            .then(response => response.blob())
-            .then(blob => {
-                var url = URL.createObjectURL(blob);
-                video.src = url;
-                video.play();
-                videoPlayer.style.display = 'block';
-            });
-    });
-</script>
 </div>
 <div class="framer-jik0nl" data-border="true" data-framer-name="Text" name="Text"><svg class="framer-udg5r7" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none" viewbox="0 0 475 88"><foreignobject height="100%" style="overflow:visible;transform-origin:center center" transform="scale(1)" width="100%"><h1 class="framer-text" style='--font-selector:R0Y7Qm93bGJ5IE9uZS1yZWd1bGFy;--framer-font-family:"Bowlby One", sans-serif;--framer-font-size:88.96920024653373px;--framer-line-height:1em;--framer-text-alignment:center;--framer-text-color:rgb(61, 52, 139);--framer-text-transform:uppercase'>paCman!</h1></foreignobject></svg><div class="framer-1227ctq" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><h1 class="framer-text" style='--font-selector:R0Y7TnVuaXRvLXJlZ3VsYXI=;--framer-font-family:"Nunito", "Nunito Placeholder", sans-serif;--framer-font-size:20px;--framer-line-height:1.4em;--framer-text-alignment:left;--framer-text-color:rgb(61, 52, 139)'>PACMAN Capture the Flag Tournament </h1></div></div><div class="framer-1yj4cz1" data-framer-name="Image" name="Image"><div class="framer-xy48p5" style="transform:rotate(-15deg)"><div class="framer-1p2r87r" data-framer-name="Image" name="Image"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" sizes="calc(max((100vw - 6px) / 3, 200px) * 2 + 20px)" src="./static/PACMAN Tournament Info_files/LaEpPm5oinW9naHpOhXUKm4G9Y.png" srcset="https://framerusercontent.com/images/LaEpPm5oinW9naHpOhXUKm4G9Y.png?scale-down-to=512 512w, https://framerusercontent.com/images/LaEpPm5oinW9naHpOhXUKm4G9Y.png 554w" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-swesb8" data-framer-name="Image" name="Image"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" sizes="max((100vw - 6px) / 3, 200px)" src="./static/PACMAN Tournament Info_files/fWfaFI0DAwbJHGRfNzdvHGcyM4.png" srcset="https://framerusercontent.com/images/fWfaFI0DAwbJHGRfNzdvHGcyM4.png?scale-down-to=512 470w, https://framerusercontent.com/images/fWfaFI0DAwbJHGRfNzdvHGcyM4.png 672w" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-39j2mo" data-framer-name="Image" name="Image"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" sizes="max((100vw - 6px) / 3, 200px)" src="./static/PACMAN Tournament Info_files/fWfaFI0DAwbJHGRfNzdvHGcyM4.png" srcset="https://framerusercontent.com/images/fWfaFI0DAwbJHGRfNzdvHGcyM4.png?scale-down-to=512 470w, https://framerusercontent.com/images/fWfaFI0DAwbJHGRfNzdvHGcyM4.png 672w" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1rv2ozr" data-framer-name="Image" name="Image"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" src="./static/PACMAN Tournament Info_files/wLEncg2KSDAx29q9qcXjULugras.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div></div></div></div><div class="framer-1816yvj" data-framer-name="Text" name="Text"><div class="framer-1r0zx4i" data-framer-name="Content" name="Content"><div class="framer-hyog6e" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><h2 class="framer-text" style='--font-selector:R0Y7Qm93bGJ5IE9uZS1yZWd1bGFy;--framer-font-family:"Bowlby One", sans-serif;--framer-font-size:48px;--framer-text-alignment:left;--framer-text-color:rgb(255, 255, 255)'>Information</h2><div><html><head><title>Results for the tournament round</title>
 <link href="static/style.css" rel="stylesheet" type="text/css"/></head>
 <body><h1>PACMAN Capture the Flag Tournament</h1>
 <h2>Tournament Organizer: UPF </h2>
 <h3>Name of Tournament: 0 </h3>
-<h3>Date of Tournament: 01/08/2023 18:54:23 
+<h3>Date of Tournament: 23/09/2023 17:27:30 
 </h3><h3>Configuration:
-<ul><li>Number of teams: 2</li><li>Layouts: 1 (1 fixed + 0 random)</li><li>Max steps: 1200 steps</li></ul></h3>
+<ul><li>Number of teams: 5</li><li>Layouts: 1 (1 fixed + 0 random)</li><li>Max steps: 1200 steps</li></ul></h3>
 <br/><br/><table border="1"><tr><th>Position</th><th>Team</th><th>Points %</th><th>Points</th><th>Win</th><th>Tie</th><th>Lost</th><th>TOTAL</th><th>FAILED</th><th>Score Balance</th></tr>
-<tr><td>1</td><td>Blue</td><td>100.0%</td><td>3</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>18</td></tr>
-<tr><td>2</td><td>Red</td><td>0.0%</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>Blue</td><td>25.0%</td><td>3</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>18</td></tr>
+<tr><td>2</td><td>secondTeamName2022</td><td>25.0%</td><td>3</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>18</td></tr>
+<tr><td>3</td><td>firstTeamName2022</td><td>8.0%</td><td>1</td><td>0</td><td>1</td><td>1</td><td>2</td><td>0</td><td>0</td></tr>
+<tr><td>4</td><td>thirdTeamName2022</td><td>8.0%</td><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>5</td><td>Red</td><td>0.0%</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
 </table>
 <br/><br/><h2>Disqualified</h2>
 <h3>Disqualified teams</h3><table border="1"><tr><th>Team</th><th>Log file</th></tr>
 </table>
 <br/><br/><h2>Games</h2>
-<h3>No. of games: 1 / Avg. game length: 0:00:38 / Max game length: 0:00:38</h3>
+<h3>No. of games: 3 / Avg. game length: 0:00:38 / Max game length: 0:00:43</h3>
 <table border="1"><tr><th>Team 1</th><th>Team 2</th><th>Layout</th><th>Time</th><th>Score</th><th>Winner</th><th>Score file</th><th>Replay file</th><th>Log file</th></tr>
-<tr><td align="center">Red</td><td align="center">Green</td><td>defaultCapture.lay</td><td>0:00:38</td><td>18</td><td><b>Blue</b></td><td align="center"><a href="contest_default/scores/match_0.json">match_0.json</a>
-</td><td align="center"><a href="contest_default/replays/match_0.replay">match_0.replay</a>
-</td><td align="center"><a href="contest_default/logs/match_0.log">match_0.log</a>
+<tr class="game-row" style=""><td align="center">Red</td><td align="center">Green</td><td>defaultCapture.lay</td><td>0:00:38</td><td>18</td><td><b>Blue</b></td><td align="center"><a download="match_0.json" href="contest_upf-ai23/scores/match_0.json">match_0.json</a>
+</td><td align="center"><a download="match_0.replay" href="contest_upf-ai23/replays/match_0.replay">match_0.replay</a>
+</td><td align="center"><a download="match_0.log" href="contest_upf-ai23/logs/match_0.log">match_0.log</a>
 </td></tr>
-</table></body></html>
-</div></div><div class="framer-1059rjc" data-framer-name="Paragraphs" name="Paragraphs"><div class="framer-mwvj5e" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"></div></div><div class="framer-179u31d" data-border="true" data-framer-name="Decoration" name="Decoration" style="transform:rotate(134deg)"></div></div></div><div class="framer-naamf6" data-framer-name="Section" name="Section"><div class="framer-1g6xmy8" data-framer-name="Wrapper" name="Wrapper"><div class="framer-11aaozj hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1m6b4nf hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1hjht6w hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1je5jm6"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-ow121z" data-border="true" data-framer-name="Decoration" name="Decoration" style="transform:rotate(134deg)"><div class="framer-1yit5x2" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><p class="framer-text" style="--framer-text-alignment:center"><br class="framer-text trailing-break"/></p></div></div></div><div class="framer-tmwzq3" data-framer-name="Wrapper" name="Wrapper"><div class="framer-1qar1nl" data-framer-name="Left" name="Left"><div class="framer-5jhst7" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><h3 class="framer-text" style='--font-selector:R0Y7Qm93bGJ5IE9uZS1yZWd1bGFy;--framer-font-family:"Bowlby One", sans-serif;--framer-font-size:32px;--framer-text-alignment:left;--framer-text-color:rgb(255, 255, 255)'>SEARCH COMPETITION</h3></div>
-<form action="/search" method="get">
-<input id="query1" name="q1" placeholder="Search team 1..." type="search"/>
-<span> vs </span>
-<input id="query2" name="q2" placeholder="Search team 2..." type="search"/>
-<input type="submit" value="Go"/>
-</form>
+<tr class="game-row" style=""><td align="center">thirdTeamName2022</td><td align="center">firstTeamName2022</td><td>defaultCapture.lay</td><td>0:00:43</td><td>0</td><td><b>None</b></td><td align="center"><a download="match_132.json" href="contest_upf-ai23/scores/match_132.json">match_132.json</a>
+</td><td align="center"><a download="match_132.replay" href="contest_upf-ai23/replays/match_132.replay">match_132.replay</a>
+</td><td align="center"><a download="match_132.log" href="contest_upf-ai23/logs/match_132.log">match_132.log</a>
+</td></tr>
+<tr class="game-row" style=""><td align="center"><b>secondTeamName2022</b></td><td align="center">firstTeamName2022</td><td>defaultCapture.lay</td><td>0:00:33</td><td>18</td><td><b>secondTeamName2022</b></td><td align="center"><a download="match_131.json" href="contest_upf-ai23/scores/match_131.json">match_131.json</a>
+</td><td align="center"><a download="match_131.replay" href="contest_upf-ai23/replays/match_131.replay">match_131.replay</a>
+</td><td align="center"><a download="match_131.log" href="contest_upf-ai23/logs/match_131.log">match_131.log</a>
+</td></tr>
+</table><button id="showNextGamesButton" onclick="showNextGames()">Show Next 10 Games</button><button id="collapseGamesButton" onclick="collapseGames()" style="display: none;">Collapse</button>
 
-{% if match_id %}
-<video controls="" height="240" width="320">
-<source src="{{ url_for('get_match_video', match_id=match_id) }}" type="video/mp4"/>
-    Your browser does not support the video tag.
-</video>
-{% endif %}
-
-<form action="/search_team" method="get">
-<label for="team_name">Enter a team name:</label>
-<input id="team_name" name="team_name" type="text"/>
-<input type="submit" value="Search"/>
-</form>
 <script>
-    $(document).ready(function(){
-      $("form").on("submit", function(event){
-        event.preventDefault();
-        var team_name = $("#team_name").val();
-        $.getJSON("/search_team", {team_name: team_name}, function(data){
-          var html = "<table><tr><th>Team Name</th><th>Wins</th><th>Losses</th><th>Points</th><th>Points %</th></tr>";
-          var team_stats = data.teams_stats[team_name];
-          if (team_stats) {
-            html += "<tr><td>" + team_name + "</td>";
-            html += "<td>" + team_stats[2] + "</td>";  // wins
-            html += "<td>" + team_stats[4] + "</td>";  // losses
-            html += "<td>" + team_stats[1] + "</td>";  // points
-            html += "<td>" + team_stats[0] + "%</td></tr>";  // points %
-          }
-          html += "</table>";
-          $("#results").html(html);
+        var currentShownGames = 10;
+
+        function showNextGames() {
+            var rows = document.getElementsByClassName("game-row");
+            var endIndex = Math.min(currentShownGames + 10, rows.length);
+            for (var i = currentShownGames; i < endIndex; i++) {
+                rows[i].style.display = "";
+            }
+            currentShownGames = endIndex;
+            if (currentShownGames >= rows.length) {
+                document.getElementById("showNextGamesButton").style.display = "none";
+                document.getElementById("collapseGamesButton").style.display = "";
+            }
+        }
+
+        function collapseGames() {
+            var rows = document.getElementsByClassName("game-row");
+            for (var i = 10; i < rows.length; i++) {
+                rows[i].style.display = "none";
+            }
+            currentShownGames = 10;
+            document.getElementById("showNextGamesButton").style.display = "";
+            document.getElementById("collapseGamesButton").style.display = "none";
+        }
+        </script>
+<div id="video-player-container">
+<h2>Top Score Match Video</h2>
+<video controls="" id="videoPlayer">
+<source src="/videos/best_match.mp4" type="video/mp4"/>
+        Your browser does not support the video tag.
+        </video>
+</div>
+</body></html>
+</div></div><div class="framer-1059rjc" data-framer-name="Paragraphs" name="Paragraphs"><div class="framer-mwvj5e" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"></div></div><div class="framer-179u31d" data-border="true" data-framer-name="Decoration" name="Decoration" style="transform:rotate(134deg)"></div></div></div><div class="framer-naamf6" data-framer-name="Section" name="Section"><div class="framer-1g6xmy8" data-framer-name="Wrapper" name="Wrapper"><div class="framer-11aaozj hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1m6b4nf hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1hjht6w hidden-1pmo0qg"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-1je5jm6"><div data-framer-background-image-wrapper="true" style="position:absolute;pointer-events:none;user-select:none;border-radius:inherit;top:0;right:0;bottom:0;left:0"><div style="display:contents;border-radius:inherit;pointer-events:none"><img alt="" loading="lazy" src="./static/PACMAN Tournament Info_files/ZJouz35sNC6Wu2M0w1TifsHLw.webp" style="pointer-events:none;user-select:none;display:block;width:100%;height:100%;border-radius:inherit;object-position:center;object-fit:cover;image-rendering:auto"/></div></div></div><div class="framer-ow121z" data-border="true" data-framer-name="Decoration" name="Decoration" style="transform:rotate(134deg)"><div class="framer-1yit5x2" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><p class="framer-text" style="--framer-text-alignment:center"><br class="framer-text trailing-break"/></p></div></div></div><div class="framer-tmwzq3" data-framer-name="Wrapper" name="Wrapper"><div class="framer-1qar1nl" data-framer-name="Left" name="Left">
+<!-- Search Competition -->
+<div style="margin-bottom: 20px;">
+<h3 style="font-family: 'Bowlby One', sans-serif; font-size: 32px; color: rgb(255, 255, 255); margin-bottom: 10px;">SEARCH COMPETITION</h3>
+<select id="yearSelect">
+<option value="default">default</option>
+<!-- Other years will be dynamically loaded -->
+</select>
+<select id="teamSelect" style="margin-left: 20px; height: 32px;">
+<option value="default">default</option>
+<!-- Other years will be dynamically loaded -->
+</select>
+</div>
+<!-- Table Container -->
+<div id="tableContainer" style="width: 100%; overflow-x: auto;">
+<div id="matchDetails"></div>
+</div>
+<script>
+// Function to map a year to a directory name
+function getDirectoryFromYear(year) {
+    if (year === "default") {
+        return "default";
+    } else {
+        return "contest_upf-" + year;  // This will return 'contest_upf-ai22', 'contest_upf-ai23', etc.
+    }
+}
+
+// Function to update match details based on selected year and team
+function updateMatches() {
+    var selectedYear = getDirectoryFromYear(document.getElementById('yearSelect').value);
+    var selectedTeam = document.getElementById('teamSelect').value;
+
+
+    fetch(`/get_matches?year=${selectedYear}&team_name=${selectedTeam}`)
+      .then(response => response.json())
+      .then(data => {
+        // Build the table and display the match details
+        var table = '<table><tr><th>Team 1</th><th>Team 2</th><th>Layout</th><th>Time</th><th>Score</th><th>Winner</th><th>Score file</th><th>Replay file</th><th>Log file</th></tr>';
+        data.matches.forEach(match => {
+          table += `<tr><td>${match.team1}</td><td>${match.team2}</td><td>${match.layout}</td><td>${match.time}</td><td>${match.score}</td><td>${match.winner}</td>`;
+          table += `<td><a href="${match.score_file}" download>Download Score</a></td>`; // Modified to Score file download link
+          table += `<td><a href="${match.replay_file}" download>Download Replay</a>`;
+          table += `<button onclick="playVideo('${match.match_id}')">Play</button></td>`; // The Replay file column contains a download link and a play button.
+          table += `<td><a href="${match.log_file}" download>Download Log</a></td></tr>`; // Download link in the Log file section
         });
+        table += '</table>';
+        document.getElementById('matchDetails').innerHTML = table;
       });
+}
+
+// Function to update the team list based on selected year
+function updateTeams() {
+    var selectedYear = getDirectoryFromYear(document.getElementById('yearSelect').value);
+
+    fetch(`/get_teams?year=${selectedYear}`)
+      .then(response => response.json())
+      .then(data => {
+        var teamSelect = document.getElementById('teamSelect');
+        teamSelect.innerHTML = ''; // Clear existing options
+        data.teams.forEach(team => {
+          var option = document.createElement('option');
+          option.value = team;
+          option.text = team;
+          teamSelect.appendChild(option);
+        });
+        updateMatches(); // Update the contest
+      });
+}
+
+// Function to update the year list
+function updateYears() {
+  fetch('/get_years')
+    .then(response => response.json())
+    .then(data => {
+      var yearSelect = document.getElementById('yearSelect');
+      yearSelect.innerHTML = ''; // Clear existing options
+      data.years.forEach(year => {
+        var option = document.createElement('option');
+        option.value = year;
+        option.text = year;
+        yearSelect.appendChild(option);
+      });
+      updateTeams(); // Update the teams after filling years
     });
-  </script>
-<div id="results"></div>
-</div><div class="framer-hoee7r" data-framer-name="Decoration" name="Decoration"><div class="framer-xt2mey" style="transform:rotate(90deg)"></div><div class="framer-w6pfxt" style="transform:rotate(-30deg)"></div><div class="framer-85bvi2" style="transform:rotate(-60deg)"></div><div class="framer-17rtv5x" style="transform:rotate(30deg)"></div><div class="framer-q2cyvh" style="transform:rotate(60deg)"></div><div class="framer-b49a2w"></div></div></div></div><div class="framer-gsw81a"><div class="framer-1m99xvz-container"></div><div class="framer-mwnp52" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><p class="framer-text" style="--framer-text-alignment:center"><br class="framer-text trailing-break"/></p></div></div><div class="framer-1ujjqfz" data-framer-name="Footer" name="Footer"><div class="framer-14z9fb5" data-framer-name="Copyright" name="Copyright"><div class="framer-19v4aem" data-framer-name="Icons" name="Icons"></div><div class="framer-1wmbps3" data-framer-name="Spacer" name="Spacer"></div><div class="framer-14pcb6k" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none"><p class="framer-text" style='--font-selector:R0Y7TnVuaXRvLXJlZ3VsYXI=;--framer-font-family:"Nunito", "Nunito Placeholder", sans-serif;--framer-line-height:1.5em;--framer-text-alignment:center;--framer-text-color:rgb(255, 255, 255)'> 2023 PACMAN Capture the Flag Tournament powered by UPF</p></div></div></div></div><div id="overlay"></div></div></div><div id="svg-templates" style="position: absolute; overflow: hidden; top: 0; left: 0; width: 0; height: 0">
+}
+
+// Update the team when the year selector changes
+document.getElementById('yearSelect').addEventListener('change', updateTeams);
+// Update matches when team selector changes
+document.getElementById('teamSelect').addEventListener('change', updateMatches);
+
+// Update the years when the page loads
+updateYears();
+
+// Function to play a video based on matchId
+function playVideo(matchId) {
+    console.log('playVideo called with matchId:', matchId);
+    
+    var selectedYear = document.getElementById('yearSelect').value;
+    var videoPath = `/videos/${selectedYear}/${matchId}.mp4`;
+
+    fetch(videoPath)
+    .then(response => {
+        if (response.status === 200) {
+            // If the video exists, create a new video playback window
+            var videoWindow = window.open("", "Video Player", "width=400,height=300");
+            videoWindow.document.write(`
+                <video width="400" controls>
+                    <source src="${videoPath}" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            `);
+        } else {
+            // If the video does not exist, display a warning message
+            alert("Video file not found, the video is being generated, please wait");
+        }
+    });
+}
+
+</script>
+</div>
+<div class="framer-hoee7r" data-framer-name="Decoration" name="Decoration">
+<div class="framer-xt2mey" style="transform:rotate(90deg)"></div>
+<div class="framer-w6pfxt" style="transform:rotate(-30deg)"></div>
+<div class="framer-85bvi2" style="transform:rotate(-60deg)"></div>
+<div class="framer-17rtv5x" style="transform:rotate(30deg)"></div>
+<div class="framer-q2cyvh" style="transform:rotate(60deg)"></div>
+<div class="framer-b49a2w"></div>
+</div>
+</div>
+</div>
+<!-- Framer Container -->
+<div class="framer-gsw81a">
+<div class="framer-1m99xvz-container"></div>
+<div class="framer-mwnp52" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none">
+<p class="framer-text" style="--framer-text-alignment:center">
+<br class="framer-text trailing-break"/>
+</p>
+</div>
+</div>
+<!-- Footer Section -->
+<div class="framer-1ujjqfz" data-framer-name="Footer" name="Footer">
+<div class="framer-14z9fb5" data-framer-name="Copyright" name="Copyright">
+<div class="framer-19v4aem" data-framer-name="Icons" name="Icons"></div>
+<div class="framer-1wmbps3" data-framer-name="Spacer" name="Spacer"></div>
+<div class="framer-14pcb6k" data-framer-component-type="RichTextContainer" style="outline:none;display:flex;flex-direction:column;justify-content:flex-start;flex-shrink:0;transform:none">
+<p class="framer-text" style='--font-selector:R0Y7TnVuaXRvLXJlZ3VsYXI=;--framer-font-family:"Nunito", "Nunito Placeholder", sans-serif;--framer-line-height:1.5em;--framer-text-alignment:center;--framer-text-color:rgb(255, 255, 255)'>
+                2023 PACMAN Capture the Flag Tournament powered by UPF
+            </p>
+</div>
+</div>
+</div>
+</div>
+<div id="overlay"></div>
+</div>
+</div>
+<!-- SVG Templates -->
+<div id="svg-templates" style="position: absolute; overflow: hidden; top: 0; left: 0; width: 0; height: 0">
 </div>
 <script data-framer-appear-animation="no-preference"></script>
 <script data-framer-bundle="" src="./PACMAN Tournament Info_files/_script0.E6CKKQI7.mjs" type="module"></script>
 <!-- End of bodyEnd -->
-</body></html>
+</body>
+</html>

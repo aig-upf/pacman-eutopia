@@ -1,4 +1,5 @@
 /* Some variables */
+
 :root {
     --page-bg-color: #EEE;
     --page-color: #EEE;
@@ -32,8 +33,9 @@
   td, th {
       padding: 15px;
       border: none;
-      font-size: 18px;
+      font-size: 17px;
       text-align: center;
+      min-width: 100px;
   }
   
   /* Table headings */
@@ -47,7 +49,7 @@
   }
       
   
-  /* Rows with mouse hovering */
+/* Row hover effect */
   tr:hover td {
       background-color: var(--table-hover-bg-color);
   }
@@ -75,40 +77,70 @@
       padding-bottom: 10px;
       color: black;
   }
-  
- /*  @font-face {
-      font-family: 'Good Times Rg';
-      src: url('fonts/GoodTimesRg-Regular.eot');
-      src: url('fonts/GoodTimesRg-Regular.eot?#iefix') format('embedded-opentype'),
-          url('fonts/GoodTimesRg-Regular.woff2') format('woff2'),
-          url('fonts/GoodTimesRg-Regular.woff') format('woff'),
-          url('fonts/GoodTimesRg-Regular.ttf') format('truetype'),
-          url('fonts/GoodTimesRg-Regular.svg#GoodTimesRg-Regular') format('svg');
-      font-weight: normal;
-      font-style: normal;
-  }
-  
-  @font-face {
-      font-family: 'Montserrat';
-      src: url('fonts/Montserrat-Light.eot');
-      src: url('fonts/Montserrat-Light.eot?#iefix') format('embedded-opentype'),
-          url('fonts/Montserrat-Light.woff2') format('woff2'),
-          url('fonts/Montserrat-Light.woff') format('woff'),
-          url('fonts/Montserrat-Light.ttf') format('truetype'),
-          url('fonts/Montserrat-Light.svg#Montserrat-Light') format('svg');
-      font-weight: 300;
-      font-style: normal;
-  }
-  
-  @font-face {
-      font-family: 'Montserrat';
-      src: url('fonts/Montserrat-Regular.eot');
-      src: url('fonts/Montserrat-Regular.eot?#iefix') format('embedded-opentype'),
-          url('fonts/Montserrat-Regular.woff2') format('woff2'),
-          url('fonts/Montserrat-Regular.woff') format('woff'),
-          url('fonts/Montserrat-Regular.ttf') format('truetype'),
-          url('fonts/Montserrat-Regular.svg#Montserrat-Regular') format('svg');
-      font-weight: normal;
-      font-style: normal;
-  }
-  */
+
+.framer-1yj4cz1 {
+    height: 350px !important;
+}
+
+.framer-1yj4cz1 img {
+    width: 100%;
+    height: auto;
+}
+
+
+
+#matchDetails table {
+      width: 100%;
+      font-size: 12px;
+      border-collapse: collapse;
+    }
+
+#matchDetails th:last-child, #matchDetails td:last-child {
+    white-space: normal;
+    word-wrap: break-word;
+}
+
+
+
+
+/* Video Player */
+#video-player-container {
+    position: fixed;  /* Keep it fixed so that the video playback window will be fixed on the screen */
+    right: 30px;  /* Distance from the right side of the screen */
+    top: 50%;  /* Set the top edge to 50% of the screen height to center it vertically */
+    transform: translateY(-50%);  /* Use transform to fine-tune it so it's perfectly centered vertically */
+    width: 400px;  /* You can adjust the width as needed */
+    height: 360px;  /* You can adjust the height as needed */
+    background-color: transparent;
+    border: none;
+    border-radius: 0;
+    padding: 0;
+    z-index: 1000;  /* Ensure that the video playback window always appears above other elements */
+}
+
+
+#video-player-container h2 {
+    margin-bottom: -80px;
+    background-color: transparent;
+
+}
+
+#videoPlayer {
+    margin-top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    margin: 0;
+    
+}
+
+.custom-select {
+    width: 200px;  /* 你可以根据需要调整这个宽度 */
+    height: 32px;  /* 这是你原来给 `teamSelect` 设置的高度 */
+    font-family: 'Montserrat', sans-serif;  /* 使用你的主要字体 */
+    font-size: 14px;  /* 设置字体大小，可以根据需要调整 */
+    background-color: #FFF;  /* 为下拉框设置一个背景颜色 */
+    border: 1px solid #ccc;  /* 为下拉框设置一个边框 */
+    padding: 4px;  /* 为下拉框设置一些内边距 */
+    border-radius: 4px;  /* 为下拉框设置圆角 */
+}
