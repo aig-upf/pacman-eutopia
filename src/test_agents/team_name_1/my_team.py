@@ -1,4 +1,4 @@
-# baselineTeam.py
+# baseline_team.py
 # ---------------
 # Licensing Information:  You are free to use or extend these projects for
 # educational purposes provided that (1) you do not distribute or publish
@@ -12,7 +12,7 @@
 # Pieter Abbeel (pabbeel@cs.berkeley.edu).
 
 
-# baselineTeam.py
+# baseline_team.py
 # ---------------
 # Licensing Information: Please do not distribute or publish solutions to this
 # project. You are free to use and extend these projects for educational
@@ -21,11 +21,11 @@
 # For more info, see http://inst.eecs.berkeley.edu/~cs188/sp09/pacman.html
 
 import random
-import contest.util as util
+import util
 
-from contest.captureAgents import CaptureAgent
-from contest.game import Directions
-from contest.util import nearestPoint
+from captureAgents import CaptureAgent
+from game import Directions
+from util import nearestPoint
 
 
 #################
@@ -146,7 +146,7 @@ class OffensiveReflexAgent(ReflexCaptureAgent):
         features = util.Counter()
         successor = self.get_successor(game_state, action)
         food_list = self.get_food(successor).as_list()
-        features['successor_score'] = -len(food_list)  # self.getScore(successor)
+        features['successor_score'] = -len(food_list)  # self.get_score(successor)
 
         # Compute distance to the nearest food
 

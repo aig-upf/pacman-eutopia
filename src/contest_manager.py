@@ -53,7 +53,7 @@ class ContestManager:
         self.www_dir = "www"
         self.matches = {}
         self.match_counter = 1
-	
+
         with open(contests_json_file, "r") as f:
             json_contests = json.load(f)
             for contest_data_teams in json_contests["contests"]:
@@ -91,7 +91,7 @@ class ContestManager:
                 error = self.check_syntax_error(repo_local_dir, contest_name)
                 loading_error = self.check_loading_errors(False, repo_local_dir, contest_name)
 
-                if error == True:
+                if error:
                     setattr(team, "syntax_error", True)
                         
                 if loading_error == [None,None]:
@@ -151,8 +151,8 @@ class ContestManager:
         with open("matches.json", "w") as f:
             json.dump(self.matches, f)
     
-    def check_syntax_error(self,filename, contest_name):
-        source = open(filename+'/myTeam.py', 'r').read() + '\n'
+    def check_syntax_error(self, filename, contest_name):
+        source = open(filename+'/my_team.py', 'r').read() + '\n'
         try:
             compile(source, filename, 'exec')
         except Exception as Argument:
@@ -163,7 +163,7 @@ class ContestManager:
     
     def check_loading_errors(self, isRed, filename, contest_name):
         try:
-            self.load_agents(isRed, filename+'/myTeam.py')
+            self.load_agents(isRed, filename+'/my_team.py')
         except Exception as Argument:
             with open(f"www/contest_{contest_name}/errors/{filename}.log", 'w') as file:
                 file.write(str(Argument))
@@ -208,8 +208,8 @@ class ContestManager:
 
     @staticmethod
     def get_local_team_name(contest_name: str, team: Team):
-        logging.info(f"Local team name at {contest_name}_{team.get_name()}/myTeam.py")
-        return f"{contest_name}_{team.get_name()}/myTeam.py"
+        logging.info(f"Local team name at {contest_name}_{team.get_name()}/my_team.py")
+        return f"{contest_name}_{team.get_name()}/my_team.py"
 
     def clean_up_old_matches(self, contest_name: str, contest_data_teams: TeamsParser) -> None:
         scores_dir = os.path.join(self.www_dir, f"contest_{contest_name}/scores")
@@ -267,9 +267,9 @@ class ContestManager:
         self.matches[self.match_counter] = match_arguments
         self.match_counter += 1
         print(self.matches)
-        	
+
         
-        	
+
 
     def generate_html(self) -> None:
         web_gen = HtmlGenerator(www_dir=self.www_dir)
@@ -291,9 +291,8 @@ def main():
         for contest_name in contest_manager.get_contest_names():
             all_teams = contest_manager.get_all_teams(contest_name=contest_name)
             for t1_idx in range(0, len(all_teams)):
-		    
                 for t2_idx in range(t1_idx+1, len(all_teams)):
-    	        # Allow only new vs all (not old vs old)
+                # Allow only new vs all (not old vs old)
                         if not all_teams[t1_idx].get_updated() and not all_teams[t2_idx].get_updated():
                             continue
                         new_match = [all_teams[t1_idx], all_teams[t2_idx]]
@@ -321,7 +320,14 @@ def main():
         with open("matches.json","r") as f:
             matches = f.read()
             matches = json.loads(matches)
-            capture.run(matches[settings['task'] ])
+            if settings['task'] is not None:  # Cluster - parallel execution
+                print(f"Match #{settings['task']}: args={matches[settings['task']]}")
+                capture.run(matches[settings['task'] ])
+            else:  # CPU - sequential execution
+                for m in matches.items():
+                    print(f"Match #{m[0]}: args={m[1]}")
+                    capture.run(m[1])
+
         
     if settings['step']  == 'html':	    
         contest_manager.generate_html()
