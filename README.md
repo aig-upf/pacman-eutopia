@@ -16,6 +16,7 @@ cd src/
 rm -rf upf-ai2* www/
 python contest_manager.py -s prepare_matches
 python contest_manager.py -s run_matches -t 1
+python contest_manager.py -s html
 ```
 
 The results are accessible from ```src/www/index.html``` file.
