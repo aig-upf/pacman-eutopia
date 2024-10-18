@@ -3,6 +3,7 @@ PACMAN capture the flag contest for EUTOPIA partners
 
 To install the packages:
 ```shell
+git submodule update --init --remote
 python3.8 -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
