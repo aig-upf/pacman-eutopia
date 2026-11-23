@@ -1,0 +1,194 @@
+{
+    "teams": [
+        {
+            "id": 1,
+            "last_commit": "4bd3c4db8cace7c70b39ce5439fc8cfa6bf7fb33",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "flag rats",
+            "repository": "https://github.com/foxtrotdelta-hub/flagrats",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 2,
+            "last_commit": "f11f347b2fcc5f9e7a6e942e94180111dd8a9341",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "despookjes",
+            "repository": "https://github.com/vsi7-m/despookjes",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 3,
+            "last_commit": "935f297fee701b57a9ebd4f80b984f8a117658b5",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "DotGobblers",
+            "repository": "https://github.com/Aiko-vdm/DotGobblers",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 4,
+            "last_commit": "a9e1f64849f221fe410f5210fab77154e1065e08",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "In The Fridge",
+            "repository": "https://github.com/Wakie26/In-The-Fridge",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 6,
+            "last_commit": "5d7bb1a364573824bbeaac55a0acb17a1209a793",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "PacBoys",
+            "repository": "https://github.com/robpriem/PacBoys",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 7,
+            "last_commit": "af498c10f812e99a93209eacce61ca6bc7e0e548",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "IDontThinkWeCanFinishThisToday",
+            "repository": "https://github.com/Scooooooott/Pacman_IDontThinkWeCanFinishThisToday",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 8,
+            "last_commit": "f29264e1c9c4417c44c7f1bbd4bd11724347a47a",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "LL_Autonomous_Pacman",
+            "repository": "https://github.com/Supergodgg/LL_Autonomous_Pacman",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 9,
+            "last_commit": "880db95e3dcb2932e8c2ba55d8a1c1d3592f4f34",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "lupASena",
+            "repository": "https://github.com/lorecleme/pacman-agent",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 10,
+            "last_commit": "2fd027ba296aea2f69d35b87ebbb0fd989cd0f18",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "M&Ms",
+            "repository": "https://github.com/marinadalmau/pacman-agent",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 11,
+            "last_commit": "ffa1a6d6b5199521c445bbe8211d71eb84e769de",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "clingcling",
+            "repository": "https://github.com/dea2001/pacManContest",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 12,
+            "last_commit": "d3c83532b486e4030f2be569fec90e31e4cdfd87",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "tortosa",
+            "repository": "https://github.com/amolaaudi/tortosa_pacman",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 13,
+            "last_commit": "65073a6e4f5a77616bb6c02c4592ec25fc791e55",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "ILClingo",
+            "repository": "https://github.com/rcrtss/pacman-agent",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 14,
+            "last_commit": "561105e77143d0066718a854ebbf5f967aa970cf",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "Bona Tarda",
+            "repository": "https://github.com/Cambie26/pacman-agent-BonaTarda",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 15,
+            "last_commit": "806134dfa437b5ff658ad24cbc55d7ceac9da458",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "TheDotDominators",
+            "repository": "https://github.com/cherryneosea/TheDotDominators/tree/main",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 16,
+            "last_commit": "29264ea2cc9fc8a26ae861fbb02097d8fd191b64",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "pacman_AS",
+            "repository": "https://github.com/maferfarfan2122/pacman_AS",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 17,
+            "last_commit": "500bd632cd348c3e4c88252f0ef44fd337c43c78",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "AutonomouSA",
+            "repository": "https://github.com/amadeohm/AutSys-pacman.git",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 18,
+            "last_commit": "fb198306b96b01abd6a8cb71dd6c302035ed18e7",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "Clingho",
+            "repository": "https://github.com/sta05/Clingho_pacman",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 19,
+            "last_commit": "503bfb3e6811b88b4db609c8ecc0973dbfa623b9",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "pacboywhite",
+            "repository": "https://github.com/eliasdevvub/pacboywhite",
+            "syntax_error": "FALSE",
+            "updated": true
+        },
+        {
+            "id": 20,
+            "last_commit": "d19909c6c4dfa7775b0334b1b89c5e798a460a64",
+            "loading_error": "FALSE",
+            "members": [],
+            "name": "TooPac",
+            "repository": "https://github.com/SebastianTabacariu/TooPac",
+            "syntax_error": "FALSE",
+            "updated": true
+        }
+    ]
+}
